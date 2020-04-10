@@ -2,18 +2,15 @@
   "compilerOptions": {
     "target": "es2018",
     "module": "commonjs",
-    "lib": [
-      "dom",
-      "esnext"
-    ],
+    "lib": ["dom", "esnext"],
     "declaration": true,
     "declarationMap": true,
     "jsx": "react",
     "strict": true,
     "pretty": true,
     "sourceMap": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "esModuleInterop": true,

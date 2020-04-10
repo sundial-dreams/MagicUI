@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+
 const webpackBaseConfig = require('./webpack.base.config');
 
 module.exports = merge.smart(webpackBaseConfig, {
@@ -164,7 +165,7 @@ module.exports = merge.smart(webpackBaseConfig, {
       }
     ]
   },
-  /*optimization: {
+  /* optimization: {
     splitChunks: {
       chunks: 'all',
       name: false,
@@ -182,7 +183,8 @@ module.exports = merge.smart(webpackBaseConfig, {
         }
       }
     }
-  },*/
+  },
+   */
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production'

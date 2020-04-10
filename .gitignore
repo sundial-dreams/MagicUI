@@ -114,3 +114,7 @@ dist
 
 release
 
+# cpp build file
+native/build
+native/node_modules
+native/cmake-build-debug

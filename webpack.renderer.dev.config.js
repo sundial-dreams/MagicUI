@@ -4,6 +4,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 const {spawn} = require('child_process');
 
 const webpackBaseConfig = require('./webpack.base.config');
@@ -164,7 +165,10 @@ module.exports = merge.smart(webpackBaseConfig, {
       scriptLoading: 'defer',
       template: path.join(__dirname, 'resources/template/template.html'),
       minify: false
-    })
+    }),
+    // new TypedCssModulesPlugin({
+    //   globPattern: 'app/renderer/**/*.{css,scss,sass}'
+    // })
   ],
   devServer: {
     port,
