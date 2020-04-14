@@ -26,7 +26,6 @@ export default function Navigation(props: INavigationProps) {
 
 
 export const HeaderNavigation: React.FC = (props) => {
-  console.log(require('~resources/images/avatar.jpg'));
   return (
     <div className={style.header_navigation}>
       <div className={style.right_content}>
