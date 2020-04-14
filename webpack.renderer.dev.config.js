@@ -4,7 +4,6 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { TypedCssModulesPlugin } = require('typed-css-modules-webpack-plugin');
 const {spawn} = require('child_process');
 
 const webpackBaseConfig = require('./webpack.base.config');
@@ -47,7 +46,8 @@ module.exports = merge.smart(webpackBaseConfig, {
           {
             loader: 'css-loader',
             options: {sourceMap: true}
-          }
+          },
+          {loader: 'resolve-url-loader'},
         ]
       },
       {
@@ -63,7 +63,8 @@ module.exports = merge.smart(webpackBaseConfig, {
               sourceMap: true,
               importLoaders: 1
             }
-          }
+          },
+          {loader: 'resolve-url-loader'}
         ]
       },
       // SCSS | SASS support that handle .global.scss
@@ -75,6 +76,7 @@ module.exports = merge.smart(webpackBaseConfig, {
             loader: 'css-loader',
             options: {sourceMap: true}
           },
+          {loader: 'resolve-url-loader'},
           {loader: 'sass-loader'}
         ]
       },
@@ -93,13 +95,19 @@ module.exports = merge.smart(webpackBaseConfig, {
               importLoaders: 1
             }
           },
+          {loader: 'resolve-url-loader'},
           {loader: 'sass-loader'}
         ]
       },
       // Image import support
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader'
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 5000
+          }
+        }
       },
       // font support
       {
@@ -107,7 +115,7 @@ module.exports = merge.smart(webpackBaseConfig, {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 5000,
             mimetype: 'application/font-woff'
           }
         }
@@ -117,7 +125,7 @@ module.exports = merge.smart(webpackBaseConfig, {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 5000,
             mimetype: 'application/font-woff'
           }
         }
@@ -127,7 +135,7 @@ module.exports = merge.smart(webpackBaseConfig, {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 5000,
             mimetype: 'application/octet-stream'
           }
         }
@@ -141,12 +149,11 @@ module.exports = merge.smart(webpackBaseConfig, {
         use: {
           loader: 'url-loader',
           options: {
-            limit: 10000,
+            limit: 5000,
             mimetype: 'image/svg+xml'
           }
         }
       }
-
     ]
   },
 
@@ -166,9 +173,6 @@ module.exports = merge.smart(webpackBaseConfig, {
       template: path.join(__dirname, 'resources/template/template.html'),
       minify: false
     }),
-    // new TypedCssModulesPlugin({
-    //   globPattern: 'app/renderer/**/*.{css,scss,sass}'
-    // })
   ],
   devServer: {
     port,

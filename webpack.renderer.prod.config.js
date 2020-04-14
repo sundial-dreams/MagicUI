@@ -41,7 +41,8 @@ module.exports = merge.smart(webpackBaseConfig, {
             options: {
               sourceMap: true
             }
-          }
+          },
+          {loader: 'resolve-url-loader'},
         ]
       },
       // Pipe other styles through css modules and append to style.css
@@ -59,7 +60,8 @@ module.exports = merge.smart(webpackBaseConfig, {
               },
               sourceMap: true
             }
-          }
+          },
+          {loader: 'resolve-url-loader'},
         ]
       },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
@@ -76,6 +78,7 @@ module.exports = merge.smart(webpackBaseConfig, {
               importLoaders: 1
             }
           },
+          {loader: 'resolve-url-loader'},
           {
             loader: 'sass-loader',
             options: {
@@ -101,6 +104,7 @@ module.exports = merge.smart(webpackBaseConfig, {
               sourceMap: true
             }
           },
+          {loader: 'resolve-url-loader'},
           {
             loader: 'sass-loader',
             options: {

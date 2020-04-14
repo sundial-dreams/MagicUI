@@ -1,0 +1,14 @@
+@mixin drag {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
+
+@mixin no-drag {
+  -webkit-app-region: no-drag;
+}
+
+@mixin content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

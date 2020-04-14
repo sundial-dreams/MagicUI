@@ -1,0 +1,30 @@
+.ui_editor {
+  background: #333544;
+
+  .header_navigation {
+    width: 100%;
+    height: 50px;
+  }
+
+  .content {
+    display: flex;
+    height: calc(100vh - 50px);
+    width: 100%;
+
+    .left_panel, .right_panel, .middle_panel {
+
+    }
+
+    .left_panel {
+      flex-basis: 170px;
+    }
+
+    .middle_panel {
+      flex: 1;
+    }
+
+    .right_panel {
+      flex-basis: 210px;
+    }
+  }
+}

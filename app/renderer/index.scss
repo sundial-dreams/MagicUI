@@ -1,98 +1,20 @@
-@import "~resources/style/reset.global.scss";
+$background-color: #333544;
 
 html, body {
   height: 100%;
   margin: 0 auto;
+  background: $background-color;
 }
 
-#app {
-  width: 100%;
+.app {
   height: 100%;
-}
-
-.page {
-  height: 100%;
-  background: blanchedalmond;
-  overflow: hidden;
-  
-  .counterWrapper {
-    width: 300px;
-    margin: 100px auto 0 auto;
-  }
-
-  .nativeTestWrapper {
-    width: 300px;
-    margin: 10px auto;
-  }
-
-  .nativeShow {
-    color: white;
-    font-size: 30px;
-    width: 300px;
-    margin: 20px auto;
-    text-align: center;
-  }
-}
-
-.counter {
-  width: 300px;
-  height: 200px;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
 
-  & > button {
-    width: 50px;
-    height: 50px;
-    background: cornflowerblue;
-    color: white;
-    font-size: 30px;
-    transition: .2s;
-
-    &:active {
-      opacity: .5;
-    }
-
+  .navigation_wrapper {
+    flex-basis: 60px;
   }
 
-  & > button:nth-child(1) {
-    background: lightsalmon;
-  }
-
-  & > span {
-    color: gray;
-    font-size: 30px;
-    display: inline-block;
-    width: 30px;
-  }
-
-
-}
-
-.nativeTest {
-  width: 300px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > input {
-    height: 40px;
-    width: 200px;
-    color: gray;
-    font-size: 30px;
-  }
-
-  & > button {
-    height: 40px;
-    width: 100px;
-    font-size: 18px;
-    color: white;
-    background: lightblue;
-    transition: .2s;
-
-    &:active {
-      opacity: .5;
-    }
+  .page_wrapper {
+    flex: 1;
   }
 }
