@@ -8,7 +8,8 @@ export const IpcEvent = {
 
 export const Routers = {
   MAIN: '/',
-  UI_EDITOR: '/ui_editor'
+  UI_EDITOR: '/ui_editor',
+  CODE_EDITOR: '/code_editor'
 };
 
 export const history = createHashHistory();

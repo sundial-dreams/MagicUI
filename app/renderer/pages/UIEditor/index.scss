@@ -1,5 +1,7 @@
+@import "~resources/style/mixin.global.scss";
+
 .ui_editor {
-  background: #333544;
+  background: $background-color;
 
   .header_navigation {
     width: 100%;

@@ -34,7 +34,7 @@ const menus = [
   },
   {
     icon: cls(style.icon, style.icon_circled),
-    path: ''
+    path: Routers.CODE_EDITOR
   }
 ];
 

@@ -6,10 +6,10 @@ import {Switch, Route, Router} from 'react-router-dom';
 import Navigation, {HeaderNavigation} from './components/navigation';
 import Main from './pages/Main';
 import UIEditor from './pages/UIEditor';
-
+import CodeEditor from './pages/CodeEditor';
 import store from './store';
-import {history} from './utils/constants';
 
+import {history} from './utils/constants';
 // @ts-ignore
 import style from './index.scss';
 import '~resources/style/reset.global.scss';
@@ -35,6 +35,9 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
             </Route>
             <Route path='/ui_editor'>
               <UIEditor/>
+            </Route>
+            <Route path='/code_editor'>
+              <CodeEditor/>
             </Route>
           </Switch>
         </Router>

@@ -16,6 +16,7 @@ export default function UIEditor(props: IUIEditorProps) {
   return (
     <div id='page' className={style.ui_editor}>
       <div className={style.header_navigation}>
+
       </div>
       <div className={style.content}>
         <div className={style.left_panel}>
