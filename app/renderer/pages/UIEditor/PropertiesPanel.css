@@ -1,0 +1,300 @@
+.properties_panel {
+    height: 100%;
+    width: 100%;
+    color: white;
+    font-size: 13px;
+}
+
+.properties_panel .panel_content {
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+.properties_panel .panel_content h3 {
+    font-size: 16px;
+    height: 30px;
+    width: 100%;
+    padding: 5px;
+    text-indent: 10px;
+    background: #313341;
+    box-sizing: border-box;
+}
+
+.properties_panel .panel_content .component_properties {
+    width: 100%;
+    height: 100%;
+    color: #999999;
+    font-size: 12px;
+}
+
+
+.component_properties .position_props,
+.component_properties .size_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.component_properties .position_props > div,
+.component_properties .size_props > div {
+    flex: 1;
+}
+
+.component_properties .position_props > div > span,
+.component_properties .size_props > div > span {
+    display: inline-flex;
+    width: 10px;
+    text-align: left;
+}
+
+.component_properties .position_props input,
+.component_properties .size_props input {
+    border: none;
+    background: transparent;
+    width: 50px;
+    color: honeydew;
+    padding-left: 5px;
+}
+
+.component_properties .bg_color_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+}
+
+.component_properties .bg_color_props > span {
+    display: inline-block;
+    width: 30px;
+}
+
+.component_properties .bg_color_props > input {
+    width: 150px;
+    margin-left: 5px;
+    border: none;
+    background: transparent;
+    color: honeydew;
+    padding-left: 5px;
+}
+
+.component_properties .bg_opacity_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.component_properties .bg_opacity_props > span {
+    display: inline-block;
+    width: 50px;
+}
+.component_properties .bg_opacity_props > input {
+    border: none;
+    background: transparent;
+    height: 24px;
+    width: 50px;
+    color: #d9d9d9;
+}
+
+.component_properties .border_props {
+    height: 28px;
+    display: flex;
+    width: 100%;
+}
+.component_properties .border_props > div {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.component_properties .border_props > div > span {
+    display: inline-block;
+    width: 10px;
+}
+
+.component_properties .border_props > div > input {
+    width: 60px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: #d9d9d9;
+    border-bottom: 1px solid #313341;
+}
+
+.component_properties .border_color_props {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.component_properties .border_color_props > span {
+    display: inline-block;
+    width: 30px;
+}
+
+.component_properties .border_color_props > input {
+    width: 150px;
+    margin-left: 5px;
+    color: #d9d9d9;
+    height: 24px;
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid #313341;
+}
+
+
+.component_properties .shadow_offset_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.component_properties .shadow_offset_props > div {
+    flex: 1;
+}
+
+.component_properties .shadow_offset_props > div > span {
+    display: inline-flex;
+    width: 10px;
+    text-align: left;
+}
+
+.component_properties .shadow_offset_props > div > input {
+    border: none;
+    background: transparent;
+    width: 50px;
+    color: honeydew;
+    padding-left: 5px;
+}
+
+.component_properties .shadow_blur_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.component_properties .shadow_blur_props > span {
+    display: inline-block;
+    width: 50px;
+}
+.component_properties .shadow_blur_props > input {
+    border: none;
+    background: transparent;
+    height: 24px;
+    width: 50px;
+    color: #d9d9d9;
+}
+
+.component_properties .shadow_color_props {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.component_properties .shadow_color_props > span {
+    display: inline-block;
+    width: 30px;
+}
+
+.component_properties .shadow_color_props > input {
+    width: 150px;
+    margin-left: 5px;
+    border: none;
+    background: transparent;
+    height: 24px;
+    color: #d9d9d9;
+}
+
+.component_properties .text_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.component_properties .text_props > span {
+    display: inline-block;
+    width: 40px;
+}
+.component_properties .text_props > input {
+    border: none;
+    background: transparent;
+    height: 24px;
+    width: 100px;
+    color: #d9d9d9;
+}
+
+.component_properties .text_color_props {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+.component_properties .text_color_props > span {
+    display: inline-block;
+    width: 30px;
+}
+
+.component_properties .text_color_props > input {
+    width: 150px;
+    margin-left: 5px;
+    border: none;
+    background: transparent;
+    height: 24px;
+    color: #d9d9d9;
+}
+
+.component_properties .image_src_props {
+    height: 28px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.component_properties .image_src_props > span {
+    display: inline-block;
+    width: 40px;
+}
+.component_properties .image_src_props > input {
+    border: none;
+    background: transparent;
+    height: 24px;
+    width: 100px;
+    color: #d9d9d9;
+}
+
+
+.properties_panel .status_bar {
+    width: 100%;
+    height: 30px;
+    background: #333544;
+}
+
+.properties_item {
+    width: 100%;
+}
+
+.properties_item > button {
+    width: 100%;
+    height: 26px;
+    font-size: 12px;
+    color: #999999;
+    box-sizing: border-box;
+    border-left: 2px solid #FF5370;
+    text-align: left;
+    text-indent: 10px;
+    box-shadow: 0 5px 6px -7px rgba(0, 0, 0, .2);
+}
+
+.properties_item .item_content {
+    padding: 5px 15px;
+    min-height: 50px;
+    background: #313341;
+}

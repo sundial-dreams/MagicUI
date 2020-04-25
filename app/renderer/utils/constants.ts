@@ -13,3 +13,41 @@ export const Routers = {
 };
 
 export const history = createHashHistory();
+
+export const COMPONENT_TYPES = {
+  LAYER: {
+
+  },
+  BUTTON: {
+    CUSTOM_BUTTON: 'custom button',
+  },
+  INPUT: {
+    CUSTOM_INPUT: 'custom input'
+  },
+  SHAPE: {
+    RECT: 'rect',
+    CIRCLE: 'circle',
+    ELLIPSE: 'ellipse'
+  },
+  WIDGET: {
+    PC_WIDGET: 'pc widget',
+    MOBILE_WIDGET: 'mobile widget'
+  },
+  TEXT: {
+    LABEL: 'label',
+    CUSTOM_TEXT: 'text'
+  },
+  IMAGE: {
+    CUSTOM_IMAGE: 'custom image'
+  }
+};
+
+
+export const WEBGL_COMPONENT_PROP_TYPES = {
+  BASIC: 'basic',
+  SHADOW: 'shadow',
+  BACKGROUND: 'background',
+  BORDER: 'border',
+  TEXT: 'text',
+  IMAGE: 'image'
+};

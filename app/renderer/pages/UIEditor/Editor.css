@@ -1,0 +1,14 @@
+.editor {
+  height: 100%;
+}
+.canvas_view {
+  width: 100%;
+  height: calc(100% - 30px);
+  overflow: hidden;
+  background: rgba(0, 0, 0, .4);
+  box-shadow: inset 0 0 7px rgba(0, 0, 0, .2);
+}
+.editor_status_bar {
+  height: 30px;
+
+}

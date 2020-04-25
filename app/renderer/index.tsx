@@ -7,13 +7,13 @@ import Navigation, {HeaderNavigation} from './components/navigation';
 import Main from './pages/Main';
 import UIEditor from './pages/UIEditor';
 import CodeEditor from './pages/CodeEditor';
+
 import store from './store';
 
 import {history} from './utils/constants';
 // @ts-ignore
-import style from './index.scss';
-import '~resources/style/reset.global.scss';
-
+import style from './index.css';
+import '../../resources/style/reset.global.css';
 
 interface IAppProps {
 

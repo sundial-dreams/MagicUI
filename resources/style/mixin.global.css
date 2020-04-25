@@ -1,0 +1,18 @@
+.drag {
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.content-center {
+
+}
+
+/*background-color: #333544;*/
+
+/*$navigation-background-color: #313341;*/
+/*$navigation-width: 60px;*/
+/*$header-navigation-height: 50px;*/

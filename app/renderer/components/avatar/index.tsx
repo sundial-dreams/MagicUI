@@ -1,6 +1,6 @@
 import React from 'react';
 // @ts-ignore
-import style from './index.scss';
+import style from './index.css';
 
 export interface IAvatarProps {
   size?: number,

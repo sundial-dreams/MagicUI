@@ -1,0 +1,30 @@
+.recent_of_ui_edit_record {
+
+}
+
+.recent_of_ui_edit_record .title {
+    color: white;
+}
+.recent_of_ui_edit_record .recent_record_list {
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.ui_edit_record_item {
+    width: 200px;
+    height: 150px;
+    border-radius: 15px;
+    background: #313341;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, .1);
+    overflow: hidden;
+    margin: 0 50px 50px 0;
+}
+
+.ui_edit_record_item .header {
+    height: 60%;
+    background: #9A3FD5;
+}
+.ui_edit_record_item .content {
+    padding: 5px;
+}

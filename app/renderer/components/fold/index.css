@@ -1,0 +1,26 @@
+.fold {
+    width: 100%;
+    height: 20px;
+    overflow: hidden;
+    transition: 1s;
+}
+.fold.show {
+
+}
+
+.fold .fold_main {
+    height: 20px;
+    width: 100%;
+    color: white;
+    font-size: 12px;
+    text-align: left;
+}
+
+.fold_item {
+    color: white;
+    font-size: 12px;
+}
+
+.fold .fold_content {
+
+}

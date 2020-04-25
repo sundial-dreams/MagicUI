@@ -1,7 +1,7 @@
 import React from 'react';
 import { WindowManager } from '../../utils/call';
 // @ts-ignore
-import style from './ControlButtonGroup.scss';
+import style from './ControlButtonGroup.css';
 
 
 export interface IControlButtonGroupProps {

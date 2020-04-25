@@ -1,13 +1,17 @@
-import React, {useCallback, useState} from 'react';
+import React, {ReactNode, useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faEdit, faMagic, faCode, faImage} from '@fortawesome/free-solid-svg-icons';
 import {cls} from '../../utils';
 // @ts-ignore
-import style from './Menu.scss';
+import style from './Menu.css';
+// @ts-ignore
+import '../../../../resources/style/icon.global.css'
 import {history, Routers} from '../../utils/constants';
 
 interface IMenuItemProps {
   onClick: () => void,
-  icon: string,
+  icon: ReactNode,
   active: boolean
 }
 
@@ -15,7 +19,7 @@ const MenuItem: React.FC<IMenuItemProps> = (props: IMenuItemProps) => {
 
   return (
     <div className={cls(style.menu_item, props.active && style.active)} onClick={props.onClick}>
-      <i className={props.icon}/>
+      {props.icon}
     </div>
   );
 };
@@ -25,16 +29,20 @@ export interface IMenuProps {
 
 const menus = [
   {
-    icon: cls(style.icon, style.icon_add_folder),
+    icon: <FontAwesomeIcon icon={faMagic}/>,
     path: Routers.MAIN
   },
   {
-    icon: cls(style.icon, style.icon_pencil),
+    icon: <FontAwesomeIcon icon={faEdit}/>,
     path: Routers.UI_EDITOR
   },
   {
-    icon: cls(style.icon, style.icon_circled),
+    icon: <FontAwesomeIcon icon={faCode}/>,
     path: Routers.CODE_EDITOR
+  },
+  {
+    icon: <FontAwesomeIcon icon={faImage}/>,
+    path: ""
   }
 ];
 

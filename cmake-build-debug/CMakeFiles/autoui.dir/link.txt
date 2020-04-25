@@ -1,0 +1,1 @@
+/usr/bin/c++.exe -g  -Wl,--enable-auto-import CMakeFiles/autoui.dir/native/main.cpp.o  -o autoui.exe -Wl,--out-implib,libautoui.dll.a -Wl,--major-image-version,0,--minor-image-version,0 

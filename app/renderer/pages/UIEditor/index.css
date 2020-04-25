@@ -1,0 +1,50 @@
+@import "../../../../resources/style/mixin.global.css";
+
+.ui_editor {
+    background: #333544;
+
+}
+
+
+.header_navigation {
+    width: calc(100% - 250px);
+    height: 50px;
+    display: flex;
+}
+
+.header_navigation .menu_wrapper {
+
+}
+
+.header_navigation .run_tools_wrapper {
+    -webkit-app-region: drag;
+
+}
+.header_navigation .edit_tools_wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    -webkit-app-region: drag;
+}
+.content {
+    display: flex;
+    height: calc(100vh - 50px);
+    width: 100%;
+}
+
+.left_panel, .right_panel, .middle_panel {
+
+}
+
+.left_panel {
+    flex-basis: 180px;
+}
+
+.middle_panel {
+    flex: 1;
+    width: 50vw;
+}
+
+.right_panel {
+    flex-basis: 210px;
+}
