@@ -1,0 +1,54 @@
+.views {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab {
+  flex-basis: 40px;
+  height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: #999999;
+  font-size: 12px;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 0 12px;
+
+  button {
+    width: 100px;
+    height: 28px;
+    background: #313341;
+    margin-right: 2px;
+  }
+}
+
+.code_editor {
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+
+.operator_btn {
+  width: 100%;
+  height: 40px;
+  flex-basis: 40px;
+  font-size: 12px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  button {
+    width: 60px;
+    height: 24px;
+    background: #313341;
+    margin-left: 12px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .1);
+    color: #999999;
+  }
+}

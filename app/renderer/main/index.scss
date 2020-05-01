@@ -1,0 +1,20 @@
+@import "~resources/style/mixin.global.scss";
+
+html, body {
+  height: 100%;
+  margin: 0 auto;
+  background: $background-color;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+}
+
+.navigation_wrapper {
+  flex-basis: 60px;
+}
+
+.page_wrapper {
+  flex: 1;
+}

@@ -1,0 +1,120 @@
+.ui_components_fold {
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  font-size: 12px;
+  color: #d9d9d9;
+  transition: .3s;
+  & > button {
+    width: 100%;
+    height: 28px;
+    box-shadow: 0 5px 5px -6px rgba(0, 0, 0, .5);
+    box-sizing: border-box;
+    border-right: 2px solid darkorchid;
+    span {
+      float: left;
+      margin-left: 10px;
+      transition: .3s;
+    }
+
+    &.fold > span {
+      transform: rotate(-180deg);
+    }
+  }
+  .fold_content {
+    padding: 5px;
+    background: rgba(0, 0, 0, .2);
+  }
+}
+
+.ui_component_item {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  box-sizing: border-box;
+  padding-left: 5px;
+  align-items: center;
+  color: #999999;
+
+  .name {
+    margin-left: 5px;
+  }
+}
+
+
+.new_page_modal {
+  width: 100%;
+  height: 100%;
+  color: #999999;
+  font-size: 12px;
+
+  .header {
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    padding-left: 10px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    box-sizing: border-box;
+  }
+
+  .content {
+    height: 140px;
+    box-sizing: border-box;
+    padding: 10px;
+
+    .input {
+      display: flex;
+      height: 28px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      input {
+        width: 180px;
+        height: 100%;
+        background: rgba(0, 0, 0, .05);
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        color: #dddddd;
+        box-sizing: border-box;
+        padding-left: 5px;
+      }
+    }
+
+    .textarea {
+      height: 50px;
+      align-items: self-start;
+
+      textarea {
+        width: 180px;
+        height: 100%;
+        background: rgba(0, 0, 0, .05);
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
+        border-radius: 3px;
+        resize: none;
+        outline: none;
+        color: #dddddd;
+        box-sizing: border-box;
+        padding-left: 5px;
+      }
+    }
+  }
+
+  .foot {
+    height: 30px;
+    display: flex;
+    justify-content: space-around;
+    box-sizing: border-box;
+    padding: 0 10px;
+
+    button {
+      width: 120px;
+      height: 24px;
+      background: rgba(0, 0, 0, .1);
+      box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+    }
+  }
+}

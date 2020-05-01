@@ -1,0 +1,48 @@
+@import "~resources/style/mixin.global.scss";
+
+.ui_editor {
+  background: #333544;
+}
+
+
+.header_navigation {
+  width: calc(100% - 250px);
+  height: 50px;
+  display: flex;
+  .menu_wrapper {
+
+  }
+  .run_tools_wrapper {
+    @include drag;
+
+  }
+  .edit_tools_wrapper {
+    @include drag;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.content {
+  display: flex;
+  height: calc(100vh - 50px);
+  width: 100%;
+}
+
+.left_panel, .right_panel, .middle_panel {
+
+}
+
+.left_panel {
+  flex-basis: 180px;
+}
+
+.middle_panel {
+  flex: 1;
+  width: 50vw;
+}
+
+.right_panel {
+  flex-basis: 210px;
+}

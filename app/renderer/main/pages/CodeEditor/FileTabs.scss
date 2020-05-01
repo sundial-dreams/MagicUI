@@ -1,0 +1,28 @@
+.file_tabs {
+  position: relative;
+  z-index: 10;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  box-shadow: 0 5px 5px -6px rgba(0, 0, 0, .4);
+}
+
+.file_tab_item {
+  height: 100%;
+  min-width: 120px;
+  font-size: 12px;
+  background: #313341;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 5px 0 8px;
+  color: #999999;
+  cursor: pointer;
+
+  &.active {
+    background: rgba(255, 255, 255, .1);
+    border-bottom: 2px solid #9A3FD5;
+  }
+}

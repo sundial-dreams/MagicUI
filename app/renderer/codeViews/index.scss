@@ -1,0 +1,16 @@
+@import "~resources/style/reset.global";
+@import "~resources/style/mixin.global";
+
+.app {
+  width: 100vw;
+  height: 100vh;
+
+  .header {
+    @include drag;
+    height: 30px;
+  }
+  .content {
+    height: calc(100% - 30px);
+    width: 100%;
+  }
+}

@@ -8,6 +8,23 @@ const merge = require('webpack-merge');
 
 const webpackBaseConfig = require('./webpack.base.config');
 
+const entry = {
+  main: path.join(__dirname, 'app/renderer/main/index.tsx'),
+  user: path.join(__dirname, 'app/renderer/user/index.tsx'),
+  codeViews: path.join(__dirname, 'app/renderer/codeViews/index.tsx'),
+  webglViews: path.join(__dirname, 'app/renderer/webglViews/index.tsx'),
+  login: path.join(__dirname, 'app/renderer/login/index.tsx')
+};
+
+const htmlWebpackPlugin = Object.keys(entry).map(name => new HtmlWebpackPlugin({
+  inject: 'body',
+  scriptLoading: 'defer',
+  template: path.join(__dirname, 'resources/template/template.html'),
+  minify: false,
+  filename: `${name}/index.html`,
+  chunks: [name]
+}));
+
 module.exports = merge.smart(webpackBaseConfig, {
   devtool: 'none',
 
@@ -15,14 +32,12 @@ module.exports = merge.smart(webpackBaseConfig, {
 
   target: 'electron-preload',
 
-  entry: {
-    index: path.join(__dirname, 'app/renderer/index.tsx')
-  },
+  entry,
 
   output: {
-    path: path.join(__dirname, 'dist/renderer'),
-    publicPath: './',
-    filename: 'renderer.prod.js'
+    path: path.join(__dirname, 'dist/renderer/'),
+    publicPath: '../',
+    filename: '[name]/index.prod.js'
   },
   module: {
     rules: [
@@ -194,13 +209,9 @@ module.exports = merge.smart(webpackBaseConfig, {
       NODE_ENV: 'production'
     }),
     new MiniCssExtractPlugin({
-      filename: 'renderer.style.css'
+      filename: '[name]/index.style.css',
+      publicPath: '../'
     }),
-    new HtmlWebpackPlugin({
-      inject: 'body',
-      scriptLoading: 'defer',
-      template: path.join(__dirname, 'resources/template/template.html'),
-      minify: false
-    })
+    ...htmlWebpackPlugin
   ]
 });

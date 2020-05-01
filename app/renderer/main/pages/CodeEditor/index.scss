@@ -1,0 +1,47 @@
+@import "~resources/style/mixin.global.scss";
+
+.code_editor {
+  background: #333544;
+}
+
+
+.header_navigation {
+  height: 50px;
+  width: calc(100% - 250px);
+  display: flex;
+  @include drag;
+
+  .menu_wrapper {
+    width: 250px;
+    flex-basis: 250px;
+
+  }
+
+  .run_tools_wrapper {
+    width: 300px;
+  }
+}
+
+.content {
+  display: flex;
+  height: calc(100vh - 50px);
+  width: 100%;
+}
+
+.file_manager_panel {
+  flex-basis: 200px;
+}
+
+.code_panel {
+  flex: 1;
+
+}
+
+.file_tab_wrapper {
+  height: 28px;
+}
+
+.editor_wrapper {
+  height: calc(100% - 28px);
+}
+

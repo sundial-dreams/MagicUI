@@ -1,0 +1,46 @@
+@import "~resources/style/mixin.global";
+
+.run_tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 400px;
+  height: 100%;
+  font-size: 12px;
+
+  button {
+    @include no-drag;
+  }
+
+  button.run_btn {
+    color: green;
+  }
+
+  button.build_btn {
+    color: #aa2222;
+  }
+
+  button.export_btn {
+    color: #aa5500;
+  }
+
+  .search {
+    @include no-drag;
+    width: 250px;
+    display: flex;
+    align-items: center;
+    color: #999999;
+
+    input {
+      width: 200px;
+      height: 24px;
+      border: none;
+      outline: none;
+      background: rgba(0, 0, 0, .1);
+      box-shadow: inset 0 0 2px rgba(0, 0, 0, .2);
+      color: #dddddd;
+      margin-right: 5px;
+      padding-left: 10px;
+    }
+  }
+}

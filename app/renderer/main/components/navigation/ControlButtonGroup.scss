@@ -1,0 +1,49 @@
+@import "~resources/style/mixin.global.scss";
+
+.control_button_group {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 45px;
+  height: 11px;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  & > button {
+    @include no-drag;
+    width: 11px;
+    height: 11px;
+    border-radius: 51%;
+    transition: .2s background;
+    cursor: pointer;
+
+    &:hover, &:active {
+      cursor: pointer;
+    }
+
+    &:nth-child(1) {
+      background: #6C0AAB;
+
+      &:hover, &:active {
+        background: #9A3FD5;
+      }
+    }
+
+    &:nth-child(2) {
+      background: #FF7400;
+
+      &:hover, &:active {
+        background: #FF7E40;
+      }
+    }
+
+    &:nth-child(3) {
+      background: #DE0052;
+
+      &:hover, &:active {
+        background: #F83E5B;
+      }
+    }
+  }
+}

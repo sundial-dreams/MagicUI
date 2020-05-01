@@ -12,6 +12,29 @@ const webpackBaseConfig = require('./webpack.base.config');
 const port = process.env.PORT || 8080;
 const publicPath = `http://localhost:${port}/dist`;
 
+const hot = [
+  'react-hot-loader/patch',
+  `webpack-dev-server/client?http://localhost:${port}/`,
+  'webpack/hot/only-dev-server',
+];
+
+const entry = {
+  main: hot.concat(require.resolve('./app/renderer/main/index.tsx')),
+  user: hot.concat(require.resolve('./app/renderer/user/index.tsx')),
+  codeViews: hot.concat(require.resolve('./app/renderer/codeViews/index.tsx')),
+  webglViews: hot.concat(require.resolve('./app/renderer/webglViews/index.tsx')),
+  login: hot.concat(require.resolve('./app/renderer/login/index.tsx'))
+};
+
+const htmlWebpackPlugin = Object.keys(entry).map(name => new HtmlWebpackPlugin({
+  inject: 'body',
+  scriptLoading: 'defer',
+  template: path.join(__dirname, 'resources/template/template.html'),
+  minify: false,
+  filename: `${name}.html`,
+  chunks: [name]
+}));
+
 module.exports = merge.smart(webpackBaseConfig, {
   devtool: 'inline-source-map',
 
@@ -19,12 +42,7 @@ module.exports = merge.smart(webpackBaseConfig, {
 
   target: 'electron-renderer',
 
-  entry: [
-    'react-hot-loader/patch',
-    `webpack-dev-server/client?http://localhost:${port}/`,
-    'webpack/hot/only-dev-server',
-    require.resolve('./app/renderer/index.tsx')
-  ],
+  entry,
 
   resolve: {
     alias: {
@@ -34,7 +52,7 @@ module.exports = merge.smart(webpackBaseConfig, {
 
   output: {
     publicPath,
-    filename: 'renderer.dev.js'
+    filename: '[name].dev.js'
   },
 
   module: {
@@ -167,12 +185,7 @@ module.exports = merge.smart(webpackBaseConfig, {
     new webpack.LoaderOptionsPlugin({
       debug: true
     }),
-    new HtmlWebpackPlugin({
-      inject: 'body',
-      scriptLoading: 'defer',
-      template: path.join(__dirname, 'resources/template/template.html'),
-      minify: false
-    }),
+    ...htmlWebpackPlugin
   ],
   devServer: {
     port,

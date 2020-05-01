@@ -163,6 +163,7 @@ input {
   height: 100%;
   opacity: 0;
   animation: page-show .5s ease-in-out forwards;
+  position: relative;
 }
 
 @keyframes page-show {

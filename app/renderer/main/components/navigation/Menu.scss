@@ -1,0 +1,31 @@
+@import "~resources/style/icon.global.scss";
+@import "~resources/style/mixin.global.scss";
+
+.menu_item {
+  @include content-center;
+
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  color: white;
+  margin: 5px 0;
+  transition: ease-in-out .2s;
+
+  &.active {
+    color: #6C0AAB;
+  }
+}
+
+.menu {
+  position: absolute;
+  top: 50%;
+  display: flex;
+
+  width: 100%;
+  height: 200px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+
+}

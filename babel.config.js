@@ -17,12 +17,13 @@ module.exports = api => {
         }
       }],
       require('@babel/preset-typescript'),
-      [require('@babel/preset-react'), {development}]
+      [require('@babel/preset-react'), {development, throwIfNamespace: false}]
     ],
     plugins: [
       [require('@babel/plugin-proposal-optional-chaining'), {loose: false}],
       [require('@babel/plugin-proposal-decorators'), {legacy: true}],
       require('@babel/plugin-syntax-dynamic-import'),
+      require('@babel/plugin-proposal-class-properties'),
       ...(development ? devPlugins : prodPlugins)
     ]
   };

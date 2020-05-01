@@ -7,7 +7,7 @@ const webpackBaseConfig = require('./webpack.base.config');
 module.exports = merge.smart(webpackBaseConfig, {
   devtool: 'none',
 
-  mode: 'production',
+  mode: 'development',
 
   target: 'node',
 

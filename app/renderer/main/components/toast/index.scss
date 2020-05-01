@@ -1,0 +1,44 @@
+@keyframes toast-show {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes toast-hidden {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.__layer {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100000;
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+  height: 32px;
+  min-width: 150px;
+  line-height: 32px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 12px;
+  color: white;
+  animation: toast-show .5s ease-in-out forwards;
+
+  &.hidden {
+    animation: toast-hidden .5s ease-in-out forwards;
+  }
+}

@@ -1,0 +1,65 @@
+@import "~resources/style/mixin.global.scss";
+
+.menu {
+  @include no-drag;
+  height: 50px;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  user-select: none;
+
+  .menu_item_wrapper {
+    width: 60px;
+    flex-basis: 60px;
+    height: 100%;
+  }
+}
+
+.menu_item {
+  width: 100%;
+  height: 100%;
+  color: #999999;
+  position: relative;
+
+  & > button {
+    @include no-drag;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+  }
+
+  &:hover > .menu_item_content {
+    visibility: visible;
+    opacity: 1;
+    top: 70%;
+  }
+
+  .menu_item_content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background: #313341;
+    box-shadow: 5px 0 5px rgba(0, 0, 0, .1);
+    border: 1px solid rgba(0, 0, 0, .1);
+    visibility: hidden;
+    opacity: 0;
+    transition: .5s;
+    min-width: 100px;
+    padding: 5px 0;
+    box-sizing: border-box;
+  }
+}
+
+.item_section {
+  font-size: 12px;
+  width: 100%;
+  margin: 2px 0;
+  height: 20px;
+  text-align: left;
+  text-indent: 10px;
+
+
+  &:hover {
+    background: rgba(255, 255, 255, .1);
+  }
+}

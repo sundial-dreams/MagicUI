@@ -1,0 +1,27 @@
+@import "~resources/style/mixin.global.scss";
+
+.edit_tools {
+  display: flex;
+  height: 50px;
+  width: 300px;
+  align-items: center;
+  justify-content: space-around;
+  color: #999999;
+  font-size: 12px;
+
+  .label {
+  }
+
+  .tools {
+    display: flex;
+    height: 100%;
+    width: 250px;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  .tools button {
+    @include no-drag;
+  }
+
+}
