@@ -7,7 +7,7 @@ export enum UserActions {
   CHANGE_USER = 'change user'
 }
 
-export function saveUser(args: { email: string, avatar: string, password: string }) {
+export function saveUser(args: { email: string, avatar: string, password: string, nickname: string }) {
   return {
     type: UserActions.SAVE_USER,
     ...args

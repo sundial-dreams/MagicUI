@@ -1,6 +1,18 @@
-import { IComponentState, IEditToolsState, IRunToolsState } from '../store/UIEditor';
+import {
+  IComponentState,
+  IEditHistoryState,
+  IEditToolsState,
+  IRunToolsState,
+  IWebGLPageState
+} from '../store/webglEditor';
 import { TActions } from '../actions';
-import { ComponentActions, EditToolsActions, RunToolsActions } from '../actions/UIEditor';
+import {
+  ComponentActions,
+  EditHistoryActions,
+  EditToolsActions,
+  RunToolsActions,
+  WebGLPageActions
+} from '../actions/webglEditor';
 import EditTools from '../pages/WebGLEditor/EditTools';
 
 export function editToolsReducer(state: IEditToolsState, action: TActions) {
@@ -40,6 +52,20 @@ export function editToolsReducer(state: IEditToolsState, action: TActions) {
         editType: action.editType
       };
     }
+    case EditToolsActions.SAVE: {
+      return {
+        ...state,
+        id: action.id,
+        editType: action.editType
+      }
+    }
+    case EditToolsActions.UNDO: {
+      return {
+        ...state,
+        id: action.id,
+        editType: action.editType
+      }
+    }
     default: {
       return { ...state };
     }
@@ -53,21 +79,26 @@ export function componentReducer(state: IComponentState, action: TActions) {
         ...state,
         id: action.id,
         name: action.name,
-        props: action.props
-      }
+        cpnType: action.cpnType,
+        props: action.props,
+        path: action.path,
+        operator: 'select-component'
+      };
     }
     case ComponentActions.DRAG_COMPONENT: {
       return {
         ...state,
+        operator: 'drag-component',
         props: {
           ...state.props,
           position: action.position
         }
-      }
+      };
     }
     case ComponentActions.TRANSFORM_COMPONENT: {
       return {
         ...state,
+        operator: 'transform-component',
         props: {
           ...state.props,
           size: action.size
@@ -77,6 +108,7 @@ export function componentReducer(state: IComponentState, action: TActions) {
     case ComponentActions.CHANGE_COMPONENT_BACKGROUND: {
       return {
         ...state,
+        operator: 'change-component-background',
         props: {
           ...state.props,
           background: {
@@ -89,6 +121,7 @@ export function componentReducer(state: IComponentState, action: TActions) {
     case ComponentActions.CHANGE_COMPONENT_TEXT: {
       return {
         ...state,
+        operator: 'change-component-text',
         props: {
           ...state.props,
           text: {
@@ -101,6 +134,7 @@ export function componentReducer(state: IComponentState, action: TActions) {
     case ComponentActions.CHANGE_COMPONENT_BORDER: {
       return {
         ...state,
+        operator: 'change-component-border',
         props: {
           ...state.props,
           border: {
@@ -114,6 +148,7 @@ export function componentReducer(state: IComponentState, action: TActions) {
     case ComponentActions.CHANGE_COMPONENT_SHADOW: {
       return {
         ...state,
+        operator: 'change-component-shadow',
         props: {
           ...state.props,
           shadow: {
@@ -125,8 +160,20 @@ export function componentReducer(state: IComponentState, action: TActions) {
         }
       };
     }
+    case ComponentActions.CHANGE_COMPONENT_IMAGE: {
+      return {
+        ...state,
+        operator: 'change-component-image',
+        props: {
+          ...state.props,
+          image: {
+            src: action.src
+          }
+        }
+      }
+    }
     default: {
-      return {...state}
+      return { ...state };
     }
   }
 }
@@ -159,6 +206,51 @@ export function runToolsReducer(state: IRunToolsState, action: TActions) {
     }
     default: {
       return { ...state };
+    }
+  }
+}
+
+export function webGLPageReducer(state: IWebGLPageState, action: TActions) {
+  switch (action.type) {
+    case WebGLPageActions.SELECT: {
+      return {
+        ...state,
+        pageId: action.pageId,
+        page: action.page,
+        name: action.name
+      }
+    }
+    default: {
+      return { ...state };
+    }
+  }
+}
+
+
+export function editHistoryReducer(state: IEditHistoryState, action: TActions) {
+  switch (action.type) {
+    case EditHistoryActions.ADD_EDIT_HISTORY: {
+      return {
+        history: [...state.history, { id: action.id, operator: action.operator, data: action.data }]
+      }
+    }
+    case EditHistoryActions.REMOVE_EDIT_HISTORY: {
+      const current = state.history.pop();
+      return {
+        history: [...state.history],
+        current
+      }
+    }
+    case EditHistoryActions.RESET_EDIT_HISTORY: {
+      return {
+        history: [],
+        current: undefined
+      }
+    }
+    default: {
+      return {
+        ...state
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
 import { constants } from 'os';
+import { EventEmitter } from '../../public/utils';
 
 export enum EditToolsActions {
   DELETE = 'edit-tools-delete',
@@ -10,6 +11,11 @@ export enum EditToolsActions {
   RESET = 'edit-tools-reset'
 }
 
+export const saveComponent = () => ({
+  type: EditToolsActions.SAVE,
+  id: 'none',
+  editType: 'save'
+});
 
 export const resetComponent = () => ({
   type: EditToolsActions.RESET,
@@ -17,11 +23,13 @@ export const resetComponent = () => ({
   editType: ''
 });
 
-export const deleteComponent = (id: string) => ({
-  type: EditToolsActions.DELETE,
-  id,
-  editType: 'delete'
-});
+export const deleteComponent = (id: string) => {
+  return ({
+    type: EditToolsActions.DELETE,
+    id,
+    editType: 'delete'
+  });
+};
 
 export const copyComponent = (id: string) => ({
   type: EditToolsActions.COPY,
@@ -54,22 +62,24 @@ export enum ComponentActions {
   CHANGE_COMPONENT_BACKGROUND = 'change-component-background',
   CHANGE_COMPONENT_SHADOW = 'change-component-shadow',
   CHANGE_COMPONENT_TEXT = 'change-component-text',
-  CHANGE_COMPONENT_BORDER = 'change-component-border'
+  CHANGE_COMPONENT_BORDER = 'change-component-border',
+  CHANGE_COMPONENT_IMAGE = 'change-component-image'
 }
 
-export const selectComponent = (id: string, name: string, props: any) => ({
+export const selectComponent = (id: string, type: string, name: string, path: string, props: any) => ({
   type: ComponentActions.SELECT_COMPONENT,
   id,
   name,
+  path,
   props
 });
 
-export const dragComponent = (position: {x: number, y: number}) => ({
+export const dragComponent = (position: { x: number, y: number }) => ({
   type: ComponentActions.DRAG_COMPONENT,
   position
 });
 
-export const transformComponent = (size: {width: number, height: number}) => ({
+export const transformComponent = (size: { width: number, height: number }) => ({
   type: ComponentActions.TRANSFORM_COMPONENT,
   size
 });
@@ -101,6 +111,10 @@ export const changeComponentBorder = (fill: string, width: number, radius: numbe
   radius
 });
 
+export const changeComponentImage = (src: string) => ({
+  type: ComponentActions.CHANGE_COMPONENT_IMAGE,
+  src
+});
 
 export enum RunToolsActions {
   BUILD = 'run-tools-build',
@@ -110,17 +124,51 @@ export enum RunToolsActions {
 }
 
 export const buildCode = () => ({
-  type: RunToolsActions.BUILD,
+  type: RunToolsActions.BUILD
 });
 
 export const runCode = () => ({
-  type: RunToolsActions.RUN,
+  type: RunToolsActions.RUN
 });
 
 export const exportCode = () => ({
-  type: RunToolsActions.EXPORT,
+  type: RunToolsActions.EXPORT
 });
 
 export const resetCode = () => ({
   type: RunToolsActions.RESET
+});
+
+
+export enum WebGLPageActions {
+  SELECT = 'select-current-webgl-page',
+}
+
+export const selectWebGLPage = (pageId: string, name: string, page: object) => ({
+  type: WebGLPageActions.SELECT,
+  pageId,
+  page,
+  name
+});
+
+
+export enum EditHistoryActions {
+  ADD_EDIT_HISTORY = 'add-edit-history',
+  REMOVE_EDIT_HISTORY = 'remove-edit-history',
+  RESET_EDIT_HISTORY = 'reset-edit-history'
+}
+
+export const addEditHistory = (id: string, operator: string, data: {old: any, new: any}) => ({
+  type: EditHistoryActions.ADD_EDIT_HISTORY,
+  id,
+  operator,
+  data
+});
+
+export const removeEditHistory = () => ({
+  type: EditHistoryActions.REMOVE_EDIT_HISTORY
+});
+
+export const resetEditHistory = () => ({
+  type: EditHistoryActions.RESET_EDIT_HISTORY
 });

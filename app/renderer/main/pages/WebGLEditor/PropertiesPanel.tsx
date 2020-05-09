@@ -1,14 +1,48 @@
-import React, {ChangeEvent, ReactNode, useEffect, useState} from 'react';
-import {cls} from '../../utils';
-import {useDispatch, useSelector} from 'react-redux';
-import {IStoreState} from '../../store';
-import {useInput} from '../../hooks';
-import {changeComponentBackground, changeComponentBorder, changeComponentShadow, changeComponentText} from '../../actions/UIEditor';
+import React, { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { cls } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { SketchPicker } from 'react-color';
+import { IStoreState } from '../../store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
+import {
+  changeComponentBackground,
+  changeComponentBorder, changeComponentImage,
+  changeComponentShadow,
+  changeComponentText
+} from '../../actions/webglEditor';
 
 // @ts-ignore
 import style from './PropertiesPanel.scss';
-const {round} = Math;
 
+const { round } = Math;
+
+
+const useShowPicker = (value = false): [boolean, () => void, React.MutableRefObject<any>, () => void] => {
+  const [showPicker, setShowPicker] = useState(value);
+  const pickerRef = useRef(null);
+  const toggleShowPicker = () => setShowPicker(showPicker => !showPicker);
+  let flag = true;
+  const hidePicker = () => {
+    if (flag) {
+      setShowPicker(false);
+    }
+    flag = true;
+  }
+
+  useEffect(() => {
+    const picker = pickerRef.current as unknown as HTMLElement;
+    picker.addEventListener('click', e => {
+      flag = false;
+    }, false);
+    document.body.addEventListener('click', hidePicker, false);
+
+    return () => {
+      document.body.removeEventListener('click', hidePicker, false);
+    };
+  }, []);
+  return [showPicker, toggleShowPicker, pickerRef, hidePicker];
+};
 
 interface IBasicPropertiesProps {
   position: { x: number, y: number },
@@ -54,14 +88,12 @@ function BackgroundProperties(props: IBackgroundPropertiesProps) {
   const dispatch = useDispatch();
   const [color, setColor] = useState('');
   const [opacity, setOpacity] = useState(0);
-
+  const [showPicker, toggleShowPicker, pickerRef] = useShowPicker(false);
   useEffect(() => setColor(props.background.fill), [props.background.fill]);
   useEffect(() => setOpacity(props.background.opacity), [props.background.opacity]);
-
   const handleChangeColor = (e: any) => {
-    setColor(e.target.value);
-    console.log(e.target.value);
-    dispatch(changeComponentBackground(e.target.value, props.background.opacity));
+    setColor(e.hex);
+    dispatch(changeComponentBackground(e.hex, props.background.opacity));
   };
   const handleChangeOpacity = (e: any) => {
     setOpacity(+e.target.value);
@@ -72,7 +104,10 @@ function BackgroundProperties(props: IBackgroundPropertiesProps) {
     <PropertiesItem name="BACKGROUND">
       <div className={style.bg_color_props}>
         <span>Fill</span>
-        <input value={color} onChange={handleChangeColor}/>
+        <input value={color} onClick={() => toggleShowPicker()}/>
+        <div className={cls(style.bg_color_picker, showPicker && style.show)} ref={pickerRef}>
+          <SketchPicker color={color} onChange={handleChangeColor}/>
+        </div>
       </div>
       <div className={style.bg_opacity_props}>
         <span>Opacity</span>
@@ -95,14 +130,15 @@ function BorderProperties(props: IBorderPropertiesProps) {
   const [width, setWidth] = useState(0);
   const [radius, setRadius] = useState(0);
   const [color, setColor] = useState('');
+  const [showPicker, toggleShowPicker, pickerRef] = useShowPicker(false);
 
   useEffect(() => setWidth(props.border.width), [props.border.width]);
   useEffect(() => setRadius(props.border.radius), [props.border.radius]);
   useEffect(() => setColor(props.border.fill), [props.border.fill]);
 
   const handleChangeColor = (e: any) => {
-    setColor(e.target.value);
-    dispatch(changeComponentBorder(e.target.value, width, radius));
+    setColor(e.hex);
+    dispatch(changeComponentBorder(e.hex, width, radius));
   };
 
   const handleChangeWidth = (e: any) => {
@@ -112,8 +148,9 @@ function BorderProperties(props: IBorderPropertiesProps) {
 
   const handleChangeRadius = (e: any) => {
     setRadius(e.target.value);
-    dispatch(changeComponentBorder(color, width, + e.target.value));
+    dispatch(changeComponentBorder(color, width, +e.target.value));
   };
+
   return (
     <PropertiesItem name="BORDER">
       <div className={style.border_props}>
@@ -128,7 +165,10 @@ function BorderProperties(props: IBorderPropertiesProps) {
       </div>
       <div className={style.border_color_props}>
         <span>Fill</span>
-        <input value={color} onChange={handleChangeColor}/>
+        <input value={color} onClick={toggleShowPicker}/>
+        <div className={cls(style.border_color_picker, showPicker && style.show)} ref={pickerRef}>
+          <SketchPicker color={color} onChange={handleChangeColor}/>
+        </div>
       </div>
     </PropertiesItem>
   );
@@ -149,6 +189,7 @@ function ShadowProperties(props: IShadowPropertiesProps) {
   const [offsetY, setOffsetY] = useState(0);
   const [blur, setBlur] = useState(0);
   const [color, setColor] = useState('');
+  const [showPicker, toggleShowPicker, pickerRef] = useShowPicker(false);
 
   useEffect(() => setOffsetX(props.shadow.offsetX), [props.shadow.offsetX]);
   useEffect(() => setOffsetY(props.shadow.offsetY), [props.shadow.offsetY]);
@@ -174,7 +215,7 @@ function ShadowProperties(props: IShadowPropertiesProps) {
   };
 
   const handleChangeColor = (e: any) => {
-    const value = e.target.value;
+    const value = e.hex;
     setColor(value);
     dispatch(changeComponentShadow(value, blur, offsetX, offsetY));
   };
@@ -197,7 +238,10 @@ function ShadowProperties(props: IShadowPropertiesProps) {
       </div>
       <div className={style.shadow_color_props}>
         <span>Fill</span>
-        <input value={color} onChange={handleChangeColor}/>
+        <input value={color} onClick={toggleShowPicker}/>
+        <div className={cls(style.shadow_color_picker, showPicker && style.show)} ref={pickerRef}>
+          <SketchPicker color={color} onChange={handleChangeColor}/>
+        </div>
       </div>
     </PropertiesItem>
   );
@@ -214,6 +258,7 @@ function TextProperties(props: ITextPropertiesProps) {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
   const [color, setColor] = useState('');
+  const [showPicker, toggleShowPicker, pickerRef] = useShowPicker(false);
 
   useEffect(() => setText(props.text.text), [props.text.text]);
   useEffect(() => setColor(props.text.fill), [props.text.fill]);
@@ -225,7 +270,7 @@ function TextProperties(props: ITextPropertiesProps) {
   };
 
   const handleChangeColor = (e: any) => {
-    const value = e.target.value;
+    const value = e.hex;
     setColor(value);
     dispatch(changeComponentText(value, text));
   };
@@ -238,22 +283,48 @@ function TextProperties(props: ITextPropertiesProps) {
       </div>
       <div className={style.text_color_props}>
         <span>Fill</span>
-        <input value={color} onChange={handleChangeColor}/>
+        <input value={color} onClick={toggleShowPicker}/>
+        <div className={cls(style.text_color_picker, showPicker && style.show)} ref={pickerRef}>
+          <SketchPicker color={color} onChange={handleChangeColor}/>
+        </div>
       </div>
     </PropertiesItem>
   );
 }
 
 interface IImagePropertiesProps {
-
+  image: {
+    src: string
+  }
 }
 
 function ImageProperties(props: IImagePropertiesProps) {
+  const dispatch = useDispatch();
+  const [src, setSrc] = useState('');
+  const [showPicker, toggleShowPicker, pickerRef, hidePicker] = useShowPicker(false);
+  useEffect(() => setSrc(props.image.src), [props.image.src]);
+  const handleChangeSrc = (e: any) => {
+    const value = e.target.value;
+    setSrc(value);
+  };
+
+  const handleConfirmSrc = () => {
+    console.log('click src');
+    dispatch(changeComponentImage(src));
+    hidePicker();
+  };
+
   return (
     <PropertiesItem name="IMAGE">
       <div className={style.image_src_props}>
-        <span>Image</span>
-        <input/>
+        <span>Src</span>
+        <input onClick={toggleShowPicker} value={src}/>
+        <div className={cls(style.image_src_card, showPicker && style.show)} ref={pickerRef}>
+          <input onChange={handleChangeSrc} value={src}/>
+          <button onClick={handleConfirmSrc}>
+            <FontAwesomeIcon icon={faCheck}/>
+          </button>
+        </div>
       </div>
     </PropertiesItem>
   );
@@ -270,14 +341,14 @@ export default function PropertiesPanel(props: IPropertiesPanelProps) {
   return (
     <div className={style.properties_panel}>
       <div className={style.panel_content}>
-        <h3>{cpnState.name}</h3>
+        <h3>{cpnState.name.split('_').join(' ')}</h3>
         <div className={style.component_properties}>
           <BasicProperties position={cpnProps.position} size={cpnProps.size}/>
           {cpnProps.background && <BackgroundProperties background={cpnProps.background}/>}
           {cpnProps.border && <BorderProperties border={cpnProps.border}/>}
           {cpnProps.shadow && <ShadowProperties shadow={cpnProps.shadow}/>}
           {cpnProps.text && <TextProperties text={cpnProps.text}/>}
-          {cpnProps.image && <ImageProperties/> }
+          {cpnProps.image && <ImageProperties image={cpnProps.image}/>}
         </div>
       </div>
       <div className={style.status_bar}>

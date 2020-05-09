@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Avatar } from '../public/components';
 
 import { faCircleNotch, faArrowRight, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-// @ts-ignore
-import style from './Login.scss';
 import { cls } from '../public/utils';
 import { throttle } from '../public/utils';
 import { fetchLoginEmail, fetchLoginPassword } from './utils';
 import Bridge from '../public/utils/bridge';
+// @ts-ignore
+import style from './Login.scss';
+
+const DEFAULT_AVATAR = 'http://localhost:9000/image/default_avatar.jpeg';
 
 const icons = {
   ok: <FontAwesomeIcon icon={faCheck} color="green"/>,
@@ -22,8 +24,10 @@ export default function Login() {
   const [src, setSrc] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [nickname, setNickname] = useState('');
   const [emailResultIcon, setEmailResultIcon] = useState(icons.empty);
   const [passwordResultIcon, setPasswordResultIcon] = useState(icons.empty);
+
 
 
   const handleEmailChange = (e: any) => {
@@ -52,21 +56,24 @@ export default function Login() {
           setPasswordResultIcon(icons.error as any);
           return;
         }
+        setNickname(v.nickname);
         setPasswordResultIcon(icons.ok as any);
       });
     })();
   };
+  console.log('nickname', nickname);
 
   const handleLogin = () => {
     if (emailResultIcon === icons.ok && passwordResultIcon === icons.ok) {
-      Bridge.openMainWindow({email, password, avatar: src});
+      console.log('nickname = ', nickname);
+      Bridge.openMainWindow({email, password, avatar: src, nickname});
     }
   };
 
   return (
     <div className={style.login}>
       <div className={style.avatar_wrapper}>
-        <Avatar src={src} size={80}/>
+        <Avatar src={src || DEFAULT_AVATAR} size={80}/>
       </div>
       <div className={style.input_wrapper}>
         <div className={cls(style.input, style.input_email)}>

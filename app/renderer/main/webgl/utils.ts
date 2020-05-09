@@ -1,4 +1,14 @@
 import Konva from 'konva';
+import { COMPONENT_TYPES, TYPES } from '../utils/constants';
+import { WebGLButton } from './components/button';
+import { WebGLInput } from './components/input';
+import { WebGLLabel, WebGLText } from './components/text';
+import { WebGLMobileWidget, WebGLPCWidget } from './components/widget';
+import { WebGLCircle, WebGLEllipse, WebGLRect } from './components/shape';
+import { WebGLImage } from './components/image';
+import WebGLComponent from './components/components';
+import CanvasEditorRenderer from './index';
+import { render } from 'react-dom';
 
 export default class WebGLEditorUtils {
   static addGuidesLineForLayer(layer: Konva.Layer, stage: Konva.Stage) {
@@ -342,20 +352,20 @@ export default class WebGLEditorUtils {
     includePoints.forEach(point => {
       const diff =
         distance(
-          {x: groupPoint.x, y: groupPoint.y},
-          {x: point.x, y: point.y}
+          { x: groupPoint.x, y: groupPoint.y },
+          { x: point.x, y: point.y }
         ) +
         distance(
-          {x: groupPoint.x + groupPoint.w, y: groupPoint.y},
-          {x: point.x + point.w, y: point.y}
+          { x: groupPoint.x + groupPoint.w, y: groupPoint.y },
+          { x: point.x + point.w, y: point.y }
         ) +
         distance(
-          {x: groupPoint.x, y: groupPoint.y + groupPoint.h},
-          {x: point.x, y: point.y + point.h}
+          { x: groupPoint.x, y: groupPoint.y + groupPoint.h },
+          { x: point.x, y: point.y + point.h }
         ) +
         distance(
-          {x: groupPoint.x + groupPoint.w, y: groupPoint.y + groupPoint.h},
-          {x: point.x + point.w, y: point.y + point.h}
+          { x: groupPoint.x + groupPoint.w, y: groupPoint.y + groupPoint.h },
+          { x: point.x + point.w, y: point.y + point.h }
         );
       if (diff < minDistance) {
         minDistance = diff;
@@ -369,4 +379,176 @@ export default class WebGLEditorUtils {
 }
 
 
+export const ComponentMap = {
+  // button
+  [TYPES.BUTTON]: {
+    [COMPONENT_TYPES.BUTTON.CUSTOM_BUTTON]: WebGLButton
+  },
+  // input
+  [TYPES.INPUT]: {
+    [COMPONENT_TYPES.INPUT.CUSTOM_INPUT]: WebGLInput
+  },
+  // text
+  [TYPES.TEXT]: {
+    [COMPONENT_TYPES.TEXT.LABEL]: WebGLLabel,
+    [COMPONENT_TYPES.TEXT.CUSTOM_TEXT]: WebGLText
+  },
+  // widget
+  [TYPES.WIDGET]: {
+    [COMPONENT_TYPES.WIDGET.PC_WIDGET]: WebGLPCWidget,
+    [COMPONENT_TYPES.WIDGET.MOBILE_WIDGET]: WebGLMobileWidget
+  },
+  // shape
+  [TYPES.SHAPE]: {
+    [COMPONENT_TYPES.SHAPE.RECT]: WebGLRect,
+    [COMPONENT_TYPES.SHAPE.CIRCLE]: WebGLCircle,
+  },
+  // image
+  [TYPES.IMAGE]: {
+    [COMPONENT_TYPES.IMAGE.CUSTOM_IMAGE]: WebGLImage
+  }
+};
 
+export function getComponentProps(webGLComponent: WebGLComponent) {
+  const position = webGLComponent.getPosition();
+  const size = webGLComponent.getSize();
+  const background = webGLComponent.getBackgroundProps();
+  const shadow = webGLComponent.getShadowProps();
+  const border = webGLComponent.getBorderProps();
+  const text = webGLComponent.getTextProps();
+  const image = webGLComponent.getImageProps();
+
+  return {
+    position: {
+      x: Math.round(position.x),
+      y: Math.round(position.y)
+    },
+    size: {
+      width: Math.round(size.width),
+      height: Math.round(size.height)
+    },
+    shadow: shadow ? {
+      offsetX: shadow?.offsetX || 0,
+      offsetY: shadow?.offsetY || 0,
+      blur: shadow?.blur || 0,
+      fill: shadow?.fill || 'white'
+    } : undefined,
+    background: background ? {
+      opacity: background?.opacity || 1,
+      fill: background?.fill || 'white'
+    } : undefined,
+    border: border ? {
+      width: border?.width || 0,
+      fill: border?.fill || 'white',
+      radius: border?.radius || 0
+    } : undefined,
+    text: text ? {
+      text: text?.text || '',
+      fill: text?.fill || 'white'
+    } : undefined,
+    image: image
+  };
+}
+
+export function dropComponentToWebGLEditor(type: string, name: string, position: { x: number, y: number }, editor: CanvasEditorRenderer) {
+  editor.addComponent(
+    new (ComponentMap as any)[type][name](position)
+  );
+}
+
+export function removeComponentFromWebGLEditor(componentId: string, editor: CanvasEditorRenderer) {
+  return editor.removeComponent(
+    componentId
+  );
+}
+
+export function pasteComponentToWebGLEditor(componentId: string, editor: CanvasEditorRenderer) {
+  return editor.pasteComponent(
+    componentId
+  );
+}
+
+export function modifyComponentProperties(componentId: string, propType: string, data: any, editor: CanvasEditorRenderer) {
+  editor.modifyComponentProperties(
+    componentId,
+    propType,
+    data
+  );
+}
+
+export function transformWebGLToJsonObject(editor: CanvasEditorRenderer) {
+  return editor.toJsonObject();
+}
+
+export type TRawComponent = {
+  id: string,
+  type: string,
+  name: string,
+  props: any,
+  children: TRawComponent[]
+};
+
+export function webGLComponentToJsonObject(component: WebGLComponent): TRawComponent {
+  return {
+    id: component.getId(),
+    type: component.getType(),
+    name: component.getName(),
+    props: getComponentProps(component),
+    children: component.getChildren().size ?
+      [...component.getChildren().values()].map(value => {
+        return webGLComponentToJsonObject(value);
+      }) : []
+  };
+}
+
+export function drawComponentFromJsonObject(jsonObject: TRawComponent, renderer: CanvasEditorRenderer, isPaste = false): WebGLComponent {
+  let root: WebGLComponent | null = null;
+  const queue = [jsonObject];
+  const map = new Map<string, WebGLComponent>();
+
+  while (queue.length) {
+    const front = queue.shift() as TRawComponent;
+    let parent;
+    if (map.has(front.id)) {
+      parent = map.get(front.id);
+    } else {
+      parent = new (ComponentMap as any)[front.type][front.name](
+        front.props.position
+      ) as WebGLComponent;
+      setComponentProps(parent, front.props);
+      map.set(front.id, parent);
+    }
+
+    if (root === null) {
+      root = parent as WebGLComponent;
+      renderer.addRootComponent(root as WebGLComponent);
+    }
+
+    for (let v of front.children) {
+      queue.push(v);
+      const child = new (ComponentMap as any)[v.type][v.name](v.props.position, v.props.size) as WebGLComponent;
+      setComponentProps(child, v.props);
+      renderer.addComponentForParent(parent as WebGLComponent, child);
+      map.set(v.id, child);
+    }
+  }
+  const component = root as WebGLComponent;
+  isPaste && component.setPosition({
+    x: component.getPosition().x + 10,
+    y: component.getPosition().y + 10
+  });
+  renderer.getComponentManager().showCurrentComponentTransformer(
+    root?.getId() as string
+  );
+  renderer.render();
+  return component;
+}
+
+export function setComponentProps(component: WebGLComponent, props: any) {
+  props.size && component.setSize(props.size);
+  component.getBackgroundProps() && props.background && component.setBackgroundProps(props.background);
+  component.getShadowProps() && props.shadow && component.setShadowProps(props.shadow);
+  component.getBorderProps() && props.border && component.setBorderProps(props.border);
+  component.getTextProps() && props.text && component.setTextProps(props.text);
+  component.getImageProps() && props.image && component.setImageProps(props.image, props.size);
+}

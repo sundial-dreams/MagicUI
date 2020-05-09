@@ -4,35 +4,30 @@ import { faWindowClose, faTimes } from '@fortawesome/free-solid-svg-icons';
 // @ts-ignore
 import style from './FileTabs.scss';
 import { cls } from '../../utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IStoreState } from '../../store';
+import { changeIndex, closeFile, selectedFileCode } from '../../actions/dslEditor';
 
 export interface IFileTabsProps {
-  files: string[]
 }
 
 export default function FileTabs(props: IFileTabsProps) {
   const state = useSelector((state: IStoreState) => state.dslFile);
-  const [items, setItems] = useState([] as { id: number, name: string }[]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const dispatch = useDispatch();
+  const openFile = useSelector((state: IStoreState) => state.openFileItems);
 
-  useEffect(() => {
-    if (state.fileType === 'file') {
-      if (items.some(v => v.id === state.id)) return;
-      setItems(items => items.concat({ id: state.id, name: state.filename }));
-      setActiveIndex(items.length);
-    }
-  }, [state.id]);
-
-  const content = items.map((v, i) => {
-    const handleClose = () => {
-      setItems(items => items.filter(item => item.id !== v.id));
-    };
+  const content = openFile.items.map((v, i) => {
     const handleClick = () => {
-      setActiveIndex(i);
+      dispatch(changeIndex(i));
     };
+
+    const handleClose = () => {
+      dispatch(closeFile(i, ''));
+    };
+
+
     return (
-      <FileTabItem key={i} filename={v.name} onClose={handleClose} active={activeIndex === i} onClick={handleClick}/>
+      <FileTabItem key={i} filename={v.name} onClose={handleClose} active={openFile.currentIndex === i} onClick={handleClick}/>
     );
   });
   return (

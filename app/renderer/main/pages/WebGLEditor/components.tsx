@@ -12,15 +12,16 @@ import toast from '../../components/toast';
 
 export interface IUIComponentsItemProps {
   icon: IconProp
-  name: string
+  name: string,
+  type: string
 }
 
 export function UIComponentItem(props: IUIComponentsItemProps) {
 
   return (
-    <button className={style.ui_component_item} draggable onDragStart={drag.bind(null, props.name)}>
+    <button className={style.ui_component_item} draggable onDragStart={drag.bind(null, props.type, props.name)}>
       <FontAwesomeIcon icon={props.icon}/>
-      <div className={style.name}>{props.name}</div>
+      <div className={style.name}>{props.name.split('_').join(' ')}</div>
     </button>
   );
 }

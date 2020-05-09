@@ -1,6 +1,6 @@
 import WebGLComponent from './components';
 import Konva from 'konva';
-import {COMPONENT_TYPES} from '../../utils/constants';
+import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
 export class WebGLRect extends WebGLComponent {
   private readonly rect: Konva.Rect;
@@ -8,6 +8,7 @@ export class WebGLRect extends WebGLComponent {
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'rect-' + Date.now();
+    this.type = TYPES.SHAPE;
     this.name = COMPONENT_TYPES.SHAPE.RECT;
     this.rect = new Konva.Rect({
       width: 100,
@@ -41,6 +42,11 @@ export class WebGLRect extends WebGLComponent {
         return newBox;
       }
     });
+  }
+
+  setSize(size: { width: number; height: number }) {
+    this.rect.setSize(size);
+    super.setSize(size);
   }
 
   getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {
@@ -93,6 +99,7 @@ export class WebGLCircle extends WebGLComponent {
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'circle-' + Date.now();
+    this.type = TYPES.SHAPE;
     this.name = COMPONENT_TYPES.SHAPE.CIRCLE;
     this.circle = new Konva.Circle({
       radius: 50,
@@ -131,6 +138,10 @@ export class WebGLCircle extends WebGLComponent {
       ],
       rotateEnabled: false
     });
+  }
+  setSize(size: { width: number; height: number }) {
+    this.circle.setSize(size);
+    super.setSize(size);
   }
 
   getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {
@@ -182,7 +193,8 @@ export class WebGLEllipse extends WebGLComponent {
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'ellipse-' + Date.now();
-    this.name = COMPONENT_TYPES.SHAPE.ELLIPSE;
+    this.type = TYPES.SHAPE;
+    this.name = '';
     this.ellipse = new Konva.Ellipse({
       radiusX: 100,
       radiusY: 50,
@@ -190,6 +202,7 @@ export class WebGLEllipse extends WebGLComponent {
       fill: 'white',
       strokeWidth: 2
     });
+
     this.group.add(this.ellipse);
 
     this.onTransform(e => {
@@ -218,6 +231,11 @@ export class WebGLEllipse extends WebGLComponent {
         return newBox;
       }
     });
+  }
+
+  setSize(size: { width: number; height: number }) {
+    this.ellipse.setSize(size);
+    super.setSize(size);
   }
 
   getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {

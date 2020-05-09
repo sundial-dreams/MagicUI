@@ -12,3 +12,16 @@
   height: 30px;
 
 }
+
+.component_path {
+  color: #999999;
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+
+  .arrow {
+    margin: 0 4px;
+    color: #f07178;
+    font-size: 14px;
+  }
+}

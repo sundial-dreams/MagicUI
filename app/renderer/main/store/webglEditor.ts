@@ -13,6 +13,9 @@ export function createEditToolsState(): IEditToolsState {
 export interface IComponentState {
   id: string,
   name: string,
+  cpnType: string,
+  path?: string,
+  operator?: string
   props: {
     position: {x:number, y: number},
     size: {
@@ -39,7 +42,7 @@ export interface IComponentState {
       fill: string
     },
     image?: {
-      image: string
+      src: string
     }
   }
 }
@@ -48,6 +51,7 @@ export function createComponentState(): IComponentState {
   return {
     id: '',
     name: '',
+    cpnType: '',
     props: {
       position: {x: 0, y: 0},
       size: {width: 0, height: 0}
@@ -56,12 +60,56 @@ export function createComponentState(): IComponentState {
 }
 
 export interface IRunToolsState {
-  runType: string
+  runType: string,
+  data?: string
 }
+
 
 export function createRunToolsState(): IRunToolsState {
   return {
-    runType: ''
+    runType: '',
+    data: ''
   }
 }
 
+export type TRawComponent = {
+  id: string,
+  type: string,
+  name: string,
+  props: any,
+  children: TRawComponent[]
+};
+
+export interface IWebGLPageState {
+  pageId: string,
+  createTime?:number,
+  description?: string,
+  page: TRawComponent | null,
+  name: string
+}
+
+export function createCurrentWebGLPageState(): IWebGLPageState {
+  return {
+    pageId: '',
+    name: '',
+    page: null,
+    createTime: 0,
+    description: ''
+  }
+}
+
+export interface IEditHistoryState {
+  history: {
+    id: string, // component id
+    operator: string,
+    data: { old: any, new: any }
+  }[],
+  current: undefined | { id: string, operator: string, data: { old: any, new: any } }
+}
+
+export function createEditHistoryState(): IEditHistoryState {
+  return {
+    history: [],
+    current: undefined
+  }
+}

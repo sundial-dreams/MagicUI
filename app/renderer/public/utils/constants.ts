@@ -4,7 +4,10 @@ export const IpcEvent = {
   CLOSE: 'close',
   MINIMIZE: 'minimize',
   MAXIMIZE: 'maximize',
-  OPEN_MAIN_WINDOW: 'open-main-window'
+  OPEN_MAIN_WINDOW: 'open-main-window',
+  COMPILE: 'compile',
+  SAVE_FILE: 'save-file',
+  USER_LOGOUT: 'user-logout'
 };
 
 export const WidgetName = {

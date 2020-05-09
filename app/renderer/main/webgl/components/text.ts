@@ -1,6 +1,6 @@
 import WebGLComponent from './components';
 import Konva from 'konva';
-import {COMPONENT_TYPES} from '../../utils/constants';
+import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
 export class WebGLText extends WebGLComponent {
   private readonly text: Konva.Text;
@@ -9,6 +9,7 @@ export class WebGLText extends WebGLComponent {
     super(position);
 
     this.id = 'text-' + Date.now();
+    this.type = TYPES.TEXT;
     this.name = COMPONENT_TYPES.TEXT.CUSTOM_TEXT;
     this.isRawComponent = true;
     this.text = new Konva.Text({
@@ -39,6 +40,10 @@ export class WebGLText extends WebGLComponent {
       }
     });
   }
+  setSize(size: { width: number; height: number }) {
+    this.text.setSize(size);
+    super.setSize(size);
+  }
 
   getTextProps(): { text: string; fill: string } | undefined {
     return {
@@ -61,6 +66,7 @@ export class WebGLLabel extends WebGLComponent {
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'label-' + Date.now();
+    this.type = TYPES.TEXT;
     this.name = COMPONENT_TYPES.TEXT.LABEL;
     this.isRawComponent = true;
     this.label = new Konva.Label({opacity: 0.75});
@@ -77,13 +83,6 @@ export class WebGLLabel extends WebGLComponent {
 
     this.group.add(this.label);
 
-    // this.onTransform(e => {
-    //   label.setAttrs({
-    //     width: label.width() * this.group.scaleX(),
-    //     height: label.height() * this.group.scaleY()
-    //   });
-    //   this.group.setAttrs({scaleX: 1, scaleY: 1});
-    // });
     this.configGroup({id: this.id});
     this.configTransformer({
       node: this.group as any,

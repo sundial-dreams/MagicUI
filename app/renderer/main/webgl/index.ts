@@ -1,16 +1,9 @@
 import Konva from 'konva';
 import { Dispatch } from 'redux';
 import WebGLComponent from './components/components';
-import WebGLEditorUtils from './utils';
+import WebGLEditorUtils, { getComponentProps } from './utils';
 import ComponentManager from './manager';
-import { COMPONENT_TYPES } from '../utils/constants';
-import { WebGLButton } from './components/button';
-import { WebGLLabel, WebGLText } from './components/text';
-import { WebGLMobileWidget, WebGLPCWidget } from './components/widget';
-import { WebGLCircle, WebGLEllipse, WebGLRect } from './components/shape';
-import { WebGLImage } from './components/image';
-import { dragComponent, resetComponent, selectComponent, transformComponent } from '../actions/UIEditor';
-import { WebGLInput } from './components/input';
+import { dragComponent, resetComponent, selectComponent, transformComponent } from '../actions/webglEditor';
 
 const CANVAS_WIDTH = 2500;
 const CANVAS_HEIGHT = 1000;
@@ -37,41 +30,14 @@ export default class CanvasEditorRenderer {
     this.renderer.add(this.layer);
   }
 
+  getComponentManager() {
+    return this.componentsManager;
+  }
+
+
   addComponent(webGLComponent: WebGLComponent) {
 
-    webGLComponent.onSelected(e => {
-      this.componentsManager.showCurrentComponentTransformer(
-        webGLComponent.getId()
-      );
-      webGLComponent.moveToTop();
-      this.dispatch(selectComponent(
-        webGLComponent.getId(),
-        webGLComponent.getName(),
-        getComponentProps(webGLComponent)
-      ));
-      this.render();
-    });
-
-    webGLComponent.onDragMove(e => {
-      this.dispatch(dragComponent(e.target.position()));
-    });
-
-    webGLComponent.onTransform(e => {
-      this.dispatch(transformComponent(webGLComponent.getSize()));
-    });
-
-    webGLComponent.onDragEnd(e => {
-      const id = WebGLEditorUtils.checkInSomeGroup(
-        this.layer,
-        this.renderer,
-        webGLComponent.getGroup()
-      );
-
-      if (id) {
-        this.componentsManager.appendComponentById(id, webGLComponent);
-      }
-      this.render();
-    });
+    this.addSomeEventForComponent(webGLComponent);
 
     webGLComponent.appendToLayer(this.layer);
     this.componentsManager.pushComponent(webGLComponent);
@@ -88,25 +54,114 @@ export default class CanvasEditorRenderer {
 
     this.dispatch(selectComponent(
       webGLComponent.getId(),
+      webGLComponent.getType(),
       webGLComponent.getName(),
+      this.componentsManager.getPathOfComponent(webGLComponent).join('>'),
       getComponentProps(webGLComponent)
     ));
 
+
     this.render();
   }
 
-  pasteComponent(id: string) {
-    const cpn = this.componentsManager.pasteComponentById(id);
-    if (cpn) {
-      this.addComponent(cpn);
-      this.dispatch(resetComponent());
+  addComponentForParent(parent: WebGLComponent, child: WebGLComponent) {
+    if (!this.componentsManager.getComponentById(parent.getId())) {
+      this.componentsManager.pushComponent(parent);
+      this.addSomeEventForComponent(parent);
+    }
+    if (!this.componentsManager.getComponentById(child.getId())) {
+      this.componentsManager.pushComponent(child);
+      this.addSomeEventForComponent(child);
+    }
+    parent.appendComponent(child);
+    child.hideTransformer();
+    this.render();
+  }
+
+  addRootComponent(root: WebGLComponent) {
+    if (!this.componentsManager.getComponentById(root.getId())) {
+      this.componentsManager.pushComponent(root);
+      this.addSomeEventForComponent(root);
+      this.componentsManager.showCurrentComponentTransformer(
+        root.getId()
+      );
+      this.addComponent(root);
+      this.dispatch(selectComponent(
+        root.getId(),
+        root.getType(),
+        root.getName(),
+        this.componentsManager.getPathOfComponent(root).join('>'),
+        getComponentProps(root)
+      ));
+      this.render();
     }
   }
 
+  addSomeEventForComponent(component: WebGLComponent) {
+    component.onSelected(e => {
+      this.componentsManager.showCurrentComponentTransformer(
+        component.getId()
+      );
+      component.moveToTop();
+      this.dispatch(selectComponent(
+        component.getId(),
+        component.getType(),
+        component.getName(),
+        this.componentsManager.getPathOfComponent(component).join('>'),
+        getComponentProps(component)
+      ));
+      this.render();
+    });
+
+    component.onDragEnd(e => {
+      this.dispatch(dragComponent(e.target.position()));
+    });
+
+    component.onTransformEnd(e => {
+      this.dispatch(transformComponent(component.getSize()));
+    })
+
+    component.onDragEnd(e => {
+      const id = WebGLEditorUtils.checkInSomeGroup(
+        this.layer,
+        this.renderer,
+        component.getGroup()
+      );
+
+
+      if (id) {
+        this.componentsManager.appendComponentById(id, component);
+      }
+      this.render();
+    });
+  }
+
+  toImage() {
+    const root = this.componentsManager.getRootComponent() as WebGLComponent;
+    const { width, height } = root.getSize();
+    const { x, y } = root.getPosition();
+
+    return this.renderer.toDataURL({
+      pixelRatio: 1,
+      width: width + x * 2,
+      height: height + y * 2
+    });
+  }
+
+  pasteComponent(id: string) {
+    const cpn = this.componentsManager.pasteComponentById(id, this);
+    if (cpn) {
+      this.dispatch(resetComponent());
+    }
+    return cpn;
+  }
+
   removeComponent(id: string) {
+    const cpn = this.componentsManager.getComponentById(id);
     this.componentsManager.removeComponentById(id);
     this.render();
     this.dispatch(resetComponent());
+    return cpn;
   }
 
   modifyComponentProperties(id: string, propType: string, data: any) {
@@ -118,69 +173,11 @@ export default class CanvasEditorRenderer {
     return this.componentsManager.toJsonObject();
   }
 
+  clear() {
+    this.componentsManager.removeAll();
+  }
+
   render() {
     this.layer.draw();
   }
-}
-
-export const mapComponentById = {
-  // button
-  [COMPONENT_TYPES.BUTTON.CUSTOM_BUTTON]: WebGLButton,
-  // input
-  [COMPONENT_TYPES.INPUT.CUSTOM_INPUT]: WebGLInput,
-  // text
-  [COMPONENT_TYPES.TEXT.LABEL]: WebGLLabel,
-  [COMPONENT_TYPES.TEXT.CUSTOM_TEXT]: WebGLText,
-  // widget
-  [COMPONENT_TYPES.WIDGET.PC_WIDGET]: WebGLPCWidget,
-  [COMPONENT_TYPES.WIDGET.MOBILE_WIDGET]: WebGLMobileWidget,
-  // shape
-  [COMPONENT_TYPES.SHAPE.RECT]: WebGLRect,
-  [COMPONENT_TYPES.SHAPE.CIRCLE]: WebGLCircle,
-  [COMPONENT_TYPES.SHAPE.ELLIPSE]: WebGLEllipse,
-  // image
-  [COMPONENT_TYPES.IMAGE.CUSTOM_IMAGE]: WebGLImage
-
-};
-
-export function getComponentProps(webGLComponent: WebGLComponent) {
-  return {
-    position: webGLComponent.getPosition(),
-    size: webGLComponent.getSize(),
-    shadow: webGLComponent.getShadowProps(),
-    background: webGLComponent.getBackgroundProps(),
-    border: webGLComponent.getBorderProps(),
-    text: webGLComponent.getTextProps(),
-    image: webGLComponent.getImageProps()
-  };
-}
-
-export function dropComponentToWebGLEditor(componentId: string, position: { x: number, y: number }, editor: CanvasEditorRenderer) {
-  editor.addComponent(
-    new mapComponentById[componentId](position)
-  );
-}
-
-export function removeComponentFromWebGLEditor(componentId: string, editor: CanvasEditorRenderer) {
-  editor.removeComponent(
-    componentId
-  );
-}
-
-export function pasteComponentToWebGLEditor(componentId: string, editor: CanvasEditorRenderer) {
-  editor.pasteComponent(
-    componentId
-  );
-}
-
-export function modifyComponentProperties(componentId: string, propType: string, data: any, editor: CanvasEditorRenderer) {
-  editor.modifyComponentProperties(
-    componentId,
-    propType,
-    data
-  );
-}
-
-export function webGLToJsonObject(editor: CanvasEditorRenderer) {
-  return editor.toJsonObject();
 }

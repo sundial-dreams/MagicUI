@@ -1,7 +1,7 @@
 import Electron from 'electron';
 import {loadHtmlByName} from '../utils/utils';
 import { CustomWindowConfig, WidgetName, WidgetType } from '../utils/constants';
-import { onCloseWidget } from '../utils/ipcHandler';
+import { onCloseWidget } from '../service/ipc';
 
 let webglViewsWindow: Electron.BrowserWindow | null = null;
 

@@ -1,18 +1,27 @@
 import { initialState, IUserState } from '../store';
 import { TActions, UserActions } from '../actions';
-import { editToolsReducer, runToolsReducer, componentReducer } from './UIEditor';
-import { dslFileReducer } from './DSLEditor';
+import {
+  editToolsReducer,
+  runToolsReducer,
+  componentReducer,
+  webGLPageReducer,
+  editHistoryReducer
+} from './webglEditor';
+import { dslCodeReducer, dslFileArrayReducer, dslFileReducer, openFileItemsReducer } from './dslEditor';
 
 export function userReducer(state: IUserState, action: TActions) {
   switch (action.type) {
     case UserActions.SAVE_USER: {
       return {
         ...state,
-        email: action.email
-      }
+        email: action.email,
+        password: action.password,
+        avatar: action.avatar,
+        nickname: action.nickname
+      };
     }
     default: {
-      return {...state}
+      return { ...state };
     }
   }
 }
@@ -22,7 +31,14 @@ export default function mainReducer(state = initialState, action: TActions) {
     editTools: editToolsReducer(state.editTools, action),
     runTools: runToolsReducer(state.runTools, action),
     component: componentReducer(state.component, action),
+    webGLPage: webGLPageReducer(state.webGLPage, action),
+    editHistory: editHistoryReducer(state.editHistory, action),
+
     dslFile: dslFileReducer(state.dslFile, action),
+    dslCode: dslCodeReducer(state.dslCode, action),
+    dslFileArray: dslFileArrayReducer(state.dslFileArray, action),
+    openFileItems: openFileItemsReducer(state.openFileItems, action),
+
     user: userReducer(state.user, action)
   };
 }

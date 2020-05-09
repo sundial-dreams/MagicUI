@@ -1,16 +1,13 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faCheckSquare, faGavel, faFileExport } from '@fortawesome/free-solid-svg-icons';
-import { buildCode } from '../../actions/UIEditor';
-
+import modal from '../../components/modal';
+import { buildCode, exportCode } from '../../actions/webglEditor';
 
 // @ts-ignore
 import style from './RunTools.scss';
-import Bridge from '../../../public/utils/bridge';
-import { WidgetName } from '../../../public/utils/constants';
-import { createOnePage } from '../../utils/api';
-import modal from '../../components/modal';
 
 export interface IRunToolsProps {
 
@@ -22,12 +19,16 @@ export default function RunTools(props: IRunToolsProps) {
     dispatch(buildCode());
   };
 
-  const run = async () => {
+  const run = () => {
     modal(cancel => (
       <div onClick={cancel}>
         Cancel
       </div>
     ));
+  };
+
+  const handleExport = () => {
+    dispatch(exportCode());
   };
 
   return (
@@ -42,7 +43,7 @@ export default function RunTools(props: IRunToolsProps) {
         <button className={style.run_btn} onClick={run}>
           <FontAwesomeIcon icon={faPlay}/>
         </button>
-        <button className={style.export_btn}>
+        <button className={style.export_btn} onClick={handleExport}>
           <FontAwesomeIcon icon={faFileExport}/>
         </button>
         <button className={style.check_btn}>

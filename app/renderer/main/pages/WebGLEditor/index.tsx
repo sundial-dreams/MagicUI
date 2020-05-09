@@ -13,15 +13,33 @@ import RunTools from './RunTools';
 import style from './index.scss';
 import modal from '../../components/modal';
 import { NewPageModal } from './components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IStoreState } from '../../store';
+import { useOnMount } from '../../hooks';
+import { fetchPages } from '../../utils/api';
+import { selectWebGLPage } from '../../actions/webglEditor';
+import toast from '../../components/toast';
 
 export interface IUIEditorProps {
 
 }
 
 export default function UIEditor(props: IUIEditorProps) {
+  const user = useSelector((state: IStoreState) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!user.email) return;
+    fetchPages(user.email).then(v => {
+      if (v.err) {
+        toast('error!');
+        return;
+      }
+      const [onePage] = v.pages;
+      dispatch(selectWebGLPage(onePage.pageId, onePage.name || 'name', onePage.page));
+    }).catch(err => {
 
+    });
+  }, [user.email]);
   return (
     <div id='page' className={style.ui_editor}>
       <div className={style.header_navigation}>

@@ -1,6 +1,7 @@
 import WebGLComponent from './components/components';
 import { WEBGL_COMPONENT_PROP_TYPES } from '../utils/constants';
-import { getComponentProps, mapComponentById } from './index';
+import { drawComponentFromJsonObject, webGLComponentToJsonObject } from './utils';
+import CanvasEditorRenderer from './index';
 
 export default class ComponentManager {
   private curCpnId: string;
@@ -15,11 +16,30 @@ export default class ComponentManager {
     this.webGLComponentCollection = new Map<string, WebGLComponent>();
   }
 
+  getComponentById(id: string) {
+    return this.webGLComponentCollection.get(id);
+  }
+
   pushComponent(webGLComponent: WebGLComponent) {
     this.curCpnId = webGLComponent.getId();
     this.hidePrevComponentTransformer();
     this.webGLComponentCollection.set(this.curCpnId, webGLComponent);
     if (!this.rootComponent) this.rootComponent = webGLComponent;
+  }
+
+  getRootComponent() {
+    return this.rootComponent;
+  }
+
+  getPathOfComponent(component: WebGLComponent) {
+    let r: any = component;
+    let path = [];
+    while (r.getParent()) {
+      path.push(r.getName());
+      r = r.getParent();
+    }
+    path.push(r.getName());
+    return path;
   }
 
   hidePrevComponentTransformer() {
@@ -54,14 +74,11 @@ export default class ComponentManager {
     }
   }
 
-  pasteComponentById(id: string) {
+  pasteComponentById(id: string, renderer: CanvasEditorRenderer) {
     if (this.webGLComponentCollection.has(id)) {
       const cpn = this.webGLComponentCollection.get(id) as WebGLComponent;
-      const json = traverseComponent(cpn);
-      console.log(json);
-      const newCpn = generateUIFromJson(json);
-      console.log(newCpn);
-      return newCpn;
+      const json = webGLComponentToJsonObject(cpn);
+      return drawComponentFromJsonObject(json, renderer, true);
     }
     return null;
   }
@@ -69,6 +86,7 @@ export default class ComponentManager {
   modifyComponentPropertiesById(id: string, propType: string, data: any) {
     if (this.webGLComponentCollection.has(id)) {
       const component = this.webGLComponentCollection.get(id) as WebGLComponent;
+      console.log(propType);
       switch (propType) {
         case WEBGL_COMPONENT_PROP_TYPES.BACKGROUND: {
           component.getBackgroundProps() && component.setBackgroundProps(data);
@@ -93,60 +111,21 @@ export default class ComponentManager {
       }
     }
   }
+
   toJsonObject() {
     if (this.rootComponent) {
-      return getComponentInfo(this.rootComponent);
+      return webGLComponentToJsonObject(this.rootComponent);
     }
     return null;
   }
 
-}
-
-function traverseComponent(component: WebGLComponent) {
-  return getComponentInfo(component);
-}
-
-export type TRawComponent = {
-  id: string,
-  type: string,
-  name: string,
-  props: any,
-  children: TRawComponent[]
-};
-
-function getComponentInfo(component: WebGLComponent): TRawComponent {
-  return {
-    id: component.getId(),
-    type: component.getId().split('-')[0],
-    name: component.getName(),
-    props: getComponentProps(component),
-    children: component.getChildren().size ?
-      [...component.getChildren().values()].map(value => {
-        return getComponentInfo(value);
-      }) : []
-  };
-}
-
-
-function generateUIFromJson(jsonObject: TRawComponent) {
-  const queue = [jsonObject];
-  let root = null;
-
-  while (queue.length) {
-    const front = queue.shift() as TRawComponent;
-    const parent = new mapComponentById[front.name](jsonObject.props.position);
-    if (!root) root = parent;
-    for (let v of front.children) {
-      queue.push(v);
-      let cpn = new mapComponentById[v.name](v.props.position);
-      cpn.setSize(v.props.size);
-      cpn.getBackgroundProps() && cpn.setBackgroundProps(v.props.background);
-      cpn.getShadowProps() && cpn.setShadowProps(v.props.shadow);
-      cpn.getBorderProps() && cpn.setBorderProps(v.props.border);
-      cpn.getTextProps() && cpn.setTextProps(v.props.text);
-      cpn.getImageProps() && cpn.setImageProps(v.props.image);
-      parent.appendComponent(cpn);
-    }
+  removeAll() {
+    if (this.rootComponent)
+      this.rootComponent.removeFromLayer();
+    this.webGLComponentCollection.clear();
+    this.curCpnId = '';
+    this.prevCpnId = '';
+    this.rootComponent = null;
   }
-  return root;
+
 }

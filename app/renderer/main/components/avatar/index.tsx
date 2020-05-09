@@ -6,13 +6,12 @@ export interface IAvatarProps {
   size?: number,
   src: string,
   onClick: () => void,
-
 }
 
 export function Avatar(props: IAvatarProps) {
 
   return (
-    <div className={style.avatar}>
+    <div className={style.avatar} onClick={props.onClick}>
       <img src={props.src} alt=""/>
     </div>
   )

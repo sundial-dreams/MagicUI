@@ -1,7 +1,7 @@
 import Electron from 'electron';
 import { loadHtmlByName } from '../utils/utils';
 import { CustomWindowConfig, WidgetName, WidgetType } from '../utils/constants';
-import { onCloseWidget, onMinimizeWidget } from '../utils/ipcHandler';
+import { onCloseWidget, onMinimizeWidget } from '../service/ipc';
 
 let loginWindow: Electron.BrowserWindow | null = null;
 

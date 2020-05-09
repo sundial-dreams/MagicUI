@@ -1,6 +1,6 @@
 import WebGLComponent from './components';
 import Konva from 'konva';
-import {COMPONENT_TYPES} from '../../utils/constants';
+import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
 export class WebGLButton extends WebGLComponent {
   private readonly rect: Konva.Rect;
@@ -9,6 +9,7 @@ export class WebGLButton extends WebGLComponent {
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'button-' + Date.now();
+    this.type = TYPES.BUTTON;
     this.name = COMPONENT_TYPES.BUTTON.CUSTOM_BUTTON;
     this.isRawComponent = true;
     this.text = new Konva.Text({
@@ -61,6 +62,11 @@ export class WebGLButton extends WebGLComponent {
         return newBox;
       }
     });
+  }
+
+  setSize(size: { width: number; height: number }) {
+    this.rect.setSize(size);
+    super.setSize(size);
   }
 
   getShadowProps() {

@@ -1,9 +1,10 @@
 import Konva from 'konva';
-import {Dispatch} from 'redux';
+import { Dispatch } from 'redux';
 
 export default abstract class WebGLComponent {
   protected id: string;
   protected name: string;
+  protected type: string;
   protected group: Konva.Group;
   protected transformer: Konva.Transformer;
   protected isRawComponent: boolean;
@@ -20,6 +21,7 @@ export default abstract class WebGLComponent {
 
     this.transformer = new Konva.Transformer({
       node: this.group as any,
+      rotateEnabled: false,
       id: '__component_transformer'
     });
 
@@ -29,6 +31,7 @@ export default abstract class WebGLComponent {
     this.id = '';
     this.isRawComponent = false;
     this.name = 'component';
+    this.type = 'component';
     this.data = {
       position
     };
@@ -51,12 +54,20 @@ export default abstract class WebGLComponent {
     return this.id;
   }
 
+  getType() {
+    return this.type;
+  }
+
   getGroup() {
     return this.group;
   }
 
   getTransformer() {
     return this.transformer;
+  }
+
+  getParent() {
+    return this.parent;
   }
 
   appendChild(component: WebGLComponent) {
@@ -79,6 +90,10 @@ export default abstract class WebGLComponent {
 
   onTransform(callback: (e: Konva.KonvaEventObject<any>) => void) {
     this.getGroup().on('transform', callback);
+  }
+
+  onTransformEnd(callback: (e: Konva.KonvaEventObject<any>) => void) {
+    this.getGroup().on('transformend', callback);
   }
 
   onSelected(callback: (event: Konva.KonvaEventObject<any>) => void) {
@@ -115,8 +130,6 @@ export default abstract class WebGLComponent {
       const transformer = component.getTransformer();
       group.moveTo(this.getGroup());
       transformer.moveTo(this.getGroup());
-      group.offsetX(0);
-      group.offsetY(0);
 
       if (component.parent) {
         component.parent.removeChild(component.getId());
@@ -141,11 +154,16 @@ export default abstract class WebGLComponent {
     return this.getGroup().position();
   }
 
+  setPosition(position: {x: number, y: number}) {
+    this.getGroup().setPosition(position);
+  }
+
   getSize() {
     return this.getTransformer().getSize();
   }
 
-  setSize(size: {width: number, height: number}) {
+  setSize(size: { width: number, height: number }) {
+    this.getGroup().setSize(size);
     this.getTransformer().setSize(size);
   }
 
@@ -177,12 +195,11 @@ export default abstract class WebGLComponent {
   setBackgroundProps(background: { opacity: number, fill: string }) {
   }
 
-  getImageProps(): {} | undefined {
+  getImageProps(): { src: string } | undefined {
     return undefined;
   }
 
-  setImageProps(image: {}) {
-  }
+  setImageProps(image: {src: string}, size?: {width: number, height: number}) {}
 
   getName() {
     return this.name;

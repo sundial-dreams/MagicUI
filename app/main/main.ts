@@ -1,10 +1,11 @@
 import Electron, { app, BrowserWindow, session } from 'electron';
-import * as IpcHandler from './utils/ipcHandler';
+import * as IpcHandler from './service/ipc';
 import { loadHtmlByName } from './utils/utils';
 import { CustomWindowConfig, WidgetName, WidgetType, WindowSize } from './utils/constants';
 import createWidgetByName, { WidgetMap } from './widget';
 import createLoginWindow from './widget/login';
-import { getCookies, getUser, saveUser, setCookies } from './service/session';
+import { clearUser, getCookies, getUser, saveUser, setCookies } from './service/session';
+import SocketService from './service/socket';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -41,7 +42,6 @@ function InstallIpcEventHandler() {
   });
 
   IpcHandler.onCloseWidget((event, args: { name: string }) => {
-    console.log('on close', args);
     if (args.name === WidgetName.MAIN) {
       mainWindow?.close();
     }
@@ -57,6 +57,7 @@ function InstallIpcEventHandler() {
 
   IpcHandler.handleOpenMainWindow(async (event, args: any ) => {
     try {
+      console.log('main window data', args);
       BrowserWindow.getFocusedWindow()?.close();
       await saveUser(args);
       await createMainWindow();
@@ -65,7 +66,28 @@ function InstallIpcEventHandler() {
     }
   });
 
+  IpcHandler.handleUserLogout(async (event, args: any) => {
+    if (mainWindow) {
+      mainWindow.close();
+      mainWindow = null;
+      await clearUser();
+      createLoginWindow();
+    }
+  });
+
   IpcHandler.handleFetch();
+
+  IpcHandler.handleCompile();
+
+  IpcHandler.handleSaveFile();
+
+  IpcHandler.handleSaveWebGLPageWithSocket();
+
+  IpcHandler.onSocketResult((data: any) => {
+    if (mainWindow) {
+      mainWindow.webContents.send('socket-result', data);
+    }
+  });
 
 }
 

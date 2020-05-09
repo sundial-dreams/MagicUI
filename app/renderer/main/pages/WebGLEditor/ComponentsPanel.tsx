@@ -1,125 +1,47 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IStoreState } from '../../store';
-import { COMPONENT_TYPES } from '../../utils/constants';
 import { UIComponentsFold, UIComponentItem, NewPageModal } from './components';
 import {
-  faSquare,
-  faCircle,
-  faEdit,
-  faWindowMaximize,
-  faMobile,
-  faImage,
-  faInbox,
   faPlus,
-  faPlusSquare,
-  faCheck, faSearch
+  faCheck,
+  faSearch,
+  faBatteryEmpty,
+  faWindowRestore,
+  faCircleNotch, faThermometerEmpty
 } from '@fortawesome/free-solid-svg-icons';
-// @ts-ignore
-import style from './ComponentsPanel.scss';
 import modal from '../../components/modal';
 import { cls } from '../../../public/utils';
-import { createOnePage } from '../../utils/api';
-import toast from '../../components/toast';
+import { fetchPages } from '../../utils/api';
+import { selectWebGLPage } from '../../actions/webglEditor';
+import { ComponentFoldConfig } from '../../utils/constants';
+
+// @ts-ignore
+import style from './ComponentsPanel.scss';
 
 
 export interface IComponentsPanelProps {
 
 }
 
-const componentFoldConfig = [
-  {
-    title: 'SHAPE',
-    children: [
-      {
-        name: COMPONENT_TYPES.SHAPE.RECT,
-        icon: faSquare
-      },
-      {
-        name: COMPONENT_TYPES.SHAPE.CIRCLE,
-        icon: faCircle
-      },
-      {
-        name: COMPONENT_TYPES.SHAPE.ELLIPSE,
-        icon: faCircle
-      }
-    ]
-  },
-  {
-    title: 'WIDGET',
-    children: [
-      {
-        name: COMPONENT_TYPES.WIDGET.PC_WIDGET,
-        icon: faWindowMaximize
-      },
-      {
-        name: COMPONENT_TYPES.WIDGET.MOBILE_WIDGET,
-        icon: faMobile
-      }
-    ]
-  },
-  {
-    title: 'LAYOUT',
-    children: []
-  },
-  {
-    title: 'BUTTON',
-    children: [
-      {
-        name: COMPONENT_TYPES.BUTTON.CUSTOM_BUTTON,
-        icon: faEdit
-      }
-    ]
-  },
-  {
-    title: 'INPUT',
-    children: [
-      {
-        name: COMPONENT_TYPES.INPUT.CUSTOM_INPUT,
-        icon: faInbox
-      }
-    ]
-  },
-  {
-    title: 'TEXT',
-    children: [
-      {
-        name: COMPONENT_TYPES.TEXT.LABEL,
-        icon: faEdit
-      },
-      {
-        name: COMPONENT_TYPES.TEXT.CUSTOM_TEXT,
-        icon: faEdit
-      }
-    ]
-  },
-  {
-    title: 'IMAGE',
-    children: [
-      {
-        name: COMPONENT_TYPES.IMAGE.CUSTOM_IMAGE,
-        icon: faImage
-      }
-    ]
-  }
-];
 
 export default function ComponentsPanel(props: IComponentsPanelProps) {
   const state = useSelector((state: IStoreState) => state.user);
 
-  const foldElem = componentFoldConfig.map((v, i) => {
+  const foldElem = ComponentFoldConfig.map((v, i) => {
+    const type = v.type;
     if (v.children.length === 0)
       return null;
 
     const items = v.children.map((v, i) => {
       return (
-        <UIComponentItem name={v.name} icon={v.icon} key={i}/>
+        <UIComponentItem type={type} name={v.name} icon={v.icon} key={i}/>
       );
     });
 
     return (
-      <UIComponentsFold title={v.title} key={i}>
+      <UIComponentsFold title={v.type} key={i}>
         {items}
       </UIComponentsFold>
     );
@@ -145,19 +67,60 @@ export default function ComponentsPanel(props: IComponentsPanelProps) {
   );
 }
 
-interface IUIPageStoreProps {
-  currentPage: string
-}
+type PageType = { pageId: string, page: {}, name: string };
 
-function UIPageStore(props: IUIPageStoreProps) {
+function UIPageStore(props: any) {
   const [hideContent, setHideContent] = useState(true);
+  const [pages, setPages] = useState([] as PageType[]);
+  const [loading, setLoading] = useState(false);
+
+  const webGLPage = useSelector((state: IStoreState) => state.webGLPage);
+  const user = useSelector((state: IStoreState) => state.user);
+  const dispatch = useDispatch();
+
   const handleClick = () => {
+    if (hideContent) {
+      if (!user.email) return;
+      setPages([]);
+      setLoading(true);
+      fetchPages(user.email).then(v => {
+        if (!v.err) {
+          const pages = v.pages as PageType[];
+          setPages(pages);
+          setLoading(false);
+        }
+      }).catch(e => {
+
+      });
+    }
     setHideContent(hideContent => !hideContent);
   };
+
+  const elem = pages.length > 0 ? pages.map((v, i) => {
+    const click = () => {
+      dispatch(selectWebGLPage(
+        v.pageId,
+        v.name,
+        v.page
+      ));
+      handleClick();
+    };
+    return (<ResultItem name={v.name} key={i} onClick={click}/>);
+  }).slice(0, 5) : (
+    <div className={style.no_data}>
+      <FontAwesomeIcon icon={faThermometerEmpty}/> No Data!
+    </div>
+  );
+  const loadingElem = (
+    <div className={style.loading}>
+      <FontAwesomeIcon icon={faCircleNotch} spin/> loading...
+    </div>
+  );
+
   return (
     <div className={style.ui_page_store}>
       <button className={style.current_ui_page} onClick={handleClick}>
-        {props.currentPage}
+        {webGLPage.name.toLocaleUpperCase()}
         <span>
           <FontAwesomeIcon icon={faCheck}/>
         </span>
@@ -170,11 +133,7 @@ function UIPageStore(props: IUIPageStoreProps) {
           </button>
         </div>
         <ul className={style.ui_page_result}>
-          <ResultItem name="a page"/>
-          <ResultItem name="a page"/>
-          <ResultItem name="a page"/>
-          <ResultItem name="a page"/>
-          <ResultItem name="a page"/>
+          {loading ? loadingElem : elem}
         </ul>
       </div>
     </div>
@@ -185,18 +144,14 @@ function ResultItem(props: { name: string, onClick?: () => void }) {
   return (
     <li className={style.result_item} onClick={props.onClick}>
       <span>
-        <FontAwesomeIcon icon={faPlusSquare}/>
+        <FontAwesomeIcon icon={faWindowRestore}/>
       </span>
       {props.name}
     </li>
   );
 }
 
-interface INewPageButtonProps {
-  onClick: () => void
-}
-
-function NewPageButton(props: INewPageButtonProps) {
+function NewPageButton(props: { onClick: () => void }) {
   return (
     <div className={style.new_page_button} onClick={props.onClick}>
       <button>

@@ -1,13 +1,15 @@
 import WebGLComponent from './components';
 import Konva from 'konva';
-import {COMPONENT_TYPES} from '../../utils/constants';
+import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
 export class WebGLPCWidget extends WebGLComponent {
   private readonly rect: Konva.Rect;
   constructor(position: { x: number, y: number }) {
     super(position);
-    this.id = 'window-' + Date.now();
+    this.id = 'widget-' + Date.now();
+    this.type = TYPES.WIDGET;
     this.name = COMPONENT_TYPES.WIDGET.PC_WIDGET;
+
     this.rect = new Konva.Rect({
       width: 650,
       height: 450,
@@ -63,6 +65,11 @@ export class WebGLPCWidget extends WebGLComponent {
     });
   }
 
+  setSize(size: { width: number; height: number }) {
+    this.rect.setSize(size);
+    super.setSize(size);
+  }
+
   getShadowProps(): { offsetX: number; offsetY: number; blur: number; fill: string } {
     return {
       offsetX: this.rect.shadowOffsetX(),
@@ -112,5 +119,6 @@ export class WebGLPCWidget extends WebGLComponent {
 export class WebGLMobileWidget extends WebGLComponent {
   constructor(position: {x: number, y: number}) {
     super(position);
+    this.name = '';
   }
 }

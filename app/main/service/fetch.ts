@@ -1,4 +1,5 @@
 import request from 'request';
+import qs from 'querystring';
 
 const baseUrl = 'http://localhost:8000';
 
@@ -15,7 +16,7 @@ export const fetch = {
         method,
         baseUrl,
         url,
-        form: data
+        ...(method === 'GET' ? { qs: data } : { form: data })
       };
       request(params, (err, res, body) => {
         try {

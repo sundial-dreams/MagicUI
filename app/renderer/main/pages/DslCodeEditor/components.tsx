@@ -1,9 +1,12 @@
-import React, { ReactNode, useState } from 'react';
+import React, { Dispatch, ReactNode, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCode, faFolderOpen, faFolder } from '@fortawesome/free-solid-svg-icons';
 // @ts-ignore
 import style from './components.scss';
 import { cls } from '../../utils';
+import { createDslFile } from '../../utils/api';
+import toast from '../../components/toast';
+import { appendFile } from '../../actions/dslEditor';
 
 interface IFolderProps {
   name: string,
@@ -65,5 +68,47 @@ export function File(props: IFileProps) {
       </span>
       {props.name}
     </button>
+  );
+}
+
+export interface INewFileOrFolderModalProps {
+  fileType: string,
+  cancel: () => void,
+  email: string,
+  folder: string,
+  dispatch: Dispatch<any>
+}
+
+export function NewFileOrFolderModal(props: INewFileOrFolderModalProps) {
+
+  const [filename, setFilename] = useState('');
+  const handleChange = (e: any) => {
+    setFilename(e.target.value);
+  };
+
+  const handleCreate = () => {
+    const { fileType, email, folder } = props;
+    createDslFile(email, filename, fileType, folder).then(v => {
+      if (!v.err) {
+        props.dispatch(appendFile(v.id, filename, fileType, folder, ""));
+        props.cancel();
+        toast('new folder!');
+      }
+    });
+  };
+
+  return (
+    <div className={style.new_file_or_folder_modal}>
+      <div className={style.title}>
+        {props.fileType === 'folder' ? 'Create Folder' : 'Create File'}
+      </div>
+      <div className={style.content}>
+        <span>Name: </span><input type="text" placeholder="some..." value={filename} onChange={handleChange}/>
+      </div>
+      <div className={style.footer}>
+        <button onClick={props.cancel}>CANCEL</button>
+        <button onClick={handleCreate}>CREATE</button>
+      </div>
+    </div>
   );
 }

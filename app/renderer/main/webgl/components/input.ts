@@ -1,12 +1,13 @@
 import WebGLComponent from './components';
 import Konva from 'konva';
-import {COMPONENT_TYPES} from '../../utils/constants';
+import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
 export class WebGLInput extends WebGLComponent {
   private readonly rect: Konva.Rect;
   constructor(position: {x: number, y: number}) {
     super(position);
     this.id = 'input-' + Date.now();
+    this.type = TYPES.INPUT;
     this.name = COMPONENT_TYPES.INPUT.CUSTOM_INPUT;
     this.isRawComponent = true;
 
@@ -45,6 +46,12 @@ export class WebGLInput extends WebGLComponent {
       }
     });
   }
+
+  setSize(size: { width: number; height: number }) {
+    this.rect.setSize(size);
+    super.setSize(size);
+  }
+
   getShadowProps() {
     return {
       offsetX: this.rect.shadowOffset().x,

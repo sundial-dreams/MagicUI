@@ -5,7 +5,14 @@ export const IpcEvent = {
   MAXIMIZE: 'maximize',
   MINIMIZE: 'minimize',
 
-  OPEN_MAIN_WINDOW: 'open-main-window'
+  OPEN_MAIN_WINDOW: 'open-main-window',
+  COMPILE: 'compile',
+
+  SAVE_FILE: 'save-file',
+
+  USER_LOGOUT: 'user-logout',
+
+  AUTO_SAVE_WEBGL_PAGE: 'auto-save-webgl-page'
 };
 
 
@@ -38,3 +45,5 @@ export const CustomWindowConfig = {
   frame: false,
   backgroundColor: '#333544'
 };
+
+

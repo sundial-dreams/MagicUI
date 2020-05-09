@@ -23,6 +23,11 @@
     height: 28px;
     background: #313341;
     margin-right: 2px;
+    box-sizing: border-box;
+    &.active {
+      border: none;
+      border-bottom: 2px solid #999999;
+    }
   }
 }
 
@@ -50,5 +55,22 @@
     margin-left: 12px;
     box-shadow: 0 0 2px rgba(0, 0, 0, .1);
     color: #999999;
+  }
+
+  button.export_btn {
+    width: 80px;
+    span {
+      margin-left: 5px;
+    }
+  }
+  button.prev_btn {
+    span {
+      margin-right: 5px;
+    }
+  }
+  button.next_btn {
+    span {
+      margin-left: 5px;
+    }
   }
 }

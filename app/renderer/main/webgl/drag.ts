@@ -4,15 +4,16 @@ export function allowDrop(event: DragEvent) {
   event.preventDefault();
 }
 
-export function drag(id: string, event: DragEvent<any>) {
-  event.dataTransfer?.setData('component_id', id);
+export function drag(type: string, name: string, event: DragEvent<any>) {
+  event.dataTransfer?.setData('component', JSON.stringify({type, name}));
 }
 
 export function drop(callback: Function, event: DragEvent<any>) {
   event.preventDefault();
-  let componentId = event.dataTransfer?.getData('component_id');
+  const { type, name } = JSON.parse(event.dataTransfer?.getData('component'));
   callback({
-    id: componentId,
+    type,
+    name,
     position: {
       clientX: event.clientX,
       clientY: event.clientY

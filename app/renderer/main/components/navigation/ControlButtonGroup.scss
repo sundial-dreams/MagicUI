@@ -18,10 +18,6 @@
     transition: .2s background;
     cursor: pointer;
 
-    &:hover, &:active {
-      cursor: pointer;
-    }
-
     &:nth-child(1) {
       background: #6C0AAB;
 

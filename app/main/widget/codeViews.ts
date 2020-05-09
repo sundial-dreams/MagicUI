@@ -1,7 +1,7 @@
 import Electron from 'electron';
 import { loadHtmlByName } from '../utils/utils';
 import { CustomWindowConfig, WidgetName, WidgetType } from '../utils/constants';
-import { onCloseWidget } from '../utils/ipcHandler';
+import { onCloseWidget } from '../service/ipc';
 
 let codeViewsWindow: Electron.BrowserWindow | null = null;
 
@@ -30,7 +30,7 @@ export default function createCodeViewsWidget(parent: Electron.BrowserWindow, da
 
   if (data) {
     codeViewsWindow.webContents.on('did-finish-load', () => {
-      codeViewsWindow?.webContents.send('jsonCode', data);
+      codeViewsWindow?.webContents.send('code', data);
     });
   }
 

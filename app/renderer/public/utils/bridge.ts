@@ -17,9 +17,12 @@ const Bridge = function () {
         url
       }).catch(console.error);
     },
+    request(params: { method: 'GET' | 'POST', url: string, data: any }) {
+      return ipcRenderer.invoke(IpcEvent.FETCH, params).catch(console.error);
+    },
     open(name: string, data: any = null) {
       ipcRenderer.send(IpcEvent.OPEN, {
-        name,data
+        name, data
       });
     },
     close(name: string) {
@@ -31,8 +34,17 @@ const Bridge = function () {
     minimize(name: string) {
       ipcRenderer.send(IpcEvent.MINIMIZE, { name });
     },
-    openMainWindow(data: {email:string, password: string, avatar: string}) {
+    openMainWindow(data: any) {
       ipcRenderer.invoke(IpcEvent.OPEN_MAIN_WINDOW, data).catch(console.error);
+    },
+    compile(type: string, code: string) {
+      return ipcRenderer.invoke(IpcEvent.COMPILE, { type, code });
+    },
+    saveFile(type: string, data: any) {
+      return ipcRenderer.invoke(IpcEvent.SAVE_FILE, { type, data })
+    },
+    logout() {
+      return ipcRenderer.invoke(IpcEvent.USER_LOGOUT);
     }
   };
 }();

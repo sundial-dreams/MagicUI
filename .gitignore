@@ -118,3 +118,4 @@ release
 native/build
 native/node_modules
 native/cmake-build-debug
+cmake-build-debug

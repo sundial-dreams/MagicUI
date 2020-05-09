@@ -10,11 +10,17 @@ export function minimize() {
 }
 
 export function fetchLoginEmail(email: string) {
-  return Bridge.fetch('POST', '/login/user_email', { email })
-    .then(v => v);
+  return Bridge.fetch(
+    'POST',
+    '/user/login/user_email',
+    { email }
+  ).then(v => v);
 }
 
 export function fetchLoginPassword(email: string, password: string) {
-  return Bridge.fetch('POST', '/login/user_password', { email, password })
-    .then(v => v);
+  return Bridge.fetch(
+    'POST',
+    '/user/login/user_password',
+    { email, password }
+  ).then(v => v);
 }
