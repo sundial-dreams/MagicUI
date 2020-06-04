@@ -1,0 +1,185 @@
+@import "~resources/style/mixin.global";
+
+.settings {
+  width: 100%;
+  height: 100%;
+
+
+  .header_navigation {
+    height: 50px;
+    width: calc(100% - 250px);
+    display: flex;
+    @include drag;
+
+  }
+
+  .content {
+    height: calc(100vh - 50px);
+    box-sizing: border-box;
+    padding: 0 40px;
+
+    .title {
+      font-size: 24px;
+      color: rgba(0, 0, 0, .3);
+    }
+
+    .settings_wrapper {
+      width: 100%;
+      display: flex;
+
+      .content_panel {
+        min-height: 80vh;
+        flex: 1;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+
+      .left_panel {
+        width: 200px;
+        min-height: 20px;
+      }
+    }
+  }
+}
+
+.settings_items {
+  padding-top: 30px;
+  padding-left: 50px;
+  font-size: 14px;
+  color: gray;
+
+  button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+    padding-left: 10px;
+
+    &.active {
+      border-left: 2px solid #d95050;
+    }
+  }
+}
+
+.normal_settings_content {
+  padding: 20px;
+  line-height: 1.5;
+
+  h4 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: lighter;
+  }
+
+  .ctrl {
+    display: flex;
+    align-items: center;
+
+    & > span {
+      display: inline-block;
+      font-size: 14px;
+      width: 30px;
+    }
+
+    button {
+      margin-left: 10px;
+      position: relative;
+      width: 40px;
+      height: 20px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .1);
+      transition: .5s;
+
+      span {
+        position: absolute;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: #f07178;
+        border-radius: 10px;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        margin: 0 2px;
+        transition: .5s;
+      }
+
+      &.active {
+        background: rgba(0, 0, 0, .3);
+
+        span {
+          left: calc(100% - 20px);
+        }
+      }
+    }
+  }
+
+}
+
+.normal_settings_content {
+  padding: 20px;
+  line-height: 1.5;
+
+  h4 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: lighter;
+  }
+
+  .ctrl {
+    font-size: 14px;
+    position: relative;
+    margin-top: 4px;
+
+    .select_item {
+      width: 120px;
+      height: 20px;
+      border-radius: 3px;
+      background: rgba(0, 0, 0, .1);
+      color: #cccccc;
+      text-align: left;
+      padding-left: 5px;
+      margin: 0;
+    }
+
+    .card {
+      position: absolute;
+      left: 0;
+      width: 120px;
+      min-height: 60px;
+      background: #333541;
+      border: 1px solid rgba(0, 0, 0, .3);
+      box-shadow: 3px 3px 7px rgba(0, 0, 0, .2);
+      border-radius: 3px;
+      padding: 0;
+      opacity: 0;
+      visibility: hidden;
+      top: 50px;
+      transition: .5s;
+
+      &.show {
+        visibility: visible;
+        top: 25px;
+        opacity: 1;
+      }
+
+      button {
+        width: 100%;
+        height: 20px;
+        border-radius: 0;
+        margin: 0;
+        background: transparent;
+
+        &:hover {
+          background: rgba(255, 255, 255, .1);
+        }
+      }
+    }
+  }
+}

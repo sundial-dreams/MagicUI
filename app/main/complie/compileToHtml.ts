@@ -1,4 +1,4 @@
-import { compileToJson, parser } from './compile';
+import { Compiler, compileToJson, parser } from './compile';
 import { COMPONENT_TYPES, TYPES } from './contants';
 
 export default function compileToHtml(code: string) {
@@ -7,27 +7,47 @@ export default function compileToHtml(code: string) {
 * { box-sizing: border-box; margin: 0; padding: 0 }
 html, body { height: 100%; width: 100% }
 ${compileToStyleToken(jsonObject)}`).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
-  let div = compileToDivToken(jsonObject).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
+  let div = compileToElementToken(jsonObject).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
 
-  return (`<!DOCTYPE>
+  const html = (`<!DOCTYPE>
 <html lang="zh">
 <head><title>auto ui</title></head>
 <style>${style}</style>
 <body>${div}</body> 
 </html>`);
+
+  return [html]
 }
 
-function compileToDivToken(obj: any): any {
-  console.log(obj);
+export class HtmlCompiler extends Compiler {
+  compile(code: string): string[] {
+    const jsonObject = compileToJson(code);
+    let style = (`
+* { box-sizing: border-box; margin: 0; padding: 0 }
+html, body { height: 100%; width: 100% }
+${compileToStyleToken(jsonObject)}`).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
+    let div = compileToElementToken(jsonObject).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
+    const html = (`<!DOCTYPE>
+<html lang="zh">
+<head><title>auto ui</title></head>
+<style>${style}</style>
+<body>${div}</body> 
+</html>`);
+    return [html];
+  }
+}
+
+
+function compileToElementToken(obj: any): any {
   switch (obj.type) {
     case TYPES.WIDGET: {
-      return (`<div id="${obj.id}">${obj.children.map((v: any) => compileToDivToken(v)).join('\n')}</div>`);
+      return (`<div id="${obj.id}">${obj.children.map((v: any) => compileToElementToken(v)).join('\n')}</div>`);
     }
     case TYPES.BUTTON: {
       return (`<button id="${obj.id}">${obj.props.text ? obj.props.text.text : ''}</button>`);
     }
     case TYPES.SHAPE: {
-      return (`<div id="${obj.id}">${obj.children.map((v: any) => compileToDivToken(v)).join('\n')}</div>`);
+      return (`<div id="${obj.id}">${obj.children.map((v: any) => compileToElementToken(v)).join('\n')}</div>`);
     }
     case TYPES.TEXT: {
       return (`<div id="${obj.id}">${obj.props.text ? obj.props.text.text : ''}</div>`);
@@ -250,6 +270,6 @@ WIDGET.pc_widget {
     }
   ]
 }
-`
+`;
 
 console.log(compileToHtml(dslCode3));

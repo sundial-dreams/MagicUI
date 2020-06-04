@@ -1,7 +1,7 @@
 .login {
   width: 250px;
   height: 250px;
-  margin: 50px auto 0 auto;
+  margin: 30px auto 0 auto;
 
   .avatar_wrapper {
     display: flex;
@@ -71,5 +71,12 @@
         transition: .5s ease-in-out;
       }
     }
+  }
+  .register_btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    color: #999999;
+    font-size: 12px;
   }
 }

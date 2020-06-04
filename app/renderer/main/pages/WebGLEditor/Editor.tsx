@@ -21,7 +21,7 @@ import { allowDrop, drop } from '../../webgl/drag';
 import { WebGLPCWidget } from '../../webgl/components/widget';
 import { WEBGL_COMPONENT_PROP_TYPES } from '../../utils/constants';
 import { addEditHistory, removeEditHistory, resetCode, resetComponent } from '../../actions/webglEditor';
-import { WidgetName } from '../../../public/utils/constants';
+import { WidgetType } from '../../../public/utils/constants';
 import Bridge from '../../../public/utils/bridge';
 
 // @ts-ignore
@@ -40,11 +40,13 @@ export default function Editor(props: IEditorProps) {
   const dispatch = useDispatch();
   const ref = useRef(null);
   const webglEditor = useRef({});
+  const autoSaveRef = useRef({});
   const editToolsState = useSelector((state: IStoreState) => state.editTools);
   const cpnState = useSelector((state: IStoreState) => state.component);
   const runToolsState = useSelector((state: IStoreState) => state.runTools);
   const webGLPageState = useSelector((state: IStoreState) => state.webGLPage);
   const editHistory = useSelector((state: IStoreState) => state.editHistory);
+  const settings = useSelector((state: IStoreState) => state.settings);
 
   const bgProps = cpnState.props.background;
   const borderProps = cpnState.props.border;
@@ -54,19 +56,32 @@ export default function Editor(props: IEditorProps) {
   const sizeProps = cpnState.props.size;
   const imageProps = cpnState.props.image;
 
-  console.log(cpnState);
+  autoSaveRef.current = settings.autoSave;
 
-  useOnMount(() => {
+
+  useEffect(() => {
     const container = ref.current as unknown as HTMLElement;
     const width = container.offsetWidth;
     const height = container.offsetHeight;
+
     webglEditor.current = new CanvasEditorRenderer(container, dispatch);
+
     const renderer = (webglEditor.current as CanvasEditorRenderer);
+
     renderer.addComponent(new WebGLPCWidget({ x: (width - 650) / 2, y: (height - 450) / 2 }));
 
+    let last = 0;
+    let now = +Date.now();
+
     EventEmitter.on('auto-save', debounce((pageId: string) => {
-      autoSaveWebGLPage({ pageId, page: renderer.toJsonObject() }).then();
-    }, 1000));
+      console.log('auto save', autoSaveRef.current);
+      if (!autoSaveRef.current) return;
+      now = +Date.now();
+      if (!last || now - last > 1000) {
+        last = now;
+        autoSaveWebGLPage({ pageId, page: renderer.toJsonObject() }).then();
+      }
+    }, 2000));
 
     onSocketResult((data: any) => {
       if (data.type === 'save-webgl-page') {
@@ -74,11 +89,14 @@ export default function Editor(props: IEditorProps) {
         else toast('save fail! try save');
       }
     });
-  });
+  }, []);
 
   const positionDeps = [positionProps.x, positionProps.y];
   useEffect(() => {
     if (cpnState.id && cpnState.operator === 'drag-component') {
+      if (cpnState.id.startsWith('widget')) {
+        return;
+      }
       EventEmitter.emit('auto-save', webGLPageState.pageId);
     }
   }, positionDeps);
@@ -164,7 +182,6 @@ export default function Editor(props: IEditorProps) {
   useEffect(() => {
     if (editToolsState.id) {
       const renderer = (webglEditor.current as CanvasEditorRenderer);
-      console.log(editToolsState);
       switch (editToolsState.editType) {
         case 'delete': {
           const rmCpn = removeComponentFromWebGLEditor(editToolsState.id, renderer);
@@ -206,7 +223,7 @@ export default function Editor(props: IEditorProps) {
     switch (runToolsState.runType) {
       case 'build': {
         const jsonObject = transformWebGLToJsonObject(renderer);
-        Bridge.open(WidgetName.CODE_VIEWS, {
+        Bridge.open(WidgetType.CODE, {
           type: 'json',
           data: jsonObject
         });
@@ -218,7 +235,10 @@ export default function Editor(props: IEditorProps) {
         Bridge.saveFile('base64', data).then((filename) => {
           dispatch(resetCode());
           toast(`save to ${filename}`, 1000);
+        }).catch(() => {
+          dispatch(resetCode());
         });
+        return;
       }
     }
   }, runToolsDeps);

@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { Dispatch } from 'redux';
 
-export default abstract class WebGLComponent {
+export default abstract class WebGLComponent implements IWebGLComponentProps, IWebGLComponentEvents{
   protected id: string;
   protected name: string;
   protected type: string;
@@ -154,7 +154,7 @@ export default abstract class WebGLComponent {
     return this.getGroup().position();
   }
 
-  setPosition(position: {x: number, y: number}) {
+  setPosition(position: { x: number, y: number }) {
     this.getGroup().setPosition(position);
   }
 
@@ -199,9 +199,53 @@ export default abstract class WebGLComponent {
     return undefined;
   }
 
-  setImageProps(image: {src: string}, size?: {width: number, height: number}) {}
+  setImageProps(image: { src: string }, size?: { width: number, height: number }) {
+  }
 
   getName() {
     return this.name;
   }
+}
+
+
+export interface IWebGLComponentProps {
+  getPosition(): { x: number, y: number };
+
+  setPosition(position: { x: number, y: number }): void;
+
+  getSize(): { width: number, height: number }
+
+  setSize(size: { width: number, height: number }): void;
+
+  getShadowProps(): { offsetX: number, offsetY: number, blur: number, fill: string } | undefined;
+
+  setShadowProps(shadow: { offsetX: number, offsetY: number, blur: number, fill: string }): void;
+
+  getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined;
+
+  setBorderProps(border: { width: number; fill: string; radius: number }): void;
+
+  getTextProps(): { text: string, fill: string } | undefined;
+
+  setTextProps(text: { text: string, fill: string }): void;
+
+  getBackgroundProps(): { opacity: number, fill: string } | undefined;
+
+  setBackgroundProps(background: { opacity: number, fill: string }): void;
+
+  getImageProps(): { src: string } | undefined;
+
+  setImageProps(image: { src: string }, size?: { width: number, height: number }): void;
+}
+
+export interface IWebGLComponentEvents {
+  onDragMove(callback: (e: Konva.KonvaEventObject<any>) => void): void;
+
+  onTransform(callback: (e: Konva.KonvaEventObject<any>) => void): void;
+
+  onTransformEnd(callback: (e: Konva.KonvaEventObject<any>) => void): void;
+
+  onSelected(callback: (event: Konva.KonvaEventObject<any>) => void): void;
+
+  onDragEnd(callback: (event: Konva.KonvaEventObject<any>) => void): void;
 }

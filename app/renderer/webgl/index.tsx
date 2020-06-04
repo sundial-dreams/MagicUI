@@ -6,9 +6,9 @@ import CanvasEditorRenderer  from '../main/webgl/index';
 import { WebGLPCWidget } from '../main/webgl/components/widget';
 import {close} from './utils';
 import { drawComponentFromJsonObject } from '../main/webgl/utils';
+import Bridge from '../public/utils/bridge';
 // @ts-ignore
 import style from './index.scss';
-import Bridge from '../public/utils/bridge';
 
 function App() {
   const container = useRef(null);

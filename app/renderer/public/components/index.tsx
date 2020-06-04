@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { cls } from '../utils';
-import { close } from '../../webglViews/utils';
+import { close } from '../../webgl/utils';
 // @ts-ignore
 import style from './index.scss';
 
@@ -52,4 +52,20 @@ export function Avatar(props: IAvatarProps) {
       <img src={props.src} alt=""/>
     </div>
   );
+}
+
+export function EditableAvatar(props: { size?: number, src:string, onClick: () => void }) {
+  const avatarStyle = {
+    width: props.size ? props.size + 'px' : '40px',
+    height: props.size ? props.size + 'px' : '40px'
+  };
+
+  return (
+    <div className={style.editable_avatar} style={avatarStyle}>
+      <img src={props.src} alt=""/>
+      <div className={style.edit_wrapper} onClick={props.onClick}>
+        Edit
+      </div>
+    </div>
+  )
 }

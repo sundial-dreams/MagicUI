@@ -7,12 +7,27 @@
   width: 32px;
   height: 32px;
   font-size: 16px;
-  color: #cccccc;
+  color: #999999;
   margin: 5px 0;
   transition: ease-in-out .2s;
   cursor: pointer;
+
   &.active {
-    color: #6C0AAB;
+    &:nth-child(1) {
+      color: #C792EA;
+    }
+
+    &:nth-child(2) {
+      color: #F78C6C;
+    }
+
+    &:nth-child(3) {
+      color: #f07178;
+    }
+
+    &:nth-child(4) {
+      color: #82AAFF;
+    }
   }
 }
 

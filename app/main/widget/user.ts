@@ -1,44 +1,51 @@
 import Electron from 'electron';
-import { loadHtmlByName } from '../utils/utils';
-import { CustomWindowConfig, WidgetName, WidgetType } from '../utils/constants';
-import { onCloseWidget, onMinimizeWidget } from '../service/ipc';
+import { loadHtmlByName, onCloseWidget, onMinimizeWidget } from '../utils/utils';
+import { CustomWindowConfig, WidgetType } from '../utils/constants';
+import { Widget } from './widget';
 
-let userWidget: Electron.BrowserWindow | null = null;
-
-onCloseWidget((event, args: { name: string }) => {
-  if (args.name === WidgetName.USER) {
-    if (userWidget) {
-      userWidget.close();
-    }
+export default class UserWidget extends Widget {
+  static instance: UserWidget | null = null;
+  static getInstance() {
+    return UserWidget.instance ? UserWidget.instance : (UserWidget.instance = new UserWidget())
   }
-});
 
-onMinimizeWidget((event, args: { name: string }) => {
-  if (args.name === WidgetName.USER) {
-    if (userWidget) {
-      userWidget.minimize();
-    }
-  }
-});
+  constructor() {
+    super();
+    onCloseWidget((event, args: { name: string }) => {
+      if (args.name === WidgetType.USER) {
+        if (this._widget) {
+          this._widget.close();
+        }
+      }
+    });
 
-export default function createUserWidget(parent: Electron.BrowserWindow, data: any = null) {
-  if (userWidget) return;
-  userWidget = new Electron.BrowserWindow({
-    ...CustomWindowConfig,
-    width: 310,
-    height: 380,
-    resizable: false,
-    maximizable: false,
-    parent
-  });
-
-  loadHtmlByName(userWidget, WidgetType.USER);
-
-  if (data) {
-    userWidget.webContents.on('did-finish-load', () => {
-      userWidget?.webContents.send('user-data', data);
+    onMinimizeWidget((event, args: { name: string }) => {
+      if (args.name === WidgetType.USER) {
+        if (this._widget) {
+          this._widget.minimize();
+        }
+      }
     });
   }
-  parent.on('close', () => userWidget = null);
-  userWidget.on('close', () => userWidget = null);
+  create(parent?: Electron.BrowserWindow, data?: any) {
+    if (this._widget) return;
+    this._widget = new Electron.BrowserWindow({
+      ...CustomWindowConfig,
+      width: 310,
+      height: 380,
+      resizable: false,
+      maximizable: false,
+      parent
+    });
+
+    loadHtmlByName(this._widget, WidgetType.USER);
+
+    if (data) {
+      this._widget.webContents.on('did-finish-load', () => {
+        this._widget?.webContents.send('user-data', data);
+      });
+    }
+    parent?.on('close', () => this.reset());
+    this._widget.on('close', () => this.reset());
+  }
 }

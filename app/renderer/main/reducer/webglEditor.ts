@@ -217,7 +217,8 @@ export function webGLPageReducer(state: IWebGLPageState, action: TActions) {
         ...state,
         pageId: action.pageId,
         page: action.page,
-        name: action.name
+        name: action.name,
+        id: action.id
       }
     }
     default: {
@@ -254,3 +255,5 @@ export function editHistoryReducer(state: IEditHistoryState, action: TActions) {
     }
   }
 }
+
+

@@ -3,24 +3,26 @@ export enum DSLFileActions {
   DELETE_FILE = 'delete-file'
 }
 
-export const selectFile = (id: string, fileType: string, filename: string, folder: string, code: string) => ({
+export const selectFile = (id: string, fileType: string, filename: string, folder: string, code: string, fileId: string) => ({
   type: DSLFileActions.SELECT_FILE,
   id,
   fileType,
   filename,
   folder,
-  code
+  code,
+  fileId
 });
 
 export enum DSLCodeActions {
   SELECTED_FILE_CODE = 'selected-file-code'
 }
 
-export const selectedFileCode = (name: string, code: string, id: string) => ({
+export const selectedFileCode = (name: string, code: string, id: string, fileId: string) => ({
   type: DSLCodeActions.SELECTED_FILE_CODE,
   name,
   code,
-  id
+  id,
+  fileId
 });
 
 
@@ -31,13 +33,14 @@ export enum DSLFileArrayActions {
   LOCAL_SAVE_FILE = 'local-save-file'
 }
 
-export const appendFile = (id:string, filename: string, fileType: string, folder: string, code: string) => ({
+export const appendFile = (id:string, filename: string, fileType: string, folder: string, code: string, fileId: string) => ({
   type: DSLFileArrayActions.APPEND_FILE,
   id,
   filename,
   fileType,
   folder,
-  code
+  code,
+  fileId
 });
 
 export const fetchFiles = (files: any[]) => ({
@@ -51,6 +54,11 @@ export const localSaveFile = (id: string, code: string) => ({
   code
 });
 
+export const localDeleteFile = (id: string) => ({
+  type: DSLFileArrayActions.REMOVE_FILE,
+  id
+})
+
 export enum OpenFileItemsActions {
   ADD_FILE = 'add-file',
   CLOSE_FILE = 'close-file',
@@ -58,15 +66,16 @@ export enum OpenFileItemsActions {
   LOCAL_SAVE_FILE = 'open-file-local-save-file'
 }
 
-export const addFile = (id: string, name: string, code: string) => ({
+export const addFile = (id: string, name: string, code: string, fileId: string) => ({
   type: OpenFileItemsActions.ADD_FILE,
-  item: { id, name, code }
+  item: { id, name, code, fileId }
 });
 
-export const closeFile = (index: number, id: string) => ({
+export const closeFile = (index: number, id: string, fileId: string) => ({
   type: OpenFileItemsActions.CLOSE_FILE,
   index,
-  id
+  id,
+  fileId
 });
 
 export const changeIndex = (index: number) => ({
@@ -74,9 +83,10 @@ export const changeIndex = (index: number) => ({
   currentIndex: index
 });
 
-export const openFileLocalSave = (index: number, id: string, code: string) => ({
+export const openFileLocalSave = (index: number, id: string, code: string, fileId: string) => ({
   type: OpenFileItemsActions.LOCAL_SAVE_FILE,
   index,
   id,
-  code
+  code,
+  fileId
 });

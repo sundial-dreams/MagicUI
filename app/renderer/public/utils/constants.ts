@@ -4,16 +4,20 @@ export const IpcEvent = {
   CLOSE: 'close',
   MINIMIZE: 'minimize',
   MAXIMIZE: 'maximize',
-  OPEN_MAIN_WINDOW: 'open-main-window',
+  USER_LOGIN: 'user-login',
+  UPDATE_USER: 'update-user',
   COMPILE: 'compile',
   SAVE_FILE: 'save-file',
-  USER_LOGOUT: 'user-logout'
+  USER_LOGOUT: 'user-logout',
+  OPEN_FILE: 'open-file'
 };
 
-export const WidgetName = {
-  CODE_VIEWS: 'code-views',
-  WEBGL_VIEWS: 'webgl-views',
+export const WidgetType = {
+  CODE: 'code',
+  WEBGL: 'webgl',
   LOGIN: 'login',
   USER: 'user',
-  MAIN: 'main'
+  MAIN: 'main',
+  AVATAR: 'avatar'
 };
+

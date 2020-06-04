@@ -15,3 +15,9 @@ export function onSocketResult(callback: Function) {
     callback(args);
   });
 }
+
+export function onUpdateUser(callback: Function) {
+  ipcRenderer.on('update-user-data', (event, args) => {
+    callback(args);
+  })
+}

@@ -35,11 +35,11 @@ const menus = [
   },
   {
     icon: <FontAwesomeIcon icon={faEdit}/>,
-    path: Routers.UI_EDITOR
+    path: Routers.WEBGL_EDITOR
   },
   {
     icon: <FontAwesomeIcon icon={faCode}/>,
-    path: Routers.CODE_EDITOR
+    path: Routers.DSL_CODE_EDITOR
   },
   {
     icon: <FontAwesomeIcon icon={faImage}/>,

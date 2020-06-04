@@ -21,9 +21,10 @@ const hot = [
 const entry = {
   main: hot.concat(require.resolve('./app/renderer/main/index.tsx')),
   user: hot.concat(require.resolve('./app/renderer/user/index.tsx')),
-  codeViews: hot.concat(require.resolve('./app/renderer/codeViews/index.tsx')),
-  webglViews: hot.concat(require.resolve('./app/renderer/webglViews/index.tsx')),
-  login: hot.concat(require.resolve('./app/renderer/login/index.tsx'))
+  code: hot.concat(require.resolve('./app/renderer/code/index.tsx')),
+  webgl: hot.concat(require.resolve('./app/renderer/webgl/index.tsx')),
+  login: hot.concat(require.resolve('./app/renderer/login/index.tsx')),
+  avatar: hot.concat(require.resolve('./app/renderer/avatar/index.tsx'))
 };
 
 const htmlWebpackPlugin = Object.keys(entry).map(name => new HtmlWebpackPlugin({

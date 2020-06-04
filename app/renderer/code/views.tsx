@@ -15,14 +15,18 @@ import { jsonToDslCode, saveCodeFile } from './utils';
 import Bridge from '../public/utils/bridge';
 import { cls } from '../public/utils';
 
-const cachedCode = ['', '', ''];
+const cachedCode = [[], [], []] as string[][];
 const tabItems = [
   ['DSL'],
   ['HTML', 'REACT']
 ];
 const codeMode = [
-  ['sass'],
-  ['htmlmixed', 'jsx']
+  [['sass']],
+  [['htmlmixed'], ['jsx', 'sass']]
+];
+const codeType = [
+  [['dsl']],
+  [['html'], ['jsx', 'sass']]
 ];
 
 export interface IViewsProps {
@@ -30,26 +34,31 @@ export interface IViewsProps {
 }
 
 export default function Views(props: IViewsProps) {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState([] as string[]);
+  const [dslCode, setDslCode] = useState('');
   const [curStep, setCurStep] = useState(0);
   const [tabItem, setTabItem] = useState([] as string[]);
   const [curTabIndex, setCurTabIndex] = useState(0);
   const [tabItemArray, setTabItemArray] = useState(tabItems);
   const [codeModeArray, setCodeModeArray] = useState(codeMode);
+  const [codeTypeIndex, setCodeTypeIndex] = useState(0);
 
   useEffect(() => {
     ipcRenderer.on('code', (event, args) => {
       if (args.type === 'json') {
         let dsl = jsonToDslCode(args.data);
-        setCode(dsl);
+        setCode([dsl]);
         setTabItem(tabItems[0]);
-        cachedCode[0] = dsl;
+        cachedCode[0] = [dsl];
+        setDslCode(dsl);
         return;
       }
       if (args.type === 'target') {
         setTabItemArray([tabItems[1]]);
         setTabItem(tabItems[1]);
         setCodeModeArray([codeMode[1]]);
+        setDslCode(args.data);
+        setCurStep(1);
         Bridge.compile('html', args.data).then((html) => {
           setCode(html);
           cachedCode[0] = html;
@@ -65,6 +74,7 @@ export default function Views(props: IViewsProps) {
       setCode(cachedCode[curStep - 1]);
       setTabItem(tabItemArray[curStep - 1]);
       setCurTabIndex(0);
+      setCodeTypeIndex(0);
       return curStep - 1;
     });
   };
@@ -74,26 +84,42 @@ export default function Views(props: IViewsProps) {
 
     setCurStep(curStep => {
       if (curStep === 0) {
-        Bridge.compile('html', code).then((html) => {
-          cachedCode[2] = html;
+        Bridge.compile('html', code[0]).then((html) => {
+          cachedCode[curStep + 1] = html;
           setCode(html);
         });
       }
 
       setTabItem(tabItemArray[curStep + 1]);
       setCurTabIndex(0);
+      setCodeTypeIndex(0);
       return curStep + 1;
     });
   };
 
-  const handleTabClick = (i: number) => setCurTabIndex(i);
+  const handleTabClick = (i: number) => {
+    setCurTabIndex(i);
+    setCodeTypeIndex(0);
+    if (i === 1) {
+      Bridge.compile('react', dslCode).then((react) => {
+        cachedCode[curStep + i] = react;
+        setCode(react);
+      })
+    }
+    if (i === 0) {
+      Bridge.compile('html', dslCode).then((html) => {
+        cachedCode[curStep + i] = html;
+        setCode(html);
+      })
+    }
+  }
 
   const handleCodeChange = (edit: any, data: any, value: any) => {
     setCode(value);
   };
 
   const handleExport = () => {
-    saveCodeFile(tabItemArray[curStep][curTabIndex], code).then(() => {
+    saveCodeFile(tabItems[curStep][curTabIndex], code).then(() => {
 
     });
   };
@@ -128,10 +154,15 @@ export default function Views(props: IViewsProps) {
   return (
     <div className={style.views}>
       <Tab items={tabItem} onTabClick={handleTabClick} curIndex={curTabIndex}/>
-      <CodeEditor code={code} onCodeChange={handleCodeChange} mode={codeMode[curStep][curTabIndex]}/>
+      <CodeEditor code={code[codeTypeIndex]}
+                  onCodeChange={handleCodeChange}
+                  mode={codeMode[curStep][curTabIndex][codeTypeIndex]}
+                  codeTypes={codeType[curStep][curTabIndex]}
+                  curCodeType={codeTypeIndex}
+                  onCodeTypeTabClick={(i) => setCodeTypeIndex(i)}/>
       <div className={style.operator_btn}>
         {prevBtn}
-        {curStep === tabItemArray.length - 1 ? exportBtn : nextBtn}
+        {curStep === tabItems.length - 1 ? exportBtn : nextBtn}
       </div>
     </div>
   );
@@ -140,7 +171,10 @@ export default function Views(props: IViewsProps) {
 interface ICodeEditorProps {
   code: string,
   onCodeChange: (edit: any, data: any, value: any) => void,
-  mode: string
+  mode: string,
+  codeTypes: string[],
+  curCodeType: number,
+  onCodeTypeTabClick: (i: number) => void
 }
 
 function CodeEditor(props: ICodeEditorProps) {
@@ -150,9 +184,21 @@ function CodeEditor(props: ICodeEditorProps) {
     theme: 'material',
     lineNumbers: true
   };
-
+  const tab = (
+    <div className={style.editor_tab}>
+      {props.codeTypes.map((v, i) => {
+        const click = () => props.onCodeTypeTabClick(i);
+        return (
+          <button key={i} className={cls(i === props.curCodeType && style.active)} onClick={click}>
+            {v}
+          </button>
+        );
+      })}
+    </div>
+  );
   return (
     <div className={style.code_editor}>
+      {tab}
       <CodeMirror onBeforeChange={props.onCodeChange} value={props.code} options={options}/>
     </div>
   );

@@ -57,10 +57,10 @@ export async function saveUser(user: UserType) {
 }
 
 export async function getUser() {
-  let email = await Session.getCookies('user-email').then(([v]) => v.value);
-  let password = await Session.getCookies('user-password').then(([v]) => v.value);
-  let avatar = await Session.getCookies('user-avatar').then(([v]) => v.value);
-  let nickname = await Session.getCookies('user-nickname').then(([v]) => v.value);
+  let email = await Session.getCookies('user-email').then(([v]) => v && v.value);
+  let password = await Session.getCookies('user-password').then(([v]) => v && v.value);
+  let avatar = await Session.getCookies('user-avatar').then(([v]) => v && v.value);
+  let nickname = await Session.getCookies('user-nickname').then(([v]) => v && v.value);
   return { email, avatar, password, nickname };
 }
 

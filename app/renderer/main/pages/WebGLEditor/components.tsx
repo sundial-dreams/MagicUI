@@ -1,14 +1,15 @@
-import React, {ReactNode, useState} from 'react';
-import {drag} from '../../webgl/drag';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import React, { ReactNode, useState } from 'react';
+import { drag } from '../../webgl/drag';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {cls} from '../../utils';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { cls } from '../../utils';
 
 // @ts-ignore
 import style from './components.scss';
-import { createOnePage } from '../../utils/api';
+import { createNewPage, fetchOnePage } from '../../utils/api';
 import toast from '../../components/toast';
+import { selectWebGLPage } from '../../actions/webglEditor';
 
 export interface IUIComponentsItemProps {
   icon: IconProp
@@ -59,10 +60,10 @@ export function UIComponentsFold(props: IUIComponentsFoldProps) {
 }
 
 
-
 interface INewPageModalProps {
   cancel: () => void;
-  email: string
+  email: string;
+  dispatch: Function
 }
 
 export function NewPageModal(props: INewPageModalProps) {
@@ -80,8 +81,14 @@ export function NewPageModal(props: INewPageModalProps) {
 
   const handleCreateNewPage = () => {
     setCreating(true);
-    createOnePage(props.email, name, description).then(() => {
+    createNewPage(props.email, name, description).then((v) => {
       setCreating(false);
+      props.dispatch(selectWebGLPage(
+        v.pageId,
+        name,
+        null,
+        v.id
+      ));
       props.cancel();
       toast('create new page!');
     }).catch(() => {
@@ -89,6 +96,7 @@ export function NewPageModal(props: INewPageModalProps) {
       toast('create page fail!');
     });
   };
+
   return (
     <div className={style.new_page_modal}>
       <div className={style.header}>

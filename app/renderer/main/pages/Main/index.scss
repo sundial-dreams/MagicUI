@@ -12,50 +12,78 @@
     height: 50px;
   }
 
-  .image_wrapper {
-    position: absolute;
-    right: 30px;
-    top: 80px;
-    width: 600px;
+  .content {
+    width: 100%;
+    height: calc(100% - 50px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    img {
-      width: 100%;
+    h4 {
+      font-family: "Comic Sans MS";
+      line-height: 2;
+      color: rgba(0, 0, 0, .3);
+      font-size: 18px;
+      text-align: center;
     }
-  }
 
-  .intro {
-    padding: 30px;
+    .logo {
+      font-size: 250px;
+      font-weight: bold;
+      color: rgba(0, 0, 0, .2);
+      margin-top: -50px;
+      margin-left: -60px;
+    }
 
-    .avatar_wrapper {
-      display: flex;
-      align-items: flex-end;
-      .user_info {
-        margin-left: 10px;
-        color: #dddddd;
 
-        h3 {
-          font-size: 20px;
-          margin-bottom: 10px;
+    .description {
+      margin-left: -60px;
+
+      .text_title {
+        font-size: 24px;
+        font-weight: bold;
+
+        span {
+          color: rgba(255, 255, 255, .1);
+          background: rgba(0, 0, 0, .1);
+          border-radius: 5px;
+          padding: 0 5px;
         }
+      }
 
-        h4 {
-          font-size: 16px;
-          color: #999999;
+      .text_des {
+        span {
+          border-bottom: 1px solid #82AAFF;
+        }
+      }
+
+
+    }
+
+    .command_wrapper {
+      width: 250px;
+      margin-top: 20px;
+      margin-left: -60px;
+
+      .command {
+        width: 100%;
+        text-align: left;
+        font-size: 20px;
+      }
+
+      .command_item {
+        width: 100%;
+
+        span {
+          background: rgba(255, 255, 255, .1);
+          border-radius: 5px;
+          padding: 0 5px;
         }
       }
     }
 
-    .intro_text {
-      width: calc(100% - 620px);
-      padding: 20px 10px 10px 10px;
-
-      h4 {
-        font-size: 16px;
-        color: #dddddd;
-        text-indent: 10px;
-        line-height: 3;
-      }
-    }
   }
 
   .start_btn {

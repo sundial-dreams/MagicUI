@@ -97,6 +97,12 @@
       color: #999999;
       background: #333544;
       box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+      border-radius: 3px;
+
+      &:nth-child(2) {
+        background: #F83E5B;
+        color: white;
+      }
     }
   }
 }

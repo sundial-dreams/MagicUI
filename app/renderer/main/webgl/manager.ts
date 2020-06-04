@@ -69,6 +69,9 @@ export default class ComponentManager {
 
   removeComponentById(id: string) {
     if (this.webGLComponentCollection.has(id)) {
+      if (this.webGLComponentCollection.get(id) === this.rootComponent) {
+        this.rootComponent = null;
+      }
       this.webGLComponentCollection.get(id)?.removeFromLayer();
       this.webGLComponentCollection.delete(id);
     }
@@ -86,7 +89,6 @@ export default class ComponentManager {
   modifyComponentPropertiesById(id: string, propType: string, data: any) {
     if (this.webGLComponentCollection.has(id)) {
       const component = this.webGLComponentCollection.get(id) as WebGLComponent;
-      console.log(propType);
       switch (propType) {
         case WEBGL_COMPONENT_PROP_TYPES.BACKGROUND: {
           component.getBackgroundProps() && component.setBackgroundProps(data);

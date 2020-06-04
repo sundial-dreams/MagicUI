@@ -1,5 +1,5 @@
-import { initialState, IUserState } from '../store';
-import { TActions, UserActions } from '../actions';
+import { initialState, ISettingsStore, IUserState } from '../store';
+import { SettingsActions, TActions, UserActions } from '../actions';
 import {
   editToolsReducer,
   runToolsReducer,
@@ -26,6 +26,21 @@ export function userReducer(state: IUserState, action: TActions) {
   }
 }
 
+export function settingsReducer(state: ISettingsStore, action: TActions) {
+  switch (action.type) {
+    case SettingsActions.SAVE_SETTINGS: {
+      return {
+        ...state,
+        autoSave: action.autoSave,
+        theme: action.theme
+      }
+    }
+    default: {
+      return {...state}
+    }
+  }
+}
+
 export default function mainReducer(state = initialState, action: TActions) {
   return {
     editTools: editToolsReducer(state.editTools, action),
@@ -39,6 +54,7 @@ export default function mainReducer(state = initialState, action: TActions) {
     dslFileArray: dslFileArrayReducer(state.dslFileArray, action),
     openFileItems: openFileItemsReducer(state.openFileItems, action),
 
-    user: userReducer(state.user, action)
+    user: userReducer(state.user, action),
+    settings: settingsReducer(state.settings, action)
   };
 }

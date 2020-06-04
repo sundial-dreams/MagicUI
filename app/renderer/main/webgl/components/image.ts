@@ -12,7 +12,7 @@ export class WebGLImage extends WebGLComponent {
     this.name = COMPONENT_TYPES.IMAGE.CUSTOM_IMAGE;
     this.isRawComponent = true;
     const imageObject = new Image();
-    this.src = imageObject.src = 'http://localhost:9000/image/default_avatar.jpeg';
+    this.src = imageObject.src = 'http://localhost:9000/image/anime-1.jpeg';
     imageObject.onload = () => {
       const image = new Konva.Image({
         image: imageObject,

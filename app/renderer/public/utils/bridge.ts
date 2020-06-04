@@ -34,8 +34,8 @@ const Bridge = function () {
     minimize(name: string) {
       ipcRenderer.send(IpcEvent.MINIMIZE, { name });
     },
-    openMainWindow(data: any) {
-      ipcRenderer.invoke(IpcEvent.OPEN_MAIN_WINDOW, data).catch(console.error);
+    login(data: any) {
+      ipcRenderer.invoke(IpcEvent.USER_LOGIN, data).catch(console.error);
     },
     compile(type: string, code: string) {
       return ipcRenderer.invoke(IpcEvent.COMPILE, { type, code });
@@ -45,6 +45,12 @@ const Bridge = function () {
     },
     logout() {
       return ipcRenderer.invoke(IpcEvent.USER_LOGOUT);
+    },
+    openFile(type: string) {
+      return ipcRenderer.invoke(IpcEvent.OPEN_FILE, { type })
+    },
+    update(user: {email: string, password: string, nickname: string, avatar: string}) {
+      return ipcRenderer.invoke(IpcEvent.UPDATE_USER, user)
     }
   };
 }();

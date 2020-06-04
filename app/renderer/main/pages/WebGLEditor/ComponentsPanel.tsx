@@ -7,27 +7,25 @@ import {
   faPlus,
   faCheck,
   faSearch,
-  faBatteryEmpty,
   faWindowRestore,
-  faCircleNotch, faThermometerEmpty
+  faCircleNotch, faThermometerEmpty, faTrash, faEdit
 } from '@fortawesome/free-solid-svg-icons';
 import modal from '../../components/modal';
 import { cls } from '../../../public/utils';
-import { fetchPages } from '../../utils/api';
+import { deleteOnePage, fetchAllPages, fetchOnePage, modifyPageName } from '../../utils/api';
 import { selectWebGLPage } from '../../actions/webglEditor';
 import { ComponentFoldConfig } from '../../utils/constants';
 
 // @ts-ignore
 import style from './ComponentsPanel.scss';
+import Confirm from '../../components/modal/confirm';
+import toast from '../../components/toast';
 
+export default function ComponentsPanel(props: {}) {
+  const user = useSelector((state: IStoreState) => state.user);
+  const webglPage = useSelector((state: IStoreState) => state.webGLPage);
 
-export interface IComponentsPanelProps {
-
-}
-
-
-export default function ComponentsPanel(props: IComponentsPanelProps) {
-  const state = useSelector((state: IStoreState) => state.user);
+  const dispatch = useDispatch();
 
   const foldElem = ComponentFoldConfig.map((v, i) => {
     const type = v.type;
@@ -46,44 +44,67 @@ export default function ComponentsPanel(props: IComponentsPanelProps) {
       </UIComponentsFold>
     );
   });
-
-  const handleCreateNewPage = () => {
-    modal(cancel => <NewPageModal cancel={cancel} email={state.email}/>);
+  const openCreatePageModal = () => {
+    modal(cancel => <NewPageModal cancel={cancel} email={user.email} dispatch={dispatch}/>);
   };
+  const openDeletePageModal = () => {
+    modal(cancel => <Confirm title={`do you want to delete ${webglPage.name}?`} cancel={cancel} confirm={() => {
+      deleteOnePage(user.email, webglPage.id).then((v) => {
+        if (!v.err) {
+          fetchOnePage(user.email, v.pageId).then((res) => {
+            cancel();
+            toast('delete one page!');
+            dispatch(selectWebGLPage(
+              v.pageId,
+              v.name,
+              res.page.page,
+              v.id
+            ));
+          });
+        }
+      });
+    }}/>);
+  };
+
   return (
     <div className={style.components_panel}>
       <div className={style.components}>
         <div className={style.ui_page_wrapper}>
-          <UIPageStore currentPage={'A Page'}/>
+          <WebGLPageList currentPage={'A Page'}/>
         </div>
         <div className={style.ui_components_fold_wrapper}>
           {foldElem}
         </div>
       </div>
       <div className={style.status_bar}>
-        <NewPageButton onClick={handleCreateNewPage}/>
+        <NewPageButton onClick={openCreatePageModal}/>
+        <DeletePageButton onClick={openDeletePageModal}/>
       </div>
     </div>
   );
 }
 
-type PageType = { pageId: string, page: {}, name: string };
+type PageType = { id: string, pageId: string, name: string };
 
-function UIPageStore(props: any) {
+function WebGLPageList(props: any) {
   const [hideContent, setHideContent] = useState(true);
   const [pages, setPages] = useState([] as PageType[]);
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [disabled, setDisabled] = useState(true);
 
   const webGLPage = useSelector((state: IStoreState) => state.webGLPage);
   const user = useSelector((state: IStoreState) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => setName(webGLPage.name), [webGLPage.name]);
 
   const handleClick = () => {
     if (hideContent) {
       if (!user.email) return;
       setPages([]);
       setLoading(true);
-      fetchPages(user.email).then(v => {
+      fetchAllPages(user.email).then(v => {
         if (!v.err) {
           const pages = v.pages as PageType[];
           setPages(pages);
@@ -95,14 +116,34 @@ function UIPageStore(props: any) {
     }
     setHideContent(hideContent => !hideContent);
   };
+  const canEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDisabled(false);
+  }
+  const handleModifyPageName = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    modifyPageName(user.email, webGLPage.id, name).then(v => {
+      console.log(v);
+      if (!v.err) {
+        setDisabled(true);
+        return;
+      }
+      setDisabled(true);
+    })
+  }
 
   const elem = pages.length > 0 ? pages.map((v, i) => {
     const click = () => {
-      dispatch(selectWebGLPage(
-        v.pageId,
-        v.name,
-        v.page
-      ));
+      fetchOnePage(user.email, v.pageId).then(res => {
+        if (!res.err) {
+          dispatch(selectWebGLPage(
+            v.pageId,
+            v.name,
+            res.page.page,
+            v.id
+          ));
+        }
+      });
       handleClick();
     };
     return (<ResultItem name={v.name} key={i} onClick={click}/>);
@@ -119,12 +160,17 @@ function UIPageStore(props: any) {
 
   return (
     <div className={style.ui_page_store}>
-      <button className={style.current_ui_page} onClick={handleClick}>
-        {webGLPage.name.toLocaleUpperCase()}
-        <span>
-          <FontAwesomeIcon icon={faCheck}/>
+      <div className={style.current_ui_page} onClick={handleClick}>
+        <input type="text"
+               className={cls(!disabled && style.active)}
+               onClick={disabled ? () => {} : e => e.stopPropagation()}
+               value={name}
+               onChange={e => setName(e.target.value)}
+               disabled={disabled}/>
+        <span onClick={disabled ? canEdit : handleModifyPageName}>
+          <FontAwesomeIcon icon={disabled ? faEdit : faCheck} color={disabled ? '#999999' : 'red'}/>
         </span>
-      </button>
+      </div>
       <div className={cls(style.ui_page_search_panel, !hideContent && style.show)}>
         <div className={style.search}>
           <input type="text" placeholder="search page..."/>
@@ -156,6 +202,16 @@ function NewPageButton(props: { onClick: () => void }) {
     <div className={style.new_page_button} onClick={props.onClick}>
       <button>
         <FontAwesomeIcon icon={faPlus}/>
+      </button>
+    </div>
+  );
+}
+
+function DeletePageButton(props: { onClick: () => void }) {
+  return (
+    <div className={style.delete_page_button} onClick={props.onClick}>
+      <button>
+        <FontAwesomeIcon icon={faTrash}/>
       </button>
     </div>
   );

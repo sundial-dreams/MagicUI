@@ -24,6 +24,13 @@
       color: #999999;
       font-size: 12px;
 
+      input {
+        border: none;
+        background: transparent !important;
+        outline: none;
+        box-shadow: none;
+      }
+
       .position_props, .size_props {
         height: 28px;
         width: 100%;
@@ -42,8 +49,6 @@
         }
 
         input {
-          border: none;
-          background: transparent;
           width: 50px;
           color: honeydew;
           padding-left: 5px;
@@ -334,7 +339,7 @@
           border: 1px solid rgba(0, 0, 0, .1);
           box-sizing: border-box;
           padding: 10px;
-          border-radius: 5px;
+          border-radius: 3px;
           z-index: 1000;
           box-shadow: 5px 5px 15px rgba(0, 0, 0, .1);
           visibility: hidden;
@@ -351,7 +356,7 @@
             height: 24px;
             margin: 0 auto;
             outline: none;
-            border: 1px solid rgba(0, 0, 0, .2);
+            border: 1px solid rgba(0, 0, 0, .2) !important;
             border-radius: 3px;
             color: #333544;
             font-size: 12px;
@@ -363,9 +368,9 @@
             position: absolute;
             right: 10px;
             bottom: 10px;
-            width: 35px;
+            width: 50px;
             height: 18px;
-            background: #9A3FD5;
+            background: #f07178;
             color: white;
             font-size: 12px;
             border-radius: 3px;

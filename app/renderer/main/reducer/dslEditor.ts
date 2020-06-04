@@ -11,7 +11,8 @@ export function dslFileReducer(state: IDSLFileState, action: TActions) {
         fileType: action.fileType,
         filename: action.filename,
         folder: action.folder,
-        code: action.code
+        code: action.code,
+        fileId: action.fileId
       };
     }
     default: {
@@ -28,7 +29,8 @@ export function dslCodeReducer(state: IDSLCodeState, action: TActions) {
         ...state,
         name: action.name,
         code: action.code,
-        id: action.id
+        id: action.id,
+        fileId: action.fileId
       }
     }
     default: {
@@ -47,7 +49,8 @@ export function dslFileArrayReducer(state: IDSLFileArrayState, action: TActions)
           filename: action.filename,
           fileType: action.fileType,
           folder: action.folder,
-          code: action.code
+          code: action.code,
+          fileId: action.fileId
         })
       }
     }
@@ -64,6 +67,11 @@ export function dslFileArrayReducer(state: IDSLFileArrayState, action: TActions)
       }
       return {
         files: [...state.files]
+      }
+    }
+    case DSLFileArrayActions.REMOVE_FILE: {
+      return {
+        files: state.files.filter(v => v.id !== action.id)
       }
     }
     default: {
@@ -92,7 +100,6 @@ export function openFileItemsReducer(state: IOpenFileItemsState, action: TAction
       }
     }
     case OpenFileItemsActions.CLOSE_FILE: {
-      console.log(action.index);
       return {
         ...state,
         currentIndex: 0,

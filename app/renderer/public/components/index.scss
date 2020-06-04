@@ -65,3 +65,35 @@
     height: 100%;
   }
 }
+
+
+.editable_avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .08);
+  border-radius: 51%;
+  overflow: hidden;
+  cursor: pointer;
+
+  & > img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .edit_wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    height: 30px;
+    color: white;
+    background: rgba(0, 0, 0, .6);
+    text-align: center;
+    font-size: 12px;
+    line-height: 30px;
+    z-index: 10;
+  }
+}

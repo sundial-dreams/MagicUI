@@ -2,28 +2,28 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExport, faGavel, faPlay, faSearch, faSave, faFileCode } from '@fortawesome/free-solid-svg-icons';
 import Bridge from '../../../public/utils/bridge';
-import { WidgetName } from '../../../public/utils/constants';
-// @ts-ignore
-import style from './RunTools.scss';
+import { WidgetType } from '../../../public/utils/constants';
 import { useSelector } from 'react-redux';
 import { IStoreState } from '../../store';
 import { saveAllDslCode, saveDslCode } from '../../utils/api';
 import toast from '../../components/toast';
+// @ts-ignore
+import style from './RunTimeTools.scss';
 
-
-export default function RunTools() {
-  const dslCode = useSelector((state: IStoreState) => state.dslCode);
-  const openFile = useSelector((state: IStoreState) => state.openFileItems);
+export default function RunTimeTools() {
+  const openFileItems = useSelector((state: IStoreState) => state.openFileItems);
   const files = useSelector((state: IStoreState) => state.dslFileArray)
   const user = useSelector((state: IStoreState) => state.user);
+
   const handleRun = () => {
-    Bridge.compile('json', openFile.items[openFile.currentIndex].code).then(v => {
-      Bridge.open(WidgetName.WEBGL_VIEWS, v);
+    Bridge.compile('json', openFileItems.items[openFileItems.currentIndex].code).then(v => {
+      Bridge.open(WidgetType.WEBGL, v);
     })
   };
 
   const handleSave = () => {
-    saveDslCode(dslCode.id, user.email, "file", dslCode.code).then((v) => {
+    const cur = openFileItems.items[openFileItems.currentIndex];
+    saveDslCode(cur.id, user.email, cur.code, cur.fileId).then((v) => {
       if (!v.err) {
         toast('save code!');
       }
@@ -39,9 +39,9 @@ export default function RunTools() {
   };
 
   const handleBuild = () => {
-    Bridge.open(WidgetName.CODE_VIEWS, {
+    Bridge.open(WidgetType.CODE, {
       type: 'target',
-      data: openFile.items[openFile.currentIndex].code
+      data: openFileItems.items[openFileItems.currentIndex].code
     });
   };
 

@@ -1,4 +1,6 @@
 import fs from 'fs';
+import zlib from 'zlib';
+import { Stream } from 'stream';
 
 export function saveBase64ToImage(filename: string, data: string) {
   return new Promise((resolve, reject) => {
@@ -23,5 +25,21 @@ export function saveCodeFile(filename: string, code: string) {
       }
       resolve(filename);
     })
+  })
+}
+
+export function readFile(filename: string) {
+
+}
+
+export function mkdir(dirname: string) {
+  return new Promise((resolve, reject) => {
+    fs.mkdir(dirname, err => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve();
+    });
   })
 }

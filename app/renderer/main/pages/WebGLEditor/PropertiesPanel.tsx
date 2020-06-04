@@ -317,12 +317,12 @@ function ImageProperties(props: IImagePropertiesProps) {
   return (
     <PropertiesItem name="IMAGE">
       <div className={style.image_src_props}>
-        <span>Src</span>
+        <span>src</span>
         <input onClick={toggleShowPicker} value={src}/>
         <div className={cls(style.image_src_card, showPicker && style.show)} ref={pickerRef}>
           <input onChange={handleChangeSrc} value={src}/>
           <button onClick={handleConfirmSrc}>
-            <FontAwesomeIcon icon={faCheck}/>
+            OK
           </button>
         </div>
       </div>

@@ -1,0 +1,58 @@
+.WIDGET-pc_widget-0 {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 1;
+  border: 2px solid white; 
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px black;
+  .TEXT-label-1 {
+  position: absolute;
+  width: 80px;
+  height: 22px;
+  background-color: yellow;
+  opacity: 0.75;
+  border: 2px solid white; 
+  border-radius: 0px;
+  box-shadow: 0px 0px 0px white;
+  left: 282px;
+  top: 249px;
+  color: black;
+}
+.TEXT-text-2 {
+  position: absolute;
+  width: 79px;
+  height: 12px;
+  background: transparent;
+  margin-left: 179px;
+  margin-top: 167px;
+  color: black;
+}
+.BUTTON-custom_button-3 {
+  position: absolute;
+  outline: none;
+  width: 100px;
+  height: 32px;
+  background-color: #962d3f;
+  opacity: 1;
+  border: 0px solid white; 
+  border-radius: 2px;
+  box-shadow: 0px 0px 5px blue;
+  left: 427px;
+  top: 346px;
+}
+.BUTTON-custom_button-4 {
+  position: absolute;
+  outline: none;
+  width: 102px;
+  height: 34px;
+  background-color: #FF5370;
+  opacity: 1;
+  border: 1px solid #b43232; 
+  border-radius: 2px;
+  box-shadow: 0px 0px 5px blue;
+  left: 521px;
+  top: 501px;
+}
+}

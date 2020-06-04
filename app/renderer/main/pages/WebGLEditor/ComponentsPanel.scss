@@ -30,16 +30,36 @@
   color: #999999;
   font-size: 14px;
 
-  & > button {
+  & > .current_ui_page {
     height: 100%;
     width: 100%;
     text-align: left;
     text-indent: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    input {
+      background: transparent;
+      height: 100%;
+      color: #999999;
+      font-size: 14px;
+      box-shadow: none;
+      flex: 4;
+      padding-left: 5px;
+      box-sizing: border-box;
+      transition: .2s;
+
+      &.active {
+        background: rgba(0, 0, 0, .1);
+        box-shadow: inset 0 0 3px rgba(0, 0, 0, .3);
+      }
+    }
 
     span {
-      float: right;
-      margin-right: 10px;
-      color: brown;
+      flex: 1;
+      display: flex;
+      justify-content: center;
     }
   }
 
@@ -49,11 +69,11 @@
     min-height: 100px;
     min-width: 200px;
     background: white;
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, .2);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, .1);
     border: 1px solid rgba(0, 0, 0, .1);
     padding: 10px 0;
     box-sizing: border-box;
-    border-radius: 5px;
+    border-radius: 2px;
     transition: .5s;
     visibility: hidden;
     opacity: 0;
@@ -137,7 +157,7 @@
 }
 
 
-.new_page_button {
+.new_page_button, .delete_page_button {
   position: absolute;
   left: 50%;
   top: -28px;
@@ -151,14 +171,14 @@
   font-size: 12px;
   box-shadow: 0 0 5px rgba(0, 0, 0, .1);
 
-  &:hover, &:active {
-    cursor: pointer;
-
-  }
-
   button {
     width: 100%;
     height: 100%;
   }
+}
+
+.delete_page_button {
+  left: 100%;
+  transform: translateX(-120%);
 }
 

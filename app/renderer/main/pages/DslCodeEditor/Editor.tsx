@@ -21,18 +21,16 @@ export default function DSLCodeEditor(props: IDSLCodeEditorProps) {
   const openFile = useSelector((state: IStoreState) => state.openFileItems);
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
-  console.log(openFile);
   useEffect(() => {
-    console.log(openFile.currentIndex, openFile.items);
     setValue(openFile.items[openFile.currentIndex].code)
   }, [openFile.items.length, openFile.currentIndex]);
 
   const handleChange = (editor: any, data: any, value: any) => {
     setValue(value);
     const index = openFile.currentIndex;
-    const {id} = openFile.items[index];
+    const {id, fileId} = openFile.items[index];
     dispatch(localSaveFile(id, value));
-    dispatch(openFileLocalSave(index, id, value))
+    dispatch(openFileLocalSave(index, id, value, fileId))
   };
 
   const options = {

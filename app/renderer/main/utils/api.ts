@@ -1,6 +1,6 @@
 import Bridge from '../../public/utils/bridge';
 
-export function createOnePage(email: string, name: string, description: string) {
+export function createNewPage(email: string, name: string, description: string) {
   return Bridge.fetch(
     'POST',
     'ui_editor/create_page',
@@ -8,12 +8,36 @@ export function createOnePage(email: string, name: string, description: string) 
   );
 }
 
-export function fetchPages(email: string) {
+export function fetchAllPages(email: string) {
   return Bridge.fetch(
     'GET',
     'ui_editor/all_page',
     {email}
-  ).then(v => ({...v, pages: v.pages.map((v1: any) => ({...v1, pageId: v1._id}))}))
+  );
+}
+
+export function fetchOnePage(email: string, pageId: string) {
+  return Bridge.fetch(
+    'GET',
+    'ui_editor/get_page',
+    { email, pageId }
+  )
+}
+
+export function deleteOnePage(email: string, id: string) {
+  return Bridge.fetch(
+    'POST',
+    'ui_editor/delete_page',
+    { email, id }
+  )
+}
+
+export function modifyPageName(email: string, id: string, name: string) {
+  return Bridge.fetch(
+    'POST',
+    'ui_editor/rename_page',
+    { email, id, name }
+  )
 }
 
 export function savePage(pageId: string, updatedPage: object) {
@@ -40,18 +64,42 @@ export function createDslFile(email: string, filename: string, fileType: string,
   )
 }
 
-export function saveDslCode(id: string, email: string, fileType: string, code: string) {
+export function saveDslCode(id: string, email: string, code: string, fileId: string) {
   return Bridge.fetch(
     'POST',
     'dsl_editor/save_dsl_code',
-    { id, email, fileType, code }
+    { id, email, code, fileId }
   )
 }
 
-export function saveAllDslCode(email: string, files: {id: string, code: string}[]) {
+export function saveAllDslCode(email: string, files: {id: string, fileId?: string, code: string}[]) {
   return Bridge.fetch(
     'POST',
     'dsl_editor/save_all_dsl_code',
     { email, files: JSON.stringify(files) }
   );
+}
+
+export function fetchDslCode(email: string, fileId: string) {
+  return Bridge.fetch(
+    'GET',
+    'dsl_editor/dsl_code',
+    { email, fileId }
+  )
+}
+
+export function deleteDslFile(email: string, id: string, fileId: string) {
+  return Bridge.fetch(
+    'POST',
+    'dsl_editor/remove_dsl_file',
+    { email, id, fileId, fileType: 'file' }
+  )
+}
+
+export function fetchSystemSettings(email: string) {
+  return Bridge.fetch(
+    'GET',
+    'user/user_settings',
+    { email }
+  )
 }

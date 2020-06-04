@@ -7,13 +7,9 @@ import modal from '../../components/modal';
 import { buildCode, exportCode } from '../../actions/webglEditor';
 
 // @ts-ignore
-import style from './RunTools.scss';
+import style from './RuntimeTools.scss';
 
-export interface IRunToolsProps {
-
-}
-
-export default function RunTools(props: IRunToolsProps) {
+export default function RuntimeTools(props: {}) {
   const dispatch = useDispatch();
   const build = () => {
     dispatch(buildCode());

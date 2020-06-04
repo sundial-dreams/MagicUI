@@ -1,8 +1,8 @@
 import Bridge from '../public/utils/bridge';
-import { WidgetName } from '../public/utils/constants';
+import { WidgetType } from '../public/utils/constants';
 
 export function close() {
-  Bridge.close(WidgetName.CODE_VIEWS);
+  Bridge.close(WidgetType.CODE);
 }
 
 export type TRawComponent = {
@@ -33,7 +33,7 @@ ${makeIndent(tabIndent)}]` : ''}
 ${makeIndent(tabIndent - 2)}}`.replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
 }
 
-export function saveCodeFile(codeType: string, code: string) {
+export function saveCodeFile(codeType: string, code: string[]) {
   return Bridge.saveFile('code', {
     codeType,
     code

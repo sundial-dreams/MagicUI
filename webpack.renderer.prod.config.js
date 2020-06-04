@@ -11,9 +11,10 @@ const webpackBaseConfig = require('./webpack.base.config');
 const entry = {
   main: path.join(__dirname, 'app/renderer/main/index.tsx'),
   user: path.join(__dirname, 'app/renderer/user/index.tsx'),
-  codeViews: path.join(__dirname, 'app/renderer/codeViews/index.tsx'),
-  webglViews: path.join(__dirname, 'app/renderer/webglViews/index.tsx'),
-  login: path.join(__dirname, 'app/renderer/login/index.tsx')
+  code: path.join(__dirname, 'app/renderer/code/index.tsx'),
+  webgl: path.join(__dirname, 'app/renderer/webgl/index.tsx'),
+  login: path.join(__dirname, 'app/renderer/login/index.tsx'),
+  avatar: path.join(__dirname, 'app/renderer/avatar/index.tsx')
 };
 
 const htmlWebpackPlugin = Object.keys(entry).map(name => new HtmlWebpackPlugin({

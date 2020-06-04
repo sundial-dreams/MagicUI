@@ -13,22 +13,41 @@ import {
   IEditToolsState,
   createRunToolsState,
   createComponentState,
-  createEditToolsState, createCurrentWebGLPageState, IWebGLPageState, createEditHistoryState, IEditHistoryState
+  createEditToolsState,
+  createCurrentWebGLPageState,
+  IWebGLPageState,
+  createEditHistoryState,
+  IEditHistoryState,
+  createWebGLPageListSate
 } from './webglEditor';
 
 export interface IUserState {
   email: string;
-  password?: string;
-  avatar?: string;
-  nickname?:string
+  password: string;
+  avatar: string;
+  nickname:string
 }
 
 function createUserState(): IUserState {
   return  {
-    email: ''
+    email: '',
+    password: '',
+    avatar: '',
+    nickname: ''
   }
 }
 
+export interface ISettingsStore {
+  theme: string;
+  autoSave: boolean;
+}
+
+function createSettingsStore(): ISettingsStore {
+  return {
+    theme: '',
+    autoSave: true
+  }
+}
 
 export interface IStoreState {
   editTools: IEditToolsState,
@@ -42,7 +61,8 @@ export interface IStoreState {
   openFileItems: IOpenFileItemsState,
   dslFileArray: IDSLFileArrayState,
 
-  user: IUserState
+  user: IUserState,
+  settings: ISettingsStore
 }
 
 function createInitialStore(): IStoreState {
@@ -61,7 +81,8 @@ function createInitialStore(): IStoreState {
     openFileItems: createOpenFileItemsState(),
 
     // user state
-    user: createUserState()
+    user: createUserState(),
+    settings: createSettingsStore()
   };
 }
 

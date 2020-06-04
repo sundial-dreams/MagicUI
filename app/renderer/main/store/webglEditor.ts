@@ -7,7 +7,7 @@ export function createEditToolsState(): IEditToolsState {
   return {
     id: '',
     editType: ''
-  }
+  };
 }
 
 export interface IComponentState {
@@ -17,7 +17,7 @@ export interface IComponentState {
   path?: string,
   operator?: string
   props: {
-    position: {x:number, y: number},
+    position: { x: number, y: number },
     size: {
       width: number,
       height: number
@@ -53,10 +53,10 @@ export function createComponentState(): IComponentState {
     name: '',
     cpnType: '',
     props: {
-      position: {x: 0, y: 0},
-      size: {width: 0, height: 0}
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
     }
-  }
+  };
 }
 
 export interface IRunToolsState {
@@ -69,7 +69,7 @@ export function createRunToolsState(): IRunToolsState {
   return {
     runType: '',
     data: ''
-  }
+  };
 }
 
 export type TRawComponent = {
@@ -81,8 +81,9 @@ export type TRawComponent = {
 };
 
 export interface IWebGLPageState {
+  id: string,
   pageId: string,
-  createTime?:number,
+  createTime?: number,
   description?: string,
   page: TRawComponent | null,
   name: string
@@ -90,12 +91,13 @@ export interface IWebGLPageState {
 
 export function createCurrentWebGLPageState(): IWebGLPageState {
   return {
+    id: '',
     pageId: '',
     name: '',
     page: null,
     createTime: 0,
     description: ''
-  }
+  };
 }
 
 export interface IEditHistoryState {
@@ -104,12 +106,35 @@ export interface IEditHistoryState {
     operator: string,
     data: { old: any, new: any }
   }[],
-  current: undefined | { id: string, operator: string, data: { old: any, new: any } }
+  current?: { id: string, operator: string, data: { old: any, new: any } }
 }
 
 export function createEditHistoryState(): IEditHistoryState {
   return {
-    history: [],
-    current: undefined
+    history: []
+  };
+}
+
+export interface IWebGLPageListState {
+  webglPageList: {
+    id: string,
+    name: string,
+    pageId: string
+  }[],
+  currentWebGlPage: {
+    id: string,
+    name: string,
+    pageId: string
   }
+}
+
+export function createWebGLPageListSate(): IWebGLPageListState {
+  return {
+    webglPageList: [],
+    currentWebGlPage: {
+      id: '',
+      name: '',
+      pageId: ''
+    }
+  };
 }

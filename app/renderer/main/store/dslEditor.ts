@@ -3,12 +3,14 @@ export interface IDSLFileState {
   fileType: string,
   filename: string,
   code: string,
-  folder: string
+  folder: string,
+  fileId: string
 }
 
 export function createDSLFileState(): IDSLFileState {
   return {
     id: '',
+    fileId: '',
     fileType: '',
     filename: '',
     code: '',
@@ -19,14 +21,16 @@ export function createDSLFileState(): IDSLFileState {
 export interface IDSLCodeState {
   code: string,
   name: string,
-  id: string
+  id: string,
+  fileId: string
 }
 
 export function createDSLCodeState(): IDSLCodeState {
   return {
     code: '',
     name: '',
-    id: ''
+    id: '',
+    fileId: ''
   }
 }
 

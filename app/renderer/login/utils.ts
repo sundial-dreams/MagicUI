@@ -1,12 +1,15 @@
 import Bridge from '../public/utils/bridge';
-import { WidgetName } from '../public/utils/constants';
+import { WidgetType } from '../public/utils/constants';
+import { createHashHistory } from 'history';
+
+export const history = createHashHistory();
 
 export function close() {
-  Bridge.close(WidgetName.LOGIN);
+  Bridge.close(WidgetType.AVATAR);
 }
 
 export function minimize() {
-  Bridge.minimize(WidgetName.LOGIN);
+  Bridge.minimize(WidgetType.LOGIN);
 }
 
 export function fetchLoginEmail(email: string) {
@@ -23,4 +26,12 @@ export function fetchLoginPassword(email: string, password: string) {
     '/user/login/user_password',
     { email, password }
   ).then(v => v);
+}
+
+export function registerUser(avatar: string, email: string, nickname: string, password: string) {
+  return Bridge.fetch(
+    'POST',
+    '/user/register/create_user',
+    { avatar, email, nickname, password }
+  );
 }

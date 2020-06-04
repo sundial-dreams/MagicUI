@@ -1,4 +1,4 @@
-export const cls = (...args: string[]) => args.filter(Boolean).join(' ');
+export const cls = (...args: (string | boolean)[]) => args.filter(Boolean).join(' ');
 
 export const throttle = (fn: Function, time: number = 500) => {
   let flag = true;

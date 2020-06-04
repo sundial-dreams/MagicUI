@@ -2,14 +2,7 @@ import React from 'react';
 // @ts-ignore
 import style from './components.scss';
 
-
-export interface IAvatarProps {
-  size?: number,
-  src: string,
-  onClick: () => void,
-}
-
-export function Avatar(props: IAvatarProps) {
+export function EditableAvatar(props: { size?:number, src:string, onClick: () => void }) {
   const avatarStyle = {
     width: props.size ? props.size + 'px' : '40px',
     height: props.size ? props.size + 'px' : '40px'
@@ -18,7 +11,7 @@ export function Avatar(props: IAvatarProps) {
   return (
     <div className={style.avatar} style={avatarStyle} onClick={props.onClick}>
       <img src={props.src} alt=""/>
-      <div className={style.edit_wrapper}>
+      <div className={style.edit_wrapper} onClick={props.onClick}>
         Edit
       </div>
     </div>

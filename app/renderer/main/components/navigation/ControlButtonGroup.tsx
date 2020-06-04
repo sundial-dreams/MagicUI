@@ -1,5 +1,5 @@
 import React from 'react';
-import { WidgetName } from '../../../public/utils/constants';
+import { WidgetType } from '../../../public/utils/constants';
 import Bridge from '../../../public/utils/bridge';
 // @ts-ignore
 import style from './ControlButtonGroup.scss';
@@ -10,16 +10,16 @@ export interface IControlButtonGroupProps {
 }
 
 function close() {
-  Bridge.close(WidgetName.MAIN);
+  Bridge.close(WidgetType.MAIN);
 }
 
 function minimize() {
-  Bridge.minimize(WidgetName.MAIN)
+  Bridge.minimize(WidgetType.MAIN)
 
 }
 
 function maximize() {
-  Bridge.maximize(WidgetName.MAIN);
+  Bridge.maximize(WidgetType.MAIN);
 }
 
 export default function ControlButtonGroup(props: IControlButtonGroupProps) {

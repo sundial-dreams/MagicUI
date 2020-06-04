@@ -6,12 +6,12 @@ import { Avatar } from '../public/components';
 import { faCircleNotch, faArrowRight, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { cls } from '../public/utils';
 import { throttle } from '../public/utils';
-import { fetchLoginEmail, fetchLoginPassword } from './utils';
+import { fetchLoginEmail, fetchLoginPassword, history } from './utils';
 import Bridge from '../public/utils/bridge';
 // @ts-ignore
 import style from './Login.scss';
 
-const DEFAULT_AVATAR = 'http://localhost:9000/image/default_avatar.jpeg';
+const DEFAULT_AVATAR = 'http://localhost:9000/image/app.png';
 
 const icons = {
   ok: <FontAwesomeIcon icon={faCheck} color="green"/>,
@@ -61,19 +61,17 @@ export default function Login() {
       });
     })();
   };
-  console.log('nickname', nickname);
 
   const handleLogin = () => {
     if (emailResultIcon === icons.ok && passwordResultIcon === icons.ok) {
-      console.log('nickname = ', nickname);
-      Bridge.openMainWindow({email, password, avatar: src, nickname});
+      Bridge.login({email, password, avatar: src, nickname});
     }
   };
 
   return (
     <div className={style.login}>
       <div className={style.avatar_wrapper}>
-        <Avatar src={src || DEFAULT_AVATAR} size={80}/>
+        <Avatar src={src || DEFAULT_AVATAR} size={100}/>
       </div>
       <div className={style.input_wrapper}>
         <div className={cls(style.input, style.input_email)}>
@@ -91,6 +89,11 @@ export default function Login() {
           <span>
             <FontAwesomeIcon icon={faArrowRight}/>
           </span>
+        </button>
+      </div>
+      <div className={style.register_btn}>
+        <button onClick={() => history.push('/register')}>
+          Register?
         </button>
       </div>
     </div>

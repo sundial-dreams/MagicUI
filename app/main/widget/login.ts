@@ -1,37 +1,46 @@
 import Electron from 'electron';
-import { loadHtmlByName } from '../utils/utils';
-import { CustomWindowConfig, WidgetName, WidgetType } from '../utils/constants';
-import { onCloseWidget, onMinimizeWidget } from '../service/ipc';
+import { loadHtmlByName, onCloseWidget, onMinimizeWidget } from '../utils/utils';
+import { CustomWindowConfig, WidgetType } from '../utils/constants';
+import { Widget } from './widget';
 
-let loginWindow: Electron.BrowserWindow | null = null;
-
-onCloseWidget((event, args: { name: string }) => {
-  if (args.name === WidgetName.LOGIN) {
-    if (loginWindow) {
-      loginWindow.close();
-    }
+export default class LoginWidget extends Widget {
+  static instance: LoginWidget | null = null;
+  static getInstance() {
+    return LoginWidget.instance ? LoginWidget.instance :(LoginWidget.instance = new LoginWidget());
   }
-});
 
-onMinimizeWidget((event, args: { name: string }) => {
-  if (args.name === WidgetName.LOGIN) {
-    if (loginWindow) {
-      loginWindow.minimize();
-    }
+  constructor() {
+    super();
+    onCloseWidget((event, args: { name: string }) => {
+      if (args.name === WidgetType.LOGIN) {
+        if (this._widget) {
+          this._widget.close();
+        }
+      }
+    });
+
+    onMinimizeWidget((event, args: { name: string }) => {
+      if (args.name === WidgetType.LOGIN) {
+        if (this._widget) {
+          this._widget.minimize();
+        }
+      }
+    });
   }
-});
 
-export default function createLoginWindow() {
-  if (loginWindow) return;
-  loginWindow = new Electron.BrowserWindow({
-    ...CustomWindowConfig,
-    width: 300,
-    height: 370,
-    resizable: false,
-    maximizable: false
-  });
+  create() {
+    if (this._widget) {
+      return;
+    }
+    this._widget = new Electron.BrowserWindow({
+      ...CustomWindowConfig,
+      width: 300,
+      height: 370,
+      resizable: false,
+      maximizable: false
+    });
 
-  loadHtmlByName(loginWindow, WidgetType.LOGIN);
-
-  loginWindow.on('close', () => loginWindow = null);
+    loadHtmlByName(this._widget, WidgetType.LOGIN);
+    this._widget.on('close', () => this.reset());
+  }
 }

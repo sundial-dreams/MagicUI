@@ -35,6 +35,29 @@
   width: 100%;
   flex: 1;
   overflow: hidden;
+  position: relative;
+  .editor_tab {
+    position: absolute;
+    top: 5px;
+    right: 20px;
+    white-space: nowrap;
+    z-index: 100;
+
+    button {
+      min-width: 40px;
+      height: 20px;
+      background: #555555;
+      border-radius: 3px;
+      margin-left: 5px;
+      color: white;
+      font-size: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+
+      &.active {
+        background: #FF5370;
+      }
+    }
+  }
 }
 
 .operator_btn {

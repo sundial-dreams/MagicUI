@@ -24,7 +24,6 @@ export const fetch = {
             reject(err);
             return;
           }
-          console.log('fetch res', res.body);
           resolve(JSON.parse(res.body));
         } catch (e) {
           reject(e);

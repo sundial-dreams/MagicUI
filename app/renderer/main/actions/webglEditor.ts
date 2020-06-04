@@ -144,11 +144,12 @@ export enum WebGLPageActions {
   SELECT = 'select-current-webgl-page',
 }
 
-export const selectWebGLPage = (pageId: string, name: string, page: object) => ({
+export const selectWebGLPage = (pageId: string, name: string, page: object | null, id: string) => ({
   type: WebGLPageActions.SELECT,
   pageId,
   page,
-  name
+  name,
+  id
 });
 
 

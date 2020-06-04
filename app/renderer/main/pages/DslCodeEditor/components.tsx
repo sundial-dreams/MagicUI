@@ -90,7 +90,7 @@ export function NewFileOrFolderModal(props: INewFileOrFolderModalProps) {
     const { fileType, email, folder } = props;
     createDslFile(email, filename, fileType, folder).then(v => {
       if (!v.err) {
-        props.dispatch(appendFile(v.id, filename, fileType, folder, ""));
+        props.dispatch(appendFile(v.id, filename, fileType, folder, "", v.fileId));
         props.cancel();
         toast('new folder!');
       }

@@ -11,8 +11,10 @@ import {
 
 export const Routers = {
   MAIN: '/',
-  UI_EDITOR: '/ui_editor',
-  CODE_EDITOR: '/code_editor'
+  WEBGL_EDITOR: '/webgl_editor',
+  DSL_CODE_EDITOR: '/dsl_code_editor',
+  HELP: '/help',
+  SETTINGS: '/settings'
 };
 
 export const history = createHashHistory();

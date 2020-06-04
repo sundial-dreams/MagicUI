@@ -5,14 +5,16 @@ export const IpcEvent = {
   MAXIMIZE: 'maximize',
   MINIMIZE: 'minimize',
 
-  OPEN_MAIN_WINDOW: 'open-main-window',
+  USER_LOGIN: 'user-login',
+  UPDATE_USER: 'update-user',
   COMPILE: 'compile',
 
   SAVE_FILE: 'save-file',
-
+  OPEN_FILE: 'open-file',
   USER_LOGOUT: 'user-logout',
 
-  AUTO_SAVE_WEBGL_PAGE: 'auto-save-webgl-page'
+  AUTO_SAVE_WEBGL_PAGE: 'auto-save-webgl-page',
+
 };
 
 
@@ -20,18 +22,10 @@ export const WidgetType = {
   MAIN: 'main',
   USER: 'user',
   LOGIN: 'login',
-  CODE_VIEWS: 'codeViews',
-  WEBGL_VIEWS: 'webglViews',
+  CODE: 'code',
+  WEBGL: 'webgl',
+  AVATAR: 'avatar'
 };
-
-export const WidgetName = {
-  CODE_VIEWS: 'code-views',
-  WEBGL_VIEWS: 'webgl-views',
-  LOGIN: 'login',
-  USER: 'user',
-  MAIN: 'main'
-};
-
 
 export const WindowSize = {
   WIDTH: 1130,
@@ -45,5 +39,6 @@ export const CustomWindowConfig = {
   frame: false,
   backgroundColor: '#333544'
 };
+
 
 
