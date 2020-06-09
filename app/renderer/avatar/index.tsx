@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { remote } from 'electron';
 import ReactDOM from 'react-dom';
 import { Avatar, ControlButtonGroup } from '../public/components';
-import { close, minimize } from '../login/utils';
 
-import { fetchAvatars } from './utils';
+import { fetchAvatars, close } from './utils';
 import { cls } from '../public/utils';
 // @ts-ignore
 import style from './index.scss';

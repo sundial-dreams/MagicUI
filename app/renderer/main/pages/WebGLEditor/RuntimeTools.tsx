@@ -1,15 +1,24 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faCheckSquare, faGavel, faFileExport } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faCircleNotch, faGavel, faFileExport, faSpinner, faCheck } from '@fortawesome/free-solid-svg-icons';
 import modal from '../../components/modal';
 import { buildCode, exportCode } from '../../actions/webglEditor';
 
 // @ts-ignore
 import style from './RuntimeTools.scss';
+import { IStoreState } from '../../store';
 
 export default function RuntimeTools(props: {}) {
+  const {loading} = useSelector((state: IStoreState) => state.autoSaveLoading);
+  console.log('loading', loading);
+  const loadingIcon = (
+    <FontAwesomeIcon icon={faCircleNotch} spin color={'gray'}/>
+  );
+  const checkIcon = (
+    <FontAwesomeIcon icon={faCheck} color={'red'}/>
+  );
   const dispatch = useDispatch();
   const build = () => {
     dispatch(buildCode());
@@ -43,7 +52,7 @@ export default function RuntimeTools(props: {}) {
           <FontAwesomeIcon icon={faFileExport}/>
         </button>
         <button className={style.check_btn}>
-          <FontAwesomeIcon icon={faCheckSquare}/>
+          { loading ? loadingIcon : checkIcon }
         </button>
       </div>
     </div>

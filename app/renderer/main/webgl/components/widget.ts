@@ -118,6 +118,7 @@ export class WebGLPCWidget extends WebGLComponent {
 
 export class WebGLMobileWidget extends WebGLComponent {
   private readonly rect: Konva.Rect;
+  private readonly titleBar: Konva.Rect;
   constructor(position: { x: number, y: number }) {
     super(position);
     this.id = 'widget-mobile_widget' + Date.now();
@@ -135,7 +136,7 @@ export class WebGLMobileWidget extends WebGLComponent {
       cornerRadius: 2
     });
 
-    const titleBar = new Konva.Rect({
+    this.titleBar = new Konva.Rect({
       width: this.rect.width(),
       height: 20,
       fill: '#cccccc',
@@ -144,15 +145,15 @@ export class WebGLMobileWidget extends WebGLComponent {
       y: 0
     });
     this.group.add(this.rect);
-    this.group.add(titleBar);
+    this.group.add(this.titleBar);
 
     this.group.on('transform', e => {
       this.rect.setAttrs({
         width: this.rect.width() * this.group.scaleX(),
         height: this.rect.height() * this.group.scaleY()
       });
-      titleBar.setAttrs({
-        width: titleBar.width() * this.group.scaleX(),
+      this.titleBar.setAttrs({
+        width: this.titleBar.width() * this.group.scaleX(),
       });
 
       this.group.setAttrs({
@@ -181,6 +182,7 @@ export class WebGLMobileWidget extends WebGLComponent {
 
   setSize(size: { width: number; height: number }) {
     this.rect.setSize(size);
+    this.titleBar.width(size.width);
     super.setSize(size);
   }
 

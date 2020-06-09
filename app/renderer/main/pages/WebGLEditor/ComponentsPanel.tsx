@@ -7,8 +7,8 @@ import {
   faPlus,
   faCheck,
   faSearch,
-  faWindowRestore,
-  faCircleNotch, faThermometerEmpty, faTrash, faEdit
+  faTags,
+  faCircleNotch, faThermometerEmpty, faTrash, faEdit, faTag
 } from '@fortawesome/free-solid-svg-icons';
 import modal from '../../components/modal';
 import { cls } from '../../../public/utils';
@@ -190,7 +190,7 @@ function ResultItem(props: { name: string, onClick?: () => void }) {
   return (
     <li className={style.result_item} onClick={props.onClick}>
       <span>
-        <FontAwesomeIcon icon={faWindowRestore}/>
+        <FontAwesomeIcon icon={faTags}/>
       </span>
       {props.name}
     </li>

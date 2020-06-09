@@ -138,3 +138,13 @@ export function createWebGLPageListSate(): IWebGLPageListState {
     }
   };
 }
+
+export interface IAutoSaveLoadingState {
+  loading: boolean,
+}
+
+export function createAutoSaveLoadingState(): IAutoSaveLoadingState {
+  return {
+    loading: false
+  }
+}

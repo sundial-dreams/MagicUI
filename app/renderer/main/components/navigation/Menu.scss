@@ -14,19 +14,19 @@
 
   &.active {
     &:nth-child(1) {
-      color: #C792EA;
+      color: fuchsia;
     }
 
     &:nth-child(2) {
-      color: #F78C6C;
+      color: #FFCC00;
     }
 
     &:nth-child(3) {
-      color: #f07178;
+      color: #F83E5B;
     }
 
     &:nth-child(4) {
-      color: #82AAFF;
+      color: chartreuse;
     }
   }
 }

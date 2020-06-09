@@ -351,22 +351,22 @@ export default class WebGLEditorUtils {
 
     includePoints.forEach(point => {
       const diff =
-        distance(
-          { x: groupPoint.x, y: groupPoint.y },
-          { x: point.x, y: point.y }
-        ) +
-        distance(
-          { x: groupPoint.x + groupPoint.w, y: groupPoint.y },
-          { x: point.x + point.w, y: point.y }
-        ) +
-        distance(
-          { x: groupPoint.x, y: groupPoint.y + groupPoint.h },
-          { x: point.x, y: point.y + point.h }
-        ) +
-        distance(
-          { x: groupPoint.x + groupPoint.w, y: groupPoint.y + groupPoint.h },
-          { x: point.x + point.w, y: point.y + point.h }
-        );
+              distance(
+                { x: groupPoint.x, y: groupPoint.y },
+                { x: point.x, y: point.y }
+              ) +
+              distance(
+                { x: groupPoint.x + groupPoint.w, y: groupPoint.y },
+                { x: point.x + point.w, y: point.y }
+              ) +
+              distance(
+                { x: groupPoint.x, y: groupPoint.y + groupPoint.h },
+                { x: point.x, y: point.y + point.h }
+              ) +
+              distance(
+                { x: groupPoint.x + groupPoint.w, y: groupPoint.y + groupPoint.h },
+                { x: point.x + point.w, y: point.y + point.h }
+              );
       if (diff < minDistance) {
         minDistance = diff;
         id = point.id;
@@ -401,7 +401,7 @@ export const ComponentMap = {
   // shape
   [TYPES.SHAPE]: {
     [COMPONENT_TYPES.SHAPE.RECT]: WebGLRect,
-    [COMPONENT_TYPES.SHAPE.CIRCLE]: WebGLCircle,
+    [COMPONENT_TYPES.SHAPE.CIRCLE]: WebGLCircle
   },
   // image
   [TYPES.IMAGE]: {
@@ -451,9 +451,9 @@ export function getComponentProps(webGLComponent: WebGLComponent) {
 }
 
 export function dropComponentToWebGLEditor(type: string, name: string, position: { x: number, y: number }, editor: CanvasEditorRenderer) {
-  editor.addComponent(
-    new (ComponentMap as any)[type][name](position)
-  );
+  const cpn = new (ComponentMap as any)[type][name](position);
+  editor.addComponent(cpn);
+  return cpn;
 }
 
 export function removeComponentFromWebGLEditor(componentId: string, editor: CanvasEditorRenderer) {

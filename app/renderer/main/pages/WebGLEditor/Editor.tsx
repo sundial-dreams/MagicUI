@@ -2,7 +2,6 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
-import { useOnMount } from '../../hooks';
 import {
   dropComponentToWebGLEditor, drawComponentFromJsonObject,
   modifyComponentProperties,
@@ -20,15 +19,22 @@ import { IStoreState } from '../../store';
 import { allowDrop, drop } from '../../webgl/drag';
 import { WebGLPCWidget } from '../../webgl/components/widget';
 import { WEBGL_COMPONENT_PROP_TYPES } from '../../utils/constants';
-import { addEditHistory, removeEditHistory, resetCode, resetComponent } from '../../actions/webglEditor';
+import {
+  addEditHistory,
+  removeEditHistory,
+  resetCode,
+  resetComponent,
+  setAutoSaveLoading
+} from '../../actions/webglEditor';
 import { WidgetType } from '../../../public/utils/constants';
 import Bridge from '../../../public/utils/bridge';
 
+import { autoSaveWebGLPage, onSocketResult } from '../../utils/ipc';
+import { debounce, EventEmitter } from '../../../public/utils';
+import WebGLComponent from '../../webgl/components/components';
+
 // @ts-ignore
 import style from './Editor.scss';
-import { autoSaveWebGLPage, onSocketResult } from '../../utils/ipc';
-import { debounce, EventEmitter, throttle } from '../../../public/utils';
-import WebGLComponent from '../../webgl/components/components';
 
 
 export interface IEditorProps {
@@ -73,19 +79,20 @@ export default function Editor(props: IEditorProps) {
     let last = 0;
     let now = +Date.now();
 
-    EventEmitter.on('auto-save', debounce((pageId: string) => {
-      console.log('auto save', autoSaveRef.current);
-      if (!autoSaveRef.current) return;
-      now = +Date.now();
-      if (!last || now - last > 1000) {
-        last = now;
-        autoSaveWebGLPage({ pageId, page: renderer.toJsonObject() }).then();
-      }
-    }, 2000));
+    EventEmitter.on('auto-save', (pageId: string) => {
+      dispatch(setAutoSaveLoading(true));
+      debounce(() => {
+        now = +Date.now();
+        if (!last || now - last > 1000) {
+          last = now;
+          autoSaveWebGLPage({ pageId, page: renderer.toJsonObject() }).then(() => {});
+        }
+      }, 2000)();
+    });
 
     onSocketResult((data: any) => {
       if (data.type === 'save-webgl-page') {
-        if (!data.err) toast('auto save!');
+        if (!data.err) dispatch(setAutoSaveLoading(false));
         else toast('save fail! try save');
       }
     });
@@ -186,12 +193,15 @@ export default function Editor(props: IEditorProps) {
         case 'delete': {
           const rmCpn = removeComponentFromWebGLEditor(editToolsState.id, renderer);
           EventEmitter.emit('auto-save', webGLPageState.pageId);
-          dispatch(addEditHistory(editToolsState.id, 'delete', {old: '', new: webGLComponentToJsonObject(rmCpn as WebGLComponent)}));
+          dispatch(addEditHistory(editToolsState.id, 'delete', {
+            old: '',
+            new: webGLComponentToJsonObject(rmCpn as WebGLComponent)
+          }));
           return;
         }
         case 'paste': {
           const newCpn = pasteComponentToWebGLEditor(editToolsState.id, renderer);
-          dispatch(addEditHistory(editToolsState.id, 'paste', {old: '', new: newCpn?.getId()}))
+          dispatch(addEditHistory(editToolsState.id, 'paste', { old: '', new: newCpn?.getId() }));
           EventEmitter.emit('auto-save', webGLPageState.pageId);
           return;
         }
@@ -205,7 +215,6 @@ export default function Editor(props: IEditorProps) {
           return;
         }
         case 'undo': {
-          console.log('undo');
           dispatch(removeEditHistory());
           dispatch(resetComponent());
           return;
@@ -260,18 +269,22 @@ export default function Editor(props: IEditorProps) {
 
   const historyDeps = [editHistory.history.length, editHistory.current];
   useEffect(() => {
-    console.log('history', editHistory);
     if (editHistory.current) {
       const renderer = (webglEditor.current as CanvasEditorRenderer);
       switch (editHistory.current.operator) {
         case 'paste': {
-          const {id, data} = editHistory.current;
+          const { id, data } = editHistory.current;
           renderer.removeComponent(data.new);
           return;
         }
         case 'delete': {
-          const {id, data} = editHistory.current;
+          const { id, data } = editHistory.current;
           drawComponentFromJsonObject(data.new, renderer);
+          return;
+        }
+        case 'drag-in': {
+          const { id, data } = editHistory.current;
+          renderer.removeComponent(data.new);
           return;
         }
         default: {
@@ -288,7 +301,8 @@ export default function Editor(props: IEditorProps) {
     const x = position.clientX - view.offsetLeft;
     const y = position.clientY - view.offsetTop;
     if (data) {
-      dropComponentToWebGLEditor(type, name, { x, y }, renderer);
+      const cpn = dropComponentToWebGLEditor(type, name, { x, y }, renderer);
+      dispatch(addEditHistory(editToolsState.id, 'drag-in', { old: '', new: cpn?.getId() }));
       EventEmitter.emit('auto-save', webGLPageState.pageId);
     }
   };

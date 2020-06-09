@@ -5,19 +5,21 @@ import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 export class WebGLImage extends WebGLComponent {
   private src: string;
 
-  constructor(position: { x: number, y: number }, size?: {width: number, height: number}) {
+  constructor(position: { x: number, y: number }, size?: { width: number, height: number }) {
     super(position);
     this.id = 'image-' + Date.now();
     this.type = TYPES.IMAGE;
     this.name = COMPONENT_TYPES.IMAGE.CUSTOM_IMAGE;
     this.isRawComponent = true;
     const imageObject = new Image();
+    const width = 200;
     this.src = imageObject.src = 'http://localhost:9000/image/anime-1.jpeg';
+
     imageObject.onload = () => {
       const image = new Konva.Image({
         image: imageObject,
-        width: size?.width || imageObject.width * 0.5,
-        height: size?.height || imageObject.height * 0.5
+        width: size?.width || width,
+        height: size?.height || width / imageObject.width * imageObject.height
       });
       this.group.add(image);
 
@@ -37,7 +39,7 @@ export class WebGLImage extends WebGLComponent {
     super.setSize(size);
   }
 
-  setImageProps(image: { src: string }, size?: {width: number, height: number}) {
+  setImageProps(image: { src: string }, size?: { width: number, height: number }) {
     const imageObject = new Image();
     this.src = imageObject.src = image.src;
     imageObject.onload = () => {

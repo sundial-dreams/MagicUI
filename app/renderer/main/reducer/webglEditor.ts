@@ -1,4 +1,5 @@
 import {
+  IAutoSaveLoadingState,
   IComponentState,
   IEditHistoryState,
   IEditToolsState,
@@ -7,6 +8,7 @@ import {
 } from '../store/webglEditor';
 import { TActions } from '../actions';
 import {
+  AutoSaveLoadingActions,
   ComponentActions,
   EditHistoryActions,
   EditToolsActions,
@@ -256,4 +258,20 @@ export function editHistoryReducer(state: IEditHistoryState, action: TActions) {
   }
 }
 
+
+export function autoSaveLoadingReducer(state: IAutoSaveLoadingState, action: TActions) {
+  switch (action.type) {
+    case AutoSaveLoadingActions.SET_LOADING: {
+      return {
+        ...state,
+        loading: action.loading
+      }
+    }
+    default: {
+      return {
+        ...state
+      }
+    }
+  }
+}
 

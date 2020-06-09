@@ -173,3 +173,12 @@ export const removeEditHistory = () => ({
 export const resetEditHistory = () => ({
   type: EditHistoryActions.RESET_EDIT_HISTORY
 });
+
+export enum AutoSaveLoadingActions {
+  SET_LOADING = 'set-loading',
+}
+
+export const setAutoSaveLoading = (v: boolean) => ({
+  type: AutoSaveLoadingActions.SET_LOADING,
+  loading: v
+})

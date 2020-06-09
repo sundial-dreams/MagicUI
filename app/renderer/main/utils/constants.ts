@@ -6,7 +6,8 @@ import {
   faInbox,
   faMobile,
   faSquare,
-  faWindowMaximize
+  faWindowMaximize,
+  faCube, faPen, faTag
 } from '@fortawesome/free-solid-svg-icons';
 
 export const Routers = {
@@ -88,7 +89,7 @@ export const ComponentFoldConfig = [
     children: [
       {
         name: COMPONENT_TYPES.BUTTON.CUSTOM_BUTTON,
-        icon: faEdit
+        icon: faCube
       }
     ]
   },
@@ -97,7 +98,7 @@ export const ComponentFoldConfig = [
     children: [
       {
         name: COMPONENT_TYPES.INPUT.CUSTOM_INPUT,
-        icon: faInbox
+        icon: faEdit
       }
     ]
   },
@@ -106,11 +107,11 @@ export const ComponentFoldConfig = [
     children: [
       {
         name: COMPONENT_TYPES.TEXT.LABEL,
-        icon: faEdit
+        icon: faPen
       },
       {
         name: COMPONENT_TYPES.TEXT.CUSTOM_TEXT,
-        icon: faEdit
+        icon: faTag
       }
     ]
   },

@@ -18,7 +18,7 @@ import {
   IWebGLPageState,
   createEditHistoryState,
   IEditHistoryState,
-  createWebGLPageListSate
+  createWebGLPageListSate, IAutoSaveLoadingState, createAutoSaveLoadingState
 } from './webglEditor';
 
 export interface IUserState {
@@ -55,6 +55,7 @@ export interface IStoreState {
   component: IComponentState,
   webGLPage: IWebGLPageState,
   editHistory: IEditHistoryState,
+  autoSaveLoading: IAutoSaveLoadingState,
 
   dslFile: IDSLFileState,
   dslCode: IDSLCodeState,
@@ -73,6 +74,7 @@ function createInitialStore(): IStoreState {
     component: createComponentState(),
     webGLPage: createCurrentWebGLPageState(),
     editHistory: createEditHistoryState(),
+    autoSaveLoading: createAutoSaveLoadingState(),
 
     // dsl editor page
     dslFile: createDSLFileState(),

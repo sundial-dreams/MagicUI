@@ -7,7 +7,7 @@ export function onCreateWindow(callback: (data: any) => void) {
 }
 
 export function autoSaveWebGLPage(data: any) {
-  return ipcRenderer.invoke('auto-save-webgl-page', data).then();
+  return ipcRenderer.invoke('auto-save-webgl-page', data);
 }
 
 export function onSocketResult(callback: Function) {

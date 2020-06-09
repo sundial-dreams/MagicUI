@@ -11,7 +11,10 @@ ${compileToStyleToken(jsonObject)}`).replace(/\n(\n)*(\s)*(\n)*\n/g, '\n');
 
   const html = (`<!DOCTYPE>
 <html lang="zh">
-<head><title>auto ui</title></head>
+<head>
+<title>auto ui</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" /> 
+</head>
 <style>${style}</style>
 <body>${div}</body> 
 </html>`);
@@ -80,7 +83,17 @@ function compileToStyleToken(obj: any): any {
 ${obj.children.map((v: any) => compileToStyleToken(v)).join('\n')}`);
         }
         case COMPONENT_TYPES.WIDGET.MOBILE_WIDGET: {
-
+          return (`#${obj.id} {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: ${obj.props.background?.fill};
+  opacity: ${obj.props.background?.opacity};
+  border: ${obj.props.border?.width}px solid ${obj.props.border?.fill}; 
+  border-radius: ${obj.props.border?.radius}px;
+  box-shadow: ${obj.props.shadow?.offsetX}px ${obj.props.shadow?.offsetY}px ${obj.props.shadow?.blur}px ${obj.props.shadow?.fill};
+}
+${obj.children.map((v: any) => compileToStyleToken(v)).join('\n')}`);
         }
       }
       break;
