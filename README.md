@@ -18,4 +18,5 @@ npm run package-mac
 ```
 更多请参考```package.json```
 
-#### 服务端
+#### 服务端地址
+[MagicUIServer](https://github.com/sundial-dreams/MagicUIServer)
