@@ -181,7 +181,12 @@ module.exports = merge.smart(webpackBaseConfig, {
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader'
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 5000
+          }
+        }
       }
     ]
   },
