@@ -98,10 +98,11 @@ export const changeComponentShadow = (fill: string, blur: number, offsetX: numbe
   offsetY
 });
 
-export const changeComponentText = (fill: string, text: string) => ({
+export const changeComponentText = (fill: string, text: string, fontSize: number) => ({
   type: ComponentActions.CHANGE_COMPONENT_TEXT,
   fill,
-  text
+  text,
+  fontSize,
 });
 
 export const changeComponentBorder = (fill: string, width: number, radius: number) => ({

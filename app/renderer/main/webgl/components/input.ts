@@ -1,4 +1,4 @@
-import WebGLComponent from './components';
+import WebGLComponent, { TBackground, TBorder, TShadow, TSize, TypeOrUndefined } from './components';
 import Konva from 'konva';
 import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
@@ -47,9 +47,32 @@ export class WebGLInput extends WebGLComponent {
     });
   }
 
+  set size(size: TSize) {
+    this.rect.setSize(size);
+    super.setSize(size);
+  }
+
   setSize(size: { width: number; height: number }) {
     this.rect.setSize(size);
     super.setSize(size);
+  }
+
+  get shadow(): TypeOrUndefined<TShadow> {
+    return {
+      offsetX: this.rect.shadowOffset().x,
+      offsetY: this.rect.shadowOffset().y,
+      blur: this.rect.shadowBlur(),
+      fill: this.rect.shadowColor()
+    };
+  }
+
+  set shadow(shadow: TypeOrUndefined<TShadow>) {
+    if (shadow) {
+      this.rect.shadowBlur(shadow.blur);
+      this.rect.shadowOffsetY(shadow.offsetY);
+      this.rect.shadowOffsetX(shadow.offsetX);
+      this.rect.shadowColor(shadow.fill);
+    }
   }
 
   getShadowProps() {
@@ -67,6 +90,21 @@ export class WebGLInput extends WebGLComponent {
     this.rect.shadowOffsetX(shadow.offsetX);
     this.rect.shadowColor(shadow.fill);
   }
+
+  get background(): TypeOrUndefined<TBackground> {
+    return {
+      opacity: this.rect.opacity(),
+      fill: this.rect.fill()
+    };
+  }
+
+  set background(background: TypeOrUndefined<TBackground>) {
+    if (background) {
+      this.rect.opacity(background.opacity);
+      this.rect.fill(background.fill);
+    }
+  }
+
   getBackgroundProps() {
     return {
       opacity: this.rect.opacity(),
@@ -77,6 +115,22 @@ export class WebGLInput extends WebGLComponent {
   setBackgroundProps(background: { opacity: number; fill: string }) {
     this.rect.opacity(background.opacity);
     this.rect.fill(background.fill);
+  }
+
+  get border(): TypeOrUndefined<TBorder> {
+    return {
+      width: this.rect.strokeWidth(),
+      fill: this.rect.stroke(),
+      radius: this.rect.cornerRadius()
+    };
+  }
+
+  set border(border: TypeOrUndefined<TBorder>) {
+    if (border) {
+      this.rect.strokeWidth(border.width);
+      this.rect.stroke(border.fill);
+      this.rect.cornerRadius(border.radius);
+    }
   }
 
   getBorderProps() {
@@ -92,6 +146,4 @@ export class WebGLInput extends WebGLComponent {
     this.rect.stroke(border.fill);
     this.rect.cornerRadius(border.radius);
   }
-
-
 }

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider, useDispatch } from 'react-redux';
-import {AppContainer as ReactHotAppContainer} from 'react-hot-loader';
-import {Switch, Route, Router} from 'react-router-dom';
+import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
+import { Switch, Route, Router } from 'react-router-dom';
 import Navigation from './components/navigation';
 import Main from './pages/Main';
 import WebGLEditor from './pages/WebGLEditor';
@@ -10,7 +10,6 @@ import DslCodeEditor from './pages/DslCodeEditor';
 import Help from './pages/Help';
 import Settings from './pages/Settings';
 
-import Loading from './components/loading';
 import { useOnMount } from './hooks';
 import { saveSettings, saveUser } from './actions';
 import { onCreateWindow, onUpdateUser } from './utils/ipc';
@@ -43,7 +42,7 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
     });
     onUpdateUser((data: any) => {
       console.log('user data', data);
-      dispatch(saveUser(data))
+      dispatch(saveUser(data));
     });
   });
 
@@ -83,13 +82,13 @@ const App: React.FC<IAppProps> = (props: IAppProps) => {
 
 
 const AppContainer = process.env.NODE_ENV === 'development' ? ReactHotAppContainer : Fragment;
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <AppContainer>
-      <Provider store={store}>
-        <App/>
-      </Provider>
-    </AppContainer>,
-    document.getElementById('app')
-  );
-});
+
+
+ReactDOM.render(
+  <AppContainer>
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  </AppContainer>,
+  document.getElementById('app')
+);

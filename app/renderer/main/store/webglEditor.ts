@@ -39,7 +39,8 @@ export interface IComponentState {
     },
     text?: {
       text: string,
-      fill: string
+      fill: string,
+      fontSize: number
     },
     image?: {
       src: string

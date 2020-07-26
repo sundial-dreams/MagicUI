@@ -128,7 +128,8 @@ export function componentReducer(state: IComponentState, action: TActions) {
           ...state.props,
           text: {
             fill: action.fill,
-            text: action.text
+            text: action.text,
+            fontSize: action.fontSize
           }
         }
       };

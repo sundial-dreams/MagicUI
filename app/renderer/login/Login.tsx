@@ -11,7 +11,7 @@ import Bridge from '../public/utils/bridge';
 // @ts-ignore
 import style from './Login.scss';
 
-const DEFAULT_AVATAR = 'http://localhost:9000/image/app.png';
+const DEFAULT_AVATAR = 'http://localhost:8000/image/app.png';
 
 const icons = {
   ok: <FontAwesomeIcon icon={faCheck} color="green"/>,

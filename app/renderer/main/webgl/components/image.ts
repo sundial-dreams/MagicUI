@@ -1,4 +1,4 @@
-import WebGLComponent from './components';
+import WebGLComponent, { TImage, TSize, TypeOrUndefined } from './components';
 import Konva from 'konva';
 import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
@@ -13,7 +13,7 @@ export class WebGLImage extends WebGLComponent {
     this.isRawComponent = true;
     const imageObject = new Image();
     const width = 200;
-    this.src = imageObject.src = 'http://localhost:9000/image/anime-1.jpeg';
+    this.src = imageObject.src = 'http://localhost:8000/image/anime-1.jpeg';
 
     imageObject.onload = () => {
       const image = new Konva.Image({
@@ -35,8 +35,31 @@ export class WebGLImage extends WebGLComponent {
 
   }
 
+  set size(size: TSize) {
+    super.setSize(size);
+  }
+
   setSize(size: { width: number; height: number }) {
     super.setSize(size);
+  }
+
+  set image(image: TypeOrUndefined<TImage>) {
+    if (!image) return;
+    const imageObject = new Image();
+    this.src = imageObject.src = image.src;
+    imageObject.onload = () => {
+      const img = new Konva.Image({
+        image: imageObject,
+        width: image.size?.width || imageObject.width * 0.5,
+        height: image.size?.height || imageObject.height * 0.5
+      });
+      this.group.removeChildren();
+      this.group.add(img);
+      this.configTransformer({
+        node: this.group as any
+      });
+      this.group?.getLayer()?.batchDraw();
+    };
   }
 
   setImageProps(image: { src: string }, size?: { width: number, height: number }) {
@@ -55,6 +78,10 @@ export class WebGLImage extends WebGLComponent {
       });
       this.group?.getLayer()?.batchDraw();
     };
+  }
+
+  get image(): TypeOrUndefined<TImage> {
+    return { src: this.src }
   }
 
   getImageProps(): { src: string } | undefined {

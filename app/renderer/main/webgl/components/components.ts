@@ -1,7 +1,17 @@
 import Konva from 'konva';
-import { Dispatch } from 'redux';
 
-export default abstract class WebGLComponent implements IWebGLComponentProps, IWebGLComponentEvents{
+export type TPosition = { x: number, y: number };
+export type TSize = { width: number, height: number };
+export type TShadow = { offsetX: number, offsetY: number, blur: number, fill: string };
+export type TBorder = { width: number; fill: string; radius: number | number[] };
+export type TBackground = { opacity: number, fill: string };
+export type TText = { text: string, fill: string, fontSize: number };
+export type TImage = { src: string, size?: TSize };
+export type TOpacity = { opacity: number, fill: string };
+
+export type TypeOrUndefined<T> = T | undefined;
+
+export default abstract class WebGLComponent implements IWebGLComponentProps, IWebGLComponentEvents {
   protected id: string;
   protected name: string;
   protected type: string;
@@ -150,56 +160,102 @@ export default abstract class WebGLComponent implements IWebGLComponentProps, IW
     this.getTransformer().remove();
   }
 
-  getPosition() {
-    return this.getGroup().position();
-  }
-
-  setPosition(position: { x: number, y: number }) {
+  set position(position: TPosition) {
     this.getGroup().setPosition(position);
   }
 
-  getSize() {
-    return this.getTransformer().getSize();
+  get position(): TPosition {
+    return this.getGroup().position();
   }
 
-  setSize(size: { width: number, height: number }) {
+  getPosition(): TPosition {
+    return this.getGroup().position();
+  }
+
+  setPosition(position: TPosition) {
+    this.getGroup().setPosition(position);
+  }
+
+  set size(size: TSize) {
     this.getGroup().setSize(size);
     this.getTransformer().setSize(size);
   }
 
-  getShadowProps(): { offsetX: number, offsetY: number, blur: number, fill: string } | undefined {
+  get size(): TSize {
+    return this.getTransformer().size();
+  }
+
+  getSize(): TSize {
+    return this.getTransformer().getSize();
+  }
+
+  setSize(size: TSize) {
+    this.getGroup().setSize(size);
+    this.getTransformer().setSize(size);
+  }
+
+
+  get shadow(): TypeOrUndefined<TShadow> {
     return undefined;
   }
 
-  setShadowProps(shadow: { offsetX: number, offsetY: number, blur: number, fill: string }) {
-  }
+  set shadow(shadow: TypeOrUndefined<TShadow>) {}
 
-  getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {
+  getShadowProps(): TypeOrUndefined<TShadow> {
     return undefined;
   }
 
-  setBorderProps(border: { width: number; fill: string; radius: number }) {
-  }
+  setShadowProps(shadow: TypeOrUndefined<TShadow>) {}
 
-  getTextProps(): { text: string, fill: string } | undefined {
+  get border(): TypeOrUndefined<TBorder> {
     return undefined;
   }
 
-  setTextProps(text: { text: string, fill: string }) {
-  }
+  set border(border: TypeOrUndefined<TBorder>) {}
 
-  getBackgroundProps(): { opacity: number, fill: string } | undefined {
+  getBorderProps(): TypeOrUndefined<TBorder> {
     return undefined;
   }
 
-  setBackgroundProps(background: { opacity: number, fill: string }) {
+  setBorderProps(border: TypeOrUndefined<TBorder>) {
   }
 
-  getImageProps(): { src: string } | undefined {
+  get text():TypeOrUndefined<TText> {
     return undefined;
   }
 
-  setImageProps(image: { src: string }, size?: { width: number, height: number }) {
+  set text(text: TypeOrUndefined<TText>) {}
+
+  getTextProps():TypeOrUndefined<TText>{
+    return undefined;
+  }
+
+  setTextProps(text: TypeOrUndefined<TText>) {
+  }
+
+  get background(): TypeOrUndefined<TBackground> {
+    return undefined;
+  }
+
+  set background(background: TypeOrUndefined<TBackground>) {}
+
+  getBackgroundProps(): TypeOrUndefined<TBackground> {
+    return undefined;
+  }
+
+  setBackgroundProps(background: TypeOrUndefined<TBackground>) {}
+
+  get image(): TypeOrUndefined<TImage> {
+    return undefined;
+  }
+
+  set image(image: TypeOrUndefined<TImage>) {}
+
+  getImageProps(): TypeOrUndefined<TImage> {
+    return undefined;
+  }
+
+  setImageProps(image: TImage, size?: { width: number, height: number }) {
   }
 
   getName() {
@@ -209,33 +265,33 @@ export default abstract class WebGLComponent implements IWebGLComponentProps, IW
 
 
 export interface IWebGLComponentProps {
-  getPosition(): { x: number, y: number };
+  getPosition(): TPosition;
 
-  setPosition(position: { x: number, y: number }): void;
+  setPosition(position: TPosition): void;
 
-  getSize(): { width: number, height: number }
+  getSize(): TSize;
 
-  setSize(size: { width: number, height: number }): void;
+  setSize(size: TSize): void;
 
-  getShadowProps(): { offsetX: number, offsetY: number, blur: number, fill: string } | undefined;
+  getShadowProps(): TypeOrUndefined<TShadow>;
 
-  setShadowProps(shadow: { offsetX: number, offsetY: number, blur: number, fill: string }): void;
+  setShadowProps(shadow: TShadow): void;
 
-  getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined;
+  getBorderProps(): TypeOrUndefined<TBorder>;
 
-  setBorderProps(border: { width: number; fill: string; radius: number }): void;
+  setBorderProps(border: TBorder): void;
 
-  getTextProps(): { text: string, fill: string } | undefined;
+  getTextProps(): TypeOrUndefined<TText>;
 
-  setTextProps(text: { text: string, fill: string }): void;
+  setTextProps(text: TText): void;
 
-  getBackgroundProps(): { opacity: number, fill: string } | undefined;
+  getBackgroundProps(): TypeOrUndefined<TBackground>;
 
-  setBackgroundProps(background: { opacity: number, fill: string }): void;
+  setBackgroundProps(background: TBackground): void;
 
-  getImageProps(): { src: string } | undefined;
+  getImageProps(): TypeOrUndefined<TImage>;
 
-  setImageProps(image: { src: string }, size?: { width: number, height: number }): void;
+  setImageProps(image: TImage, size?: { width: number, height: number }): void;
 }
 
 export interface IWebGLComponentEvents {

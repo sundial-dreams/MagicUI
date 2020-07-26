@@ -250,7 +250,8 @@ function ShadowProperties(props: IShadowPropertiesProps) {
 interface ITextPropertiesProps {
   text: {
     fill: string,
-    text: string
+    text: string,
+    fontSize: number
   }
 }
 
@@ -258,21 +259,29 @@ function TextProperties(props: ITextPropertiesProps) {
   const dispatch = useDispatch();
   const [text, setText] = useState('');
   const [color, setColor] = useState('');
+  const [fontSize, setFontSize] = useState(0);
   const [showPicker, toggleShowPicker, pickerRef] = useShowPicker(false);
 
   useEffect(() => setText(props.text.text), [props.text.text]);
   useEffect(() => setColor(props.text.fill), [props.text.fill]);
+  useEffect(() => setFontSize(props.text.fontSize), [props.text.fontSize]);
 
   const handleChangeText = (e: any) => {
     const value = e.target.value;
     setText(value);
-    dispatch(changeComponentText(color, value));
+    dispatch(changeComponentText(color, value, fontSize));
+  };
+
+  const handleChangeFontSize = (e: any) => {
+    const value = e.target.value;
+    setFontSize(value);
+    dispatch(changeComponentText(color, text, value));
   };
 
   const handleChangeColor = (e: any) => {
     const value = e.hex;
     setColor(value);
-    dispatch(changeComponentText(value, text));
+    dispatch(changeComponentText(value, text, fontSize));
   };
 
   return (
@@ -280,6 +289,10 @@ function TextProperties(props: ITextPropertiesProps) {
       <div className={style.text_props}>
         <span>Text</span>
         <input value={text} onChange={handleChangeText}/>
+      </div>
+      <div className={style.text_font_size_props}>
+        <span>Size</span>
+        <input value={fontSize} onChange={handleChangeFontSize}/>
       </div>
       <div className={style.text_color_props}>
         <span>Fill</span>

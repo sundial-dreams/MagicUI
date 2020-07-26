@@ -157,7 +157,7 @@ export default function Editor(props: IEditorProps) {
     }
   }, shadowDeps);
 
-  const textDeps = [textProps?.fill, textProps?.text];
+  const textDeps = [textProps?.fill, textProps?.text, textProps?.fontSize];
   useEffect(() => {
     if (cpnState.id && cpnState.operator === 'change-component-text') {
       const renderer = (webglEditor.current as CanvasEditorRenderer);

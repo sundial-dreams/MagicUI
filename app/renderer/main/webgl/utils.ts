@@ -444,7 +444,8 @@ export function getComponentProps(webGLComponent: WebGLComponent) {
     } : undefined,
     text: text ? {
       text: text?.text || '',
-      fill: text?.fill || 'white'
+      fill: text?.fill || 'white',
+      fontSize: text?.fontSize || 0
     } : undefined,
     image: image
   };

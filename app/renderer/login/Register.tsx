@@ -11,7 +11,7 @@ import { WidgetType } from '../public/utils/constants';
 // @ts-ignore
 import style from './Register.scss';
 
-const defaultAvatar = 'http://localhost:9000/image/app.png';
+const defaultAvatar = 'http://localhost:8000/image/app.png';
 export default function Register() {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');

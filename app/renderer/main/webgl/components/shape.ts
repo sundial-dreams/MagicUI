@@ -1,4 +1,4 @@
-import WebGLComponent from './components';
+import WebGLComponent, { TBackground, TBorder, TShadow, TSize, TypeOrUndefined } from './components';
 import Konva from 'konva';
 import { COMPONENT_TYPES, TYPES } from '../../utils/constants';
 
@@ -44,9 +44,30 @@ export class WebGLRect extends WebGLComponent {
     });
   }
 
+  set size(size: TSize) {
+    this.rect.setSize(size);
+    super.setSize(size);
+  }
+
   setSize(size: { width: number; height: number }) {
     this.rect.setSize(size);
     super.setSize(size);
+  }
+
+  get border(): TypeOrUndefined<TBorder> {
+    return {
+      width: this.rect.strokeWidth(),
+      fill: this.rect.stroke(),
+      radius: this.rect.cornerRadius()
+    };
+  }
+
+  set border(border: TypeOrUndefined<TBorder>) {
+    if (border) {
+      this.rect.stroke(border.fill);
+      this.rect.strokeWidth(border.width);
+      this.rect.cornerRadius(border.radius);
+    }
   }
 
   getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {
@@ -63,6 +84,21 @@ export class WebGLRect extends WebGLComponent {
     this.rect.cornerRadius(border.radius);
   }
 
+
+  get background(): TypeOrUndefined<TBackground> {
+    return {
+      fill: this.rect.fill(),
+      opacity: this.rect.opacity()
+    };
+  }
+
+  set background(background: TypeOrUndefined<TBackground>) {
+    if (background) {
+      this.rect.fill(background.fill);
+      this.rect.opacity(background.opacity);
+    }
+  }
+
   getBackgroundProps(): { opacity: number; fill: string } | undefined {
     return {
       fill: this.rect.fill(),
@@ -73,6 +109,24 @@ export class WebGLRect extends WebGLComponent {
   setBackgroundProps(background: { opacity: number; fill: string }) {
     this.rect.fill(background.fill);
     this.rect.opacity(background.opacity);
+  }
+
+  get shadow(): TypeOrUndefined<TShadow> {
+    return {
+      offsetX: this.rect.shadowOffsetX(),
+      offsetY: this.rect.shadowOffsetY(),
+      blur: this.rect.shadowBlur(),
+      fill: this.rect.shadowColor()
+    };
+  }
+
+  set shadow(shadow: TypeOrUndefined<TShadow>) {
+    if (shadow) {
+      this.rect.shadowColor(shadow.fill);
+      this.rect.shadowBlur(shadow.blur);
+      this.rect.shadowOffsetX(shadow.offsetX);
+      this.rect.shadowOffsetY(shadow.offsetY);
+    }
   }
 
   getShadowProps(): { offsetX: number; offsetY: number; blur: number; fill: string } | undefined {
@@ -139,9 +193,31 @@ export class WebGLCircle extends WebGLComponent {
       rotateEnabled: false
     });
   }
+
+  set size(size: TSize) {
+    this.circle.setSize(size);
+    super.setSize(size);
+  }
+
   setSize(size: { width: number; height: number }) {
     this.circle.setSize(size);
     super.setSize(size);
+  }
+
+
+  get border(): TypeOrUndefined<TBorder> {
+    return {
+      width: this.circle.strokeWidth(),
+      fill: this.circle.stroke(),
+      radius: 0
+    };
+  }
+
+  set border(border: TypeOrUndefined<TBorder>) {
+    if (border) {
+      this.circle.stroke(border.fill);
+      this.circle.strokeWidth(border.width);
+    }
   }
 
   getBorderProps(): { width: number; fill: string; radius: number | number[] } | undefined {
@@ -157,6 +233,20 @@ export class WebGLCircle extends WebGLComponent {
     this.circle.strokeWidth(border.width);
   }
 
+  get background(): TypeOrUndefined<TBackground> {
+    return {
+      fill: this.circle.fill(),
+      opacity: this.circle.opacity()
+    };
+  }
+
+  set background(background: TypeOrUndefined<TBackground>) {
+    if (background) {
+      this.circle.fill(background.fill);
+      this.circle.opacity(background.opacity);
+    }
+  }
+
   getBackgroundProps(): { opacity: number; fill: string } | undefined {
     return {
       fill: this.circle.fill(),
@@ -167,6 +257,25 @@ export class WebGLCircle extends WebGLComponent {
   setBackgroundProps(background: { opacity: number; fill: string }) {
     this.circle.fill(background.fill);
     this.circle.opacity(background.opacity);
+  }
+
+
+  get shadow(): TypeOrUndefined<TShadow> {
+    return {
+      offsetX: this.circle.shadowOffsetX(),
+      offsetY: this.circle.shadowOffsetY(),
+      blur: this.circle.shadowBlur(),
+      fill: this.circle.shadowColor()
+    };
+  }
+
+  set shadow(shadow: TypeOrUndefined<TShadow>) {
+    if (shadow) {
+      this.circle.shadowColor(shadow.fill);
+      this.circle.shadowBlur(shadow.blur);
+      this.circle.shadowOffsetX(shadow.offsetX);
+      this.circle.shadowOffsetY(shadow.offsetY);
+    }
   }
 
   getShadowProps(): { offsetX: number; offsetY: number; blur: number; fill: string } | undefined {
