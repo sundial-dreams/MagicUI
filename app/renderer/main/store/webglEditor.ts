@@ -149,3 +149,13 @@ export function createAutoSaveLoadingState(): IAutoSaveLoadingState {
     loading: false
   }
 }
+
+export interface IGetImageLoadingState {
+  loading: boolean
+}
+
+export function createGetImageLoadingState(): IGetImageLoadingState {
+  return {
+    loading: false
+  }
+}

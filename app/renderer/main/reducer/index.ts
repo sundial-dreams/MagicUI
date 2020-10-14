@@ -5,7 +5,9 @@ import {
   runToolsReducer,
   componentReducer,
   webGLPageReducer,
-  editHistoryReducer, autoSaveLoadingReducer
+  editHistoryReducer, 
+  autoSaveLoadingReducer,
+  getImageLoadingReducer
 } from './webglEditor';
 import { dslCodeReducer, dslFileArrayReducer, dslFileReducer, openFileItemsReducer } from './dslEditor';
 
@@ -49,6 +51,7 @@ export default function mainReducer(state = initialState, action: TActions) {
     webGLPage: webGLPageReducer(state.webGLPage, action),
     editHistory: editHistoryReducer(state.editHistory, action),
     autoSaveLoading: autoSaveLoadingReducer(state.autoSaveLoading, action),
+    getImageLoading: getImageLoadingReducer(state.getImageLoading, action),
 
     dslFile: dslFileReducer(state.dslFile, action),
     dslCode: dslCodeReducer(state.dslCode, action),

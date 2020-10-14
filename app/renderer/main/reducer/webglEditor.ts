@@ -4,7 +4,8 @@ import {
   IEditHistoryState,
   IEditToolsState,
   IRunToolsState,
-  IWebGLPageState
+  IWebGLPageState,
+  IGetImageLoadingState
 } from '../store/webglEditor';
 import { TActions } from '../actions';
 import {
@@ -13,7 +14,8 @@ import {
   EditHistoryActions,
   EditToolsActions,
   RunToolsActions,
-  WebGLPageActions
+  WebGLPageActions,
+  ImageLoadingActions
 } from '../actions/webglEditor';
 import EditTools from '../pages/WebGLEditor/EditTools';
 
@@ -276,3 +278,25 @@ export function autoSaveLoadingReducer(state: IAutoSaveLoadingState, action: TAc
   }
 }
 
+
+export function getImageLoadingReducer(state: IGetImageLoadingState, action: TActions) {
+  switch (action.type) {
+    case ImageLoadingActions.IMAGE_LOADING: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case ImageLoadingActions.IMAGE_SUCCESS: {
+      return {
+        ...state,
+        loading: false
+      }
+    }
+    default: {
+      return {
+        ...state
+      }
+    }
+  }
+}

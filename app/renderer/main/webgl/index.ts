@@ -164,8 +164,8 @@ export default class CanvasEditorRenderer {
     return cpn;
   }
 
-  modifyComponentProperties(id: string, propType: string, data: any) {
-    this.componentsManager.modifyComponentPropertiesById(id, propType, data);
+  modifyComponentProperties(id: string, propType: string, data: any, callback?: Function) {
+    this.componentsManager.modifyComponentPropertiesById(id, propType, data, callback);
     this.render();
   }
 

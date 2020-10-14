@@ -86,7 +86,7 @@ export default class ComponentManager {
     return null;
   }
 
-  modifyComponentPropertiesById(id: string, propType: string, data: any) {
+  modifyComponentPropertiesById(id: string, propType: string, data: any, callback?: Function) {
     if (this.webGLComponentCollection.has(id)) {
       const component = this.webGLComponentCollection.get(id) as WebGLComponent;
       switch (propType) {
@@ -107,7 +107,7 @@ export default class ComponentManager {
           return;
         }
         case WEBGL_COMPONENT_PROP_TYPES.IMAGE: {
-          component.getImageProps() && component.setImageProps(data);
+          component.getImageProps() && component.setImageProps(data, undefined, callback);
           return;
         }
       }

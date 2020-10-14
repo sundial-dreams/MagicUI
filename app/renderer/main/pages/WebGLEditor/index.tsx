@@ -15,12 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IStoreState } from '../../store';
 import { deleteOnePage, fetchAllPages, fetchOnePage } from '../../utils/api';
 import {
-buildCode,
-copyComponent,
-deleteComponent, exportCode,
-pasteComponent, saveComponent,
-selectWebGLPage,
-undoComponent
+  buildCode,
+  copyComponent,
+  deleteComponent, exportCode,
+  pasteComponent, saveComponent,
+  selectWebGLPage,
+  undoComponent
 } from '../../actions/webglEditor';
 import toast from '../../components/toast';
 import Confirm from '../../components/modal/confirm';
@@ -29,10 +29,9 @@ import Confirm from '../../components/modal/confirm';
 import style from './index.scss';
 
 
-
 export default function UIEditor(props: {}) {
   const user = useSelector((state: IStoreState) => state.user);
-  const webglPage= useSelector((state: IStoreState) => state.webGLPage);
+  const webglPage = useSelector((state: IStoreState) => state.webGLPage);
   const cpnState = useSelector((state: IStoreState) => state.component);
   const editToolsState = useSelector((state: IStoreState) => state.editTools);
   const dispatch = useDispatch();
@@ -53,7 +52,7 @@ export default function UIEditor(props: {}) {
             onePage.id
           ));
         }
-      })
+      });
     }).catch(err => {
 
     });
@@ -72,7 +71,7 @@ export default function UIEditor(props: {}) {
         return;
       }
       if ((e.ctrlKey || isCmd) && e.key === 'v') {
-        dispatch(pasteComponent(editToolsState.id))
+        dispatch(pasteComponent(editToolsState.id));
         toast('paste!');
         return;
       }
@@ -99,11 +98,11 @@ export default function UIEditor(props: {}) {
         return;
       }
     };
-    window.addEventListener('keydown',handleKeyDown, false)
+    window.addEventListener('keydown', handleKeyDown, false);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown, false)
-    }
+      window.removeEventListener('keydown', handleKeyDown, false);
+    };
   }, [cpnState.id, editToolsState.id]);
 
   return (
@@ -137,7 +136,7 @@ export default function UIEditor(props: {}) {
 
 function EditorMenu() {
   const user = useSelector((state: IStoreState) => state.user);
-  const webglPage= useSelector((state: IStoreState) => state.webGLPage);
+  const webglPage = useSelector((state: IStoreState) => state.webGLPage);
   const cpnState = useSelector((state: IStoreState) => state.component);
   const editToolsState = useSelector((state: IStoreState) => state.editTools);
   const dispatch = useDispatch();
@@ -179,11 +178,11 @@ function EditorMenu() {
     toast('cut!');
   };
   const handlePaste = () => {
-    dispatch(pasteComponent(editToolsState.id))
+    dispatch(pasteComponent(editToolsState.id));
     toast('paste!');
   };
   const handleSave = () => {
-    dispatch(saveComponent())
+    dispatch(saveComponent());
   };
   const handleDelete = () => {
     dispatch(deleteComponent(cpnState.id));

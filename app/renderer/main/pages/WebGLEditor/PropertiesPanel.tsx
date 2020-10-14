@@ -9,11 +9,14 @@ import {
   changeComponentBackground,
   changeComponentBorder, changeComponentImage,
   changeComponentShadow,
-  changeComponentText
+  changeComponentText,
+  startImageLoading,
+  cancelImageLoading
 } from '../../actions/webglEditor';
 
 // @ts-ignore
 import style from './PropertiesPanel.scss';
+import toast from '../../components/toast';
 
 const { round } = Math;
 
@@ -324,6 +327,9 @@ function ImageProperties(props: IImagePropertiesProps) {
   const handleConfirmSrc = () => {
     console.log('click src');
     dispatch(changeComponentImage(src));
+    dispatch(startImageLoading());
+    toast('waiting~');
+    // image loading
     hidePicker();
   };
 

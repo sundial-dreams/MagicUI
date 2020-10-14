@@ -62,7 +62,7 @@ export class WebGLImage extends WebGLComponent {
     };
   }
 
-  setImageProps(image: { src: string }, size?: { width: number, height: number }) {
+  setImageProps(image: { src: string }, size?: { width: number, height: number }, callback?: Function) {
     const imageObject = new Image();
     this.src = imageObject.src = image.src;
     imageObject.onload = () => {
@@ -77,6 +77,8 @@ export class WebGLImage extends WebGLComponent {
         node: this.group as any
       });
       this.group?.getLayer()?.batchDraw();
+      // add callback
+      callback && callback();
     };
   }
 

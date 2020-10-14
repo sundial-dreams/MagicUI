@@ -22,7 +22,7 @@ export default function FileTabs(props: IFileTabsProps) {
     };
 
     const handleClose = () => {
-      dispatch(closeFile(i, ''));
+      dispatch(closeFile(i, "", ""));
     };
 
 

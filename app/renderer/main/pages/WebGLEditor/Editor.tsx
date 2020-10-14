@@ -24,7 +24,8 @@ import {
   removeEditHistory,
   resetCode,
   resetComponent,
-  setAutoSaveLoading
+  setAutoSaveLoading,
+  cancelImageLoading
 } from '../../actions/webglEditor';
 import { WidgetType } from '../../../public/utils/constants';
 import Bridge from '../../../public/utils/bridge';
@@ -179,7 +180,11 @@ export default function Editor(props: IEditorProps) {
         cpnState.id,
         WEBGL_COMPONENT_PROP_TYPES.IMAGE,
         cpnState.props.image,
-        renderer
+        renderer,
+        () => {
+          dispatch(cancelImageLoading());
+          toast('loading success~'); 
+        }
       );
       EventEmitter.emit('auto-save', webGLPageState.pageId);
     }

@@ -469,11 +469,12 @@ export function pasteComponentToWebGLEditor(componentId: string, editor: CanvasE
   );
 }
 
-export function modifyComponentProperties(componentId: string, propType: string, data: any, editor: CanvasEditorRenderer) {
+export function modifyComponentProperties(componentId: string, propType: string, data: any, editor: CanvasEditorRenderer, callback?: Function) {
   editor.modifyComponentProperties(
     componentId,
     propType,
-    data
+    data,
+    callback
   );
 }
 

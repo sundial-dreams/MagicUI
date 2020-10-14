@@ -183,3 +183,19 @@ export const setAutoSaveLoading = (v: boolean) => ({
   type: AutoSaveLoadingActions.SET_LOADING,
   loading: v
 })
+
+export enum ImageLoadingActions {
+  IMAGE_LOADING = 'image-loading',
+  IMAGE_SUCCESS = 'image-success',
+  IMAGE_FAIL = 'image-fail'
+}
+
+export const startImageLoading = () => ({
+  type: ImageLoadingActions.IMAGE_LOADING,
+  loading: true
+});
+
+export const cancelImageLoading = () => ({
+  type: ImageLoadingActions.IMAGE_SUCCESS,
+  loading: false
+});

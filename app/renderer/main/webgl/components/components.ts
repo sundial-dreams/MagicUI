@@ -255,7 +255,7 @@ export default abstract class WebGLComponent implements IWebGLComponentProps, IW
     return undefined;
   }
 
-  setImageProps(image: TImage, size?: { width: number, height: number }) {
+  setImageProps(image: TImage, size?: { width: number, height: number }, callback?: Function) {
   }
 
   getName() {
@@ -291,7 +291,7 @@ export interface IWebGLComponentProps {
 
   getImageProps(): TypeOrUndefined<TImage>;
 
-  setImageProps(image: TImage, size?: { width: number, height: number }): void;
+  setImageProps(image: TImage, size?: { width: number, height: number }, callback?: Function): void;
 }
 
 export interface IWebGLComponentEvents {
